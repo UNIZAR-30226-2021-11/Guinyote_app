@@ -7,9 +7,8 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="manyosoft.guinyote.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:name="manyosoft.guinyote.MainMenuFragment"
+        tools:layout="@layout/main_menu">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -17,9 +16,8 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="manyosoft.guinyote.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:name="manyosoft.guinyote.OnlineMenuFragment"
+        tools:layout="@layout/online_menu">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
