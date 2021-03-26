@@ -1,6 +1,7 @@
 package manyosoft.guinyote;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 public class MainMenuFragment extends Fragment {
+
+    private static final int ACTIVITY_LOGIN = 0;
 
     @Override
     public View onCreateView(
@@ -58,6 +61,8 @@ public class MainMenuFragment extends Fragment {
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+                Intent i = new Intent(context, LoginActivity.class);
+                startActivityForResult(i,ACTIVITY_LOGIN);
             }
         });
     }

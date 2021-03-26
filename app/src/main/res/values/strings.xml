@@ -20,4 +20,16 @@
     <string name="unirse_sala">Unirse a una sala</string>
     <string name="logo_de_la_empresa">Logo de la empresa</string>
 
+    <!-- MENU ONLINE -->
+    <string name="Usuario">Usuario</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="Acceder">ACCEDER</string>
+    <string name="Crear_cuenta">CREAR CUENTA</string>
+
+    <!-- MENU USUARIO -->
+    <string name="EQUIPO">EQUIPO</string>
+    <string name="RESULTADO">RESULTADO</string>
+    <string name="PUNTOS">PUNTOS</string>
+
+
 </resources>
