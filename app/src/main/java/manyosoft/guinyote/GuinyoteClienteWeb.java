@@ -10,7 +10,7 @@ public class GuinyoteClienteWeb {
     /**
      * Servidor remoto del backend
      */
-    private static final String SERVER = "ws://echo.websocket.org";
+    private static final String SERVER = /*"ws://15.188.14.213:27000/echo"*/"ws://echo.websocket.org";
 
     /**
      * The timeout value in milliseconds for socket connection.
@@ -30,10 +30,10 @@ public class GuinyoteClienteWeb {
     /**
      * Connect to the server.
      */
-    private static void connect() throws IOException, WebSocketException
+    public void connect() throws IOException, WebSocketException
     {
         // Crea un buzón vacío
-        buzon = new LinkedList<String>();
+        buzon = new LinkedList<>();
 
         // Crea una conexión y la asocia al websocket de la clase
         ws =  new WebSocketFactory()
@@ -50,11 +50,18 @@ public class GuinyoteClienteWeb {
 
     }
 
+    public void close() {
+        if(ws != null && ws.isOpen())
+            ws.disconnect();
+        if(buzon != null)
+            buzon.clear();
+    }
+
     /**
      * Envía una cadena de texto al backend
      * @param text Cadena de texto enviada
      */
-    public static void sendText(String text)    {
+    public void sendText(String text)    {
         if(text != null)
             ws.sendText(text);
     }
@@ -64,7 +71,7 @@ public class GuinyoteClienteWeb {
      * Si no hay ningún mensaje devuelve null.
      * @return Cadena de texto enviada por el backend (null si no se ha recibido nada)
      */
-    public static String readText() {
+    public String readText() {
         return buzon.poll();
     }
 }

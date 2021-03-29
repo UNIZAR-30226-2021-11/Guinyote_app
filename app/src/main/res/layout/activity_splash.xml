@@ -11,7 +11,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="false"
+            android:background="@color/white"
             android:contentDescription="@string/logo_de_la_empresa"
-            android:src="@mipmap/logo_manyosoft"/>
+            android:src="@mipmap/logo_manyosoft_mejor"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
