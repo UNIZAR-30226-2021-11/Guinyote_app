@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.util;
 
 import java.io.*;
 import com.neovisionaries.ws.client.*;
@@ -6,7 +6,7 @@ import com.neovisionaries.ws.client.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class GuinyoteClienteWeb {
+public class GuinyoteClienteWebSockets {
     /**
      * Servidor remoto del backend
      */

@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import manyosoft.guinyote.R;
 
 public class Registro extends AppCompatActivity {
 

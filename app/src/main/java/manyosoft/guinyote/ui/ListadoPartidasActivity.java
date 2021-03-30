@@ -1,9 +1,8 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.provider.Telephony;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +13,10 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import manyosoft.guinyote.util.ListadoPartidasAdapter;
+import manyosoft.guinyote.util.Partida;
+import manyosoft.guinyote.R;
 
 public class ListadoPartidasActivity extends AppCompatActivity {
 

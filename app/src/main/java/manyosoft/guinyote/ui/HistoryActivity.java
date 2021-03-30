@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import manyosoft.guinyote.R;
 
 public class HistoryActivity extends AppCompatActivity {
 

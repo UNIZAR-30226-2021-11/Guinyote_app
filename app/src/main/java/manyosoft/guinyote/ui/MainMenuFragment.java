@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
+import manyosoft.guinyote.R;
 
 public class MainMenuFragment extends Fragment {
 

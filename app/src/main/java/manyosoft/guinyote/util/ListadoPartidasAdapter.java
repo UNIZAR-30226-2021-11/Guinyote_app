@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import manyosoft.guinyote.R;
 
 public class ListadoPartidasAdapter extends BaseAdapter {
     private Context context;

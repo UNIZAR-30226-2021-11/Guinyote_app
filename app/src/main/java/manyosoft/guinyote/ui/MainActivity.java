@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import android.os.Bundle;
 
@@ -12,6 +12,8 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import manyosoft.guinyote.R;
 
 public class MainActivity extends AppCompatActivity {
 

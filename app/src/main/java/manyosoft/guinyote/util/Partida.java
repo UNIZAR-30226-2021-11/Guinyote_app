@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.util;
 
 public class Partida {
     private Long id;

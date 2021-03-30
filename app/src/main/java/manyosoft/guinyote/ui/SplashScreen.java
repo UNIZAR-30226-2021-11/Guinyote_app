@@ -1,9 +1,11 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import manyosoft.guinyote.R;
 
 public class SplashScreen extends Activity {
 

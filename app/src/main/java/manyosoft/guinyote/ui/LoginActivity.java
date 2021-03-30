@@ -1,4 +1,4 @@
-package manyosoft.guinyote;
+package manyosoft.guinyote.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import manyosoft.guinyote.R;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int ACTIVITY_PROFILE = 0;
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, UserProfile.class);
         startActivityForResult(i,ACTIVITY_PROFILE);
     }
+
     private void act_registro(){
         Intent i = new Intent(this, Registro.class);
         startActivityForResult(i,ACTIVITY_CREAR_CUENTA);
