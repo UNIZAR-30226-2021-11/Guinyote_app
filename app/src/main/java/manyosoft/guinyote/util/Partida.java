@@ -4,6 +4,7 @@ public class Partida {
     private Long id;
     private String nombre;
     private Integer jugadores;
+    private String created, end;
 
     /**
      *  Resto de elementos necesarios para controlar la partida
@@ -14,6 +15,17 @@ public class Partida {
             this.id = id;
             this.nombre = name;
             this.jugadores = players;
+        }
+    }
+
+
+    public Partida(Long id, String name, Integer players, String created, String end)   {
+        if(id != null && name != null && players != null)   {
+            this.id = id;
+            this.nombre = name;
+            this.jugadores = players;
+            this.created = created;
+            this.end = end;
         }
     }
 
