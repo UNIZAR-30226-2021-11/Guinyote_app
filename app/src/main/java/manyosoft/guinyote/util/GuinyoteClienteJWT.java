@@ -32,7 +32,7 @@ public class GuinyoteClienteJWT {
     static String token = null;
 
     public String getToken()    {
-        return token;
+        return "bearer: "+token;
     }
 
 
@@ -109,7 +109,7 @@ public class GuinyoteClienteJWT {
         // Espera síncrona
         JsonObject respuesta = Ion.with(context)
                 .load("GET",HOST+GET_USER+username)
-                .setHeader("Authorization", token)  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
 
@@ -133,7 +133,7 @@ public class GuinyoteClienteJWT {
         // Envía la petición PUT y no espera respuesta alguna
         Ion.with(context)
                 .load("PUT",HOST+UPDATE_USER+id.toString())
-                .setHeader("Authorization", token)  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .setJsonObjectBody(json);
     }
 
@@ -141,7 +141,7 @@ public class GuinyoteClienteJWT {
         // Envía la petición DELETE y no espera respuesta alguna
         Ion.with(context)
                 .load("DELETE",HOST+DELETE_USER+id.toString())
-                .setHeader("Authorization", token);  // Token de autorización
+                .setHeader("Authorization", getToken());  // Token de autorización
     }
 
     public ArrayList<Partida> getPartidasPublicas(Context context) throws ExecutionException, InterruptedException {
@@ -150,7 +150,7 @@ public class GuinyoteClienteJWT {
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET",HOST+GET_PUBLICAS)
-                .setHeader("Authorization", token)  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
 
@@ -177,7 +177,7 @@ public class GuinyoteClienteJWT {
         // Espera síncrona
         JsonObject partidaJSON = Ion.with(context)
                 .load("GET",HOST+GET_PUBLICAS)
-                .setHeader("Authorization", token)  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
 
