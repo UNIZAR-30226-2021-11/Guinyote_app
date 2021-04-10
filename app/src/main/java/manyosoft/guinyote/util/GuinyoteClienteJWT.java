@@ -11,12 +11,14 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 
-public class GuinyoteClienteJWT {
+public class GuinyoteClienteJWT implements Serializable {
     static final String HOST = "host/";
+
 
     // Usuarios
     static final String CREATE_USER = "api/v1/users/";
@@ -28,8 +30,20 @@ public class GuinyoteClienteJWT {
     // Partidas
     static final String GET_PUBLICAS = "api/v1/games/";
 
+    private static GuinyoteClienteJWT instance = null;
 
-    static String token = null;
+    String token;
+
+    protected GuinyoteClienteJWT()  {
+        this.token = null;
+    }
+
+    public static synchronized GuinyoteClienteJWT getInstance() {
+        if(instance == null)    {
+            instance = new GuinyoteClienteJWT();
+        }
+        return instance;
+    }
 
     public String getToken()    {
         return "bearer: "+token;
