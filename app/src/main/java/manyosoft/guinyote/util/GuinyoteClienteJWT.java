@@ -17,7 +17,9 @@ import java.util.concurrent.ExecutionException;
 
 
 public class GuinyoteClienteJWT implements Serializable {
-    static final String HOST = "http://10.0.2.2:20000/";
+    static final String LOCALHOST = "http://10.0.2.2:9000/";
+    static final String REMOTEHOST = "http://15.188.14.213:11050/";
+    static final String HOST = LOCALHOST;
 
 
     // Usuarios
@@ -46,10 +48,13 @@ public class GuinyoteClienteJWT implements Serializable {
     }
 
     public String getToken()    {
-        return "bearer: "+token;
+        return "Bearer: "+token;
     }
 
 
+    public String getTokenTesting()    {
+        return "Bearer: "+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.Qi0Tc-jTChzascHaZhl0e6rRaCvAS6OJ8RLsI8Y-R78";
+    }
 
     public void loginUsuario(Context context, String username, String password)  {
         final String usuarioJSON = "username";
@@ -168,12 +173,16 @@ public class GuinyoteClienteJWT implements Serializable {
     public ArrayList<Partida> getPartidasPublicas(Context context) throws ExecutionException, InterruptedException {
         ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
+
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET",HOST+GET_PUBLICAS)
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
+
+        Log.d("Mensaje Partidas Recibido",partidasJSON.toString());
 
         JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
         for(JsonElement par : partidasJSONArray)  {
@@ -182,7 +191,7 @@ public class GuinyoteClienteJWT implements Serializable {
                     new Partida(
                             parObj.get("id").getAsLong(),
                             parObj.get("name").getAsString(),
-                            parObj.get("player_count").getAsInt(),
+                            parObj.get("players_count").getAsInt(),
                             parObj.get("creation_date").getAsString(),
                             parObj.get("end_date").getAsString()
                     )

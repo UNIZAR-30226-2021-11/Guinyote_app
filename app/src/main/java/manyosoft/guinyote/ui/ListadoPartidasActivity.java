@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import manyosoft.guinyote.util.GuinyoteClienteJWT;
 import manyosoft.guinyote.util.ListadoPartidasAdapter;
@@ -40,17 +41,17 @@ public class ListadoPartidasActivity extends AppCompatActivity {
             }
         });
 
+        clienteJWT = GuinyoteClienteJWT.getInstance();
+
         listadoPartidas = (ListView) findViewById(R.id.listadoPartidas);
 
-        // TODO SOLICITA PARTIDAS
-
-
-        // TODO LEE LAS PARTIDAS
-        partidas = new ArrayList<>();
-        Partida uno = new Partida(0L,"partida0",0);
-        partidas.add(uno);
-        Partida otro = new Partida(1L,"partida1",2);
-        partidas.add(otro);
+        // SOLICITA PARTIDAS
+        try {
+            partidas = clienteJWT.getPartidasPublicas(this);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            partidas = new ArrayList<>();
+        }
 
         // Adaptador para la lista de partidas
         ListadoPartidasAdapter adaptador = new ListadoPartidasAdapter(this, R.layout.list_item_partidas, partidas);

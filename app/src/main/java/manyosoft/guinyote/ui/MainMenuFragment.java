@@ -56,8 +56,6 @@ public class MainMenuFragment extends Fragment {
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
-
-                cliente.crearUsuario(view.getContext(), "Zuera", "David", "david@gmail.com", "12345");
             }
         });
 
