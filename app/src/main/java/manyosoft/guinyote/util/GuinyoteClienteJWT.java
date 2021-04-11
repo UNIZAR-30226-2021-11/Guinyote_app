@@ -17,15 +17,11 @@ import java.util.concurrent.ExecutionException;
 
 
 public class GuinyoteClienteJWT implements Serializable {
-    static final String HOST = "host/";
-
+    static final String HOST = "http://localhost:9000/";
 
     // Usuarios
-    static final String CREATE_USER = "api/v1/users/";
-    static final String LOGIN = "api/v1/users/";
-    static final String DELETE_USER = "api/v1/users/";
-    static final String GET_USER = "api/v1/users/";
-    static final String UPDATE_USER = "api/v1/users/";
+    static final String USER = "api/v1/users/";
+    static final String LOGIN = "api/v1/users/login/";
 
     // Partidas
     static final String GET_PUBLICAS = "api/v1/games/";
@@ -52,6 +48,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
 
     public void loginUsuario(Context context, String username, String password)  {
+
         final String usuarioJSON = "username";
         final String passwordJSON = "password";
         final String tokenJSON = "token";
@@ -75,7 +72,8 @@ public class GuinyoteClienteJWT implements Serializable {
                 });
     }
 
-    public void crearUsuario(Context context, String location, String usuario, String mail, String password)  {
+    public boolean crearUsuario(Context context, String location, String usuario, String mail, String password)  {
+        final boolean[] error = {true};
         // Constantes para trabajar con JSON
         final String usuarioObjetoJSON = "user";
         final String usuarioJSON = "username";
@@ -92,7 +90,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         // Envío + Callback para la respuesta
         Ion.with(context)
-                .load("POST", HOST+LOGIN)
+                .load("POST", HOST+USER)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -102,14 +100,16 @@ public class GuinyoteClienteJWT implements Serializable {
                             String mensaje = e.getMessage();
                             if(mensaje == null) mensaje = "Error desconocido en creación de usuario";
                             Log.d("Creación de usuario", mensaje);
+                            error[0] = true;
                         }
                         else    {
                             // Ok
                             Log.d("Creación de usuario", "Ok");
+                            error[0] = false;
                         }
                     }
                 });
-
+        return error[0];
     }
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
@@ -122,7 +122,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         // Espera síncrona
         JsonObject respuesta = Ion.with(context)
-                .load("GET",HOST+GET_USER+username)
+                .load("GET",HOST+USER+username)
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
@@ -146,7 +146,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         // Envía la petición PUT y no espera respuesta alguna
         Ion.with(context)
-                .load("PUT",HOST+UPDATE_USER+id.toString())
+                .load("PUT",HOST+USER+id.toString())
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .setJsonObjectBody(json);
     }
@@ -154,7 +154,7 @@ public class GuinyoteClienteJWT implements Serializable {
     public void deleteUsuario(Context context, Integer id)  {
         // Envía la petición DELETE y no espera respuesta alguna
         Ion.with(context)
-                .load("DELETE",HOST+DELETE_USER+id.toString())
+                .load("DELETE",HOST+USER+id.toString())
                 .setHeader("Authorization", getToken());  // Token de autorización
     }
 

@@ -53,5 +53,11 @@ public class Partida {
         this.jugadores = jugadores;
     }
 
+    public String  getCreated(){return created;}
 
+    public void setCreated(String created) {this.created = created;}
+
+    public String getEnd() { return end;}
+
+    public void setEnd(String end) {this.end = end;}
 }

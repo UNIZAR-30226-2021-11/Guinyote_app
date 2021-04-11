@@ -58,13 +58,13 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                CharSequence text = "Apertura perfil usuario";
-                int duration = Toast.LENGTH_SHORT;
+                if(true) {// no se ha logeado
+                    Intent i = new Intent(context, LoginActivity.class);
+                    startActivityForResult(i, ACTIVITY_LOGIN);
+                }
+                else{//ya se ha logeado
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                Intent i = new Intent(context, LoginActivity.class);
-                startActivityForResult(i,ACTIVITY_LOGIN);
+                }
             }
         });
     }
