@@ -13,18 +13,24 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import manyosoft.guinyote.R;
+import manyosoft.guinyote.util.GuinyoteClienteJWT;
 
 public class MainMenuFragment extends Fragment {
 
     private static final int ACTIVITY_LOGIN = 0;
+
+    private GuinyoteClienteJWT cliente;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        cliente = GuinyoteClienteJWT.getInstance();
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.main_menu, container, false);
+
     }
 
 
@@ -50,6 +56,8 @@ public class MainMenuFragment extends Fragment {
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+
+                cliente.crearUsuario(view.getContext(), "Zuera", "David", "david@gmail.com", "12345");
             }
         });
 

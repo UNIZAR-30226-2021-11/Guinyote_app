@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import manyosoft.guinyote.util.GuinyoteClienteJWT;
 import manyosoft.guinyote.util.ListadoPartidasAdapter;
 import manyosoft.guinyote.util.Partida;
 import manyosoft.guinyote.R;
@@ -22,6 +23,7 @@ public class ListadoPartidasActivity extends AppCompatActivity {
 
     private ListView listadoPartidas;
     private ArrayList<Partida> partidas;
+    private GuinyoteClienteJWT clienteJWT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +44,13 @@ public class ListadoPartidasActivity extends AppCompatActivity {
 
         // TODO SOLICITA PARTIDAS
 
+
         // TODO LEE LAS PARTIDAS
-        Log.d("xd","xd");
         partidas = new ArrayList<>();
         Partida uno = new Partida(0L,"partida0",0);
         partidas.add(uno);
         Partida otro = new Partida(1L,"partida1",2);
         partidas.add(otro);
-        Log.d("xd","xd");
 
         // Adaptador para la lista de partidas
         ListadoPartidasAdapter adaptador = new ListadoPartidasAdapter(this, R.layout.list_item_partidas, partidas);
