@@ -35,11 +35,8 @@ dependencies {
     // JWT API https://github.com/jwtk/jjwt
     implementation 'com.koushikdutta.ion:ion:3.0.8'
 
-    api 'io.jsonwebtoken:jjwt-api:0.11.2'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.11.2') {
-        exclude group: 'org.json', module: 'json' //provided by Android natively
-    }
+    // Libreria que permite redimensionar en funcion del tamanyo de la pantalla
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
     // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
     //runtimeOnly 'org.bouncycastle:bcprov-jdk15on:1.60'
 
