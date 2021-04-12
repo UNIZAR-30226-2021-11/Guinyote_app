@@ -40,6 +40,8 @@
     <!-- LISTADO PARTIDAS -->
     <string name="introduccir_codigo">Introduza el código de la partida</string>
     <string name="buscar_partida">Buscar</string>
+    <string name="back_button_description">Back button</string>
+    <string name="settings_button_description">Preferencias</string>
 
 
 </resources>

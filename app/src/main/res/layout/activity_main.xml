@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|start"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="?attr/homeAsUpIndicator" />
+        app:srcCompat="?attr/homeAsUpIndicator"
+        android:contentDescription="@string/back_button_description" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
+        app:srcCompat="@android:drawable/ic_menu_preferences"
+        android:contentDescription="@string/settings_button_description" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

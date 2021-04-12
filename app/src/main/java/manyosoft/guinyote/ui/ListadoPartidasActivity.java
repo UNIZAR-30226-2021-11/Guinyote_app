@@ -2,8 +2,10 @@ package manyosoft.guinyote.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -45,6 +47,7 @@ public class ListadoPartidasActivity extends AppCompatActivity {
 
         listadoPartidas = (ListView) findViewById(R.id.listadoPartidas);
 
+
         // SOLICITA PARTIDAS
         try {
             partidas = clienteJWT.getPartidasPublicas(this);
@@ -61,11 +64,12 @@ public class ListadoPartidasActivity extends AppCompatActivity {
         listadoPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(ListadoPartidasActivity.this, "Seleccionaste la partida: " + partidas.get(position).getNombre(), Toast.LENGTH_SHORT).show();
-                // TODO Lanza la actividad de seleccion de equipo con la partida seleccionada en la lista
+                Toast.makeText(ListadoPartidasActivity.this, "Seleccionaste la partida: " + partidas.get(position).getNombre() + ", id:"+id, Toast.LENGTH_SHORT).show();
+                Intent teamSelection = new Intent(ListadoPartidasActivity.this, SeleccionEquipoActivity.class);
+                teamSelection.putExtra("id",id);
+                startActivity(teamSelection);
             }
         });
     }
-
     
 }

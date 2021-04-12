@@ -178,27 +178,30 @@ public class GuinyoteClienteJWT implements Serializable {
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET",HOST+GET_PUBLICAS)
-                .setHeader("Authorization", getToken())  // Token de autorización
+                .setHeader("Authorization", getTokenTesting())  // Token de autorización
                 .asJsonObject()
                 .get();
 
         Log.d("Mensaje Partidas Recibido",partidasJSON.toString());
 
         JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
-        for(JsonElement par : partidasJSONArray)  {
-            JsonObject parObj = par.getAsJsonObject();
-            partidasRecuperadas.add(
-                    new Partida(
-                            parObj.get("id").getAsLong(),
-                            parObj.get("name").getAsString(),
-                            parObj.get("players_count").getAsInt(),
-                            parObj.get("creation_date").getAsString(),
-                            parObj.get("end_date").getAsString()
-                    )
-            );
+        if(partidasJSONArray == null) return partidasRecuperadas;
+        else    {
+            for(JsonElement par : partidasJSONArray)  {
+                JsonObject parObj = par.getAsJsonObject();
+                partidasRecuperadas.add(
+                        new Partida(
+                                parObj.get("id").getAsLong(),
+                                parObj.get("name").getAsString(),
+                                parObj.get("players_count").getAsInt(),
+                                parObj.get("creation_date").getAsString(),
+                                parObj.get("end_date").getAsString()
+                        )
+                );
+            }
+            // Devuelve el listado de partidas publicas recuperadas del backend
+            return partidasRecuperadas;
         }
-        // Devuelve el listado de partidas publicas recuperadas del backend
-        return partidasRecuperadas;
     }
 
     public Partida createAndJoinGame(Context context, Integer userID) throws ExecutionException, InterruptedException {

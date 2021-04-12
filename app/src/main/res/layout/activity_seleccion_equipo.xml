@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.SeleccionEquipoActivity">
 
+    <!-- Boton de retroceso -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/back_button_description" />
+
     <Button
         android:id="@+id/buttonTeam1"
         android:layout_width="wrap_content"
