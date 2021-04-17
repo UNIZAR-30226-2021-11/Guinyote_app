@@ -43,5 +43,10 @@
     <string name="back_button_description">Back button</string>
     <string name="settings_button_description">Preferencias</string>
 
+    <!-- SELECCION EQUIPO -->
+    <string name="Error">Error</string>
+    <string name="Join">Unirse</string>
+    <string name="Full">Equipo lleno</string>
+
 
 </resources>
