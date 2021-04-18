@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.CrearPartidas">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/homeAsUpIndicator"/>
+
+    <TextView
+        android:id="@+id/crearPartida_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/crearPartida"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_crearPartida_sala"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nombreSala"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/textView_crarPartida_publica"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/crearPartida_titulo" />
+
+    <TextView
+        android:id="@+id/textView_crarPartida_publica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/publica"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/button_crearPartida"
+        app:layout_constraintStart_toStartOf="@+id/textView_crearPartida_sala"
+        app:layout_constraintTop_toBottomOf="@+id/textView_crearPartida_sala" />
+
+    <EditText
+        android:id="@+id/editText_crearPartida_nombreSala"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/nombre"
+        android:inputType="textLongMessage"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_crearPartida_sala"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/textView_crearPartida_sala"
+        app:layout_constraintTop_toTopOf="@+id/textView_crearPartida_sala"
+        app:layout_constraintVertical_bias="0.523" />
+
+    <CheckBox
+        android:id="@+id/checkBox_crearPartida"
+        android:layout_width="31dp"
+        android:layout_height="32dp"
+        android:checked="false"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_crarPartida_publica"
+        app:layout_constraintStart_toStartOf="@+id/editText_crearPartida_nombreSala"
+        app:layout_constraintTop_toTopOf="@+id/textView_crarPartida_publica" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.10992908" />
+
+    <Button
+        android:id="@+id/button_crearPartida"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/crearPartida"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText_crearPartida_nombreSala"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_crarPartida_publica"
+        app:layout_constraintTop_toBottomOf="@+id/textView_crarPartida_publica" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

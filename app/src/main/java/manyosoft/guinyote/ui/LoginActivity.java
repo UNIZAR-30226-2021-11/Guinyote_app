@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,13 +47,8 @@ public class LoginActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
+
                             act_profile();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }
         );
@@ -68,21 +64,34 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void act_profile() throws ExecutionException, InterruptedException {
+    private void act_profile(){
         GuinyoteClienteJWT guinyoteClienteJWT = GuinyoteClienteJWT.getInstance();
-        guinyoteClienteJWT.loginUsuario(this,userName.getText().toString(),password.getText().toString());
-        //if() {//acierto en el inicio de sesión
+        boolean error;
+        try{
+            error = guinyoteClienteJWT.loginUsuario(this, userName.getText().toString(), password.getText().toString());
+        } catch (Exception e) {
+            Log.d("Login de usuario", e.getMessage());
+            error = true;
+        }
+        if(!error) {//acierto en el inicio de sesión
+            try {
+
+                Usuario user = guinyoteClienteJWT.getUsuario(this,userName.getText().toString());
+                new Usuario(user);
+            }catch(Exception e){
+                Log.d("GET USUARIO",e.getMessage());
+            }
+
             Intent i = new Intent(this, UserProfile.class);
-            i.putExtra("userName",userName.getText().toString());
             startActivityForResult(i, ACTIVITY_PROFILE);
-        /*}
+        }
         else{//error en el inicio de sesión
             CharSequence text = "ERROR EN EL INICIO DE SESION";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(this, text, duration);
             toast.show();
         }
-        guinyoteClienteJWT.getUsuario(this,userName.getText().toString());*/
+
     }
 
     private void act_registro(){

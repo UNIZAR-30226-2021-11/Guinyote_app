@@ -24,39 +24,43 @@ public class GuinyoteClienteJWT implements Serializable {
 
     // Usuarios
     static final String CREATE_USER = "api/v1/users/";
-    static final String LOGIN = "api/v1/users/login";
+    static final String LOGIN = "api/v1/users/login/";
     static final String DELETE_USER = "api/v1/users/";
     static final String GET_USER = "api/v1/users/";
     static final String UPDATE_USER = "api/v1/users/";
 
     // Partidas
     static final String GET_PUBLICAS = "api/v1/games/";
+    static final String GET_USER_GAMES = "api/v1/games/user/";
+    static final String CREATE_GAME = "api/v1/games/";
 
     private static GuinyoteClienteJWT instance = null;
 
     String token;
 
-    protected GuinyoteClienteJWT()  {
+    protected GuinyoteClienteJWT() {
         this.token = null;
     }
 
     public static synchronized GuinyoteClienteJWT getInstance() {
-        if(instance == null)    {
+        if (instance == null) {
             instance = new GuinyoteClienteJWT();
         }
         return instance;
     }
 
-    public String getToken()    {
-        return "Bearer: "+token;
+    public String getToken() {
+        return "Bearer: " + token;
     }
 
 
-    public String getTokenTesting()    {
-        return "Bearer: "+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.Qi0Tc-jTChzascHaZhl0e6rRaCvAS6OJ8RLsI8Y-R78";
+    public String getTokenTesting() {
+        return "Bearer: " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.Qi0Tc-jTChzascHaZhl0e6rRaCvAS6OJ8RLsI8Y-R78";
     }
 
-    public void loginUsuario(Context context, String username, String password)  {
+    public boolean loginUsuario(Context context, String username, String password) throws ExecutionException, InterruptedException {
+
+        boolean error = true;
         final String usuarioJSON = "username";
         final String passwordJSON = "password";
         final String tokenJSON = "token";
@@ -67,20 +71,20 @@ public class GuinyoteClienteJWT implements Serializable {
         json.addProperty(passwordJSON, password);
 
         // Envío + Callback para la respuesta
-        Ion.with(context)
-                .load("POST",HOST+LOGIN)
+        JsonObject result = Ion.with(context)
+                .load("POST", HOST + LOGIN)
                 .setJsonObjectBody(json)
                 .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        // Guarda el token obtenido en la respuesta
-                        token = result.get(tokenJSON).getAsString();
-                    }
-                });
+                .get();
+        if (result.get(tokenJSON) != null) {//comprobar que devuelve algo, si no devuelve es que no ha encontrado el usuario en la base
+            token = result.get(tokenJSON).getAsString();
+            error = false;
+        }
+        return error;
+
     }
 
-    public void crearUsuario(Context context, String location, String usuario, String mail, String password)  {
+    public boolean crearUsuario(Context context, String location, String usuario, String mail, String password) throws ExecutionException, InterruptedException {
         // Constantes para trabajar con JSON
         final String usuarioObjetoJSON = "user";
         final String usuarioJSON = "username";
@@ -95,33 +99,16 @@ public class GuinyoteClienteJWT implements Serializable {
         json.addProperty(locationJSON, location);
         json.addProperty(passwordJSON, password);
 
-        Log.d("JSON que manda", json.toString());
-
-        Ion.getDefault(context).getConscryptMiddleware().enable(false);
-
         // Envío + Callback para la respuesta
-        Ion.with(context)
-                .load("POST", HOST+CREATE_USER)
+        JsonObject result = Ion.with(context)
+                .load("POST", HOST + CREATE_USER)
                 .setJsonObjectBody(json)
                 .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if(e != null)   {
-                            String mensaje = e.getMessage();
-                            String mensajeExtended = e.getLocalizedMessage();
-                            if(mensaje == null) mensaje = "Error desconocido en creación de usuario";
-                            Log.d("Creación de usuario", mensaje+","+mensajeExtended);
-                            e.printStackTrace();
-                        }
-                        else    {
-                            // Ok
-                            Log.d("Creación de usuario", result.toString());
-
-                        }
-                    }
-                });
-
+                .get();
+        if (result.get(usuarioObjetoJSON) != null) {
+            return false;
+        }
+        return true;
     }
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
@@ -134,60 +121,61 @@ public class GuinyoteClienteJWT implements Serializable {
 
         // Espera síncrona
         JsonObject respuesta = Ion.with(context)
-                .load("GET",HOST+GET_USER+username)
+                .load("GET", HOST + GET_USER + username)
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
-
-        return new Usuario(
-                respuesta.get(idUsuario).getAsInt(),
-                respuesta.get(usernameUsuario).getAsString(),
-                respuesta.get(emailUsuario).getAsString(),
-                respuesta.get(locationUsuario).getAsString(),
-                respuesta.get(createdUsuario).getAsString(),
-                respuesta.get(updatedUsuario).getAsString() );
+        if (respuesta.get("user") != null) {
+            return new Usuario(
+                    respuesta.get("user").getAsJsonObject().get(idUsuario).getAsInt(),
+                    respuesta.get("user").getAsJsonObject().get(usernameUsuario).getAsString(),
+                    respuesta.get("user").getAsJsonObject().get(emailUsuario).getAsString(),
+                    respuesta.get("user").getAsJsonObject().get(locationUsuario).getAsString(),
+                    respuesta.get("user").getAsJsonObject().get(createdUsuario).getAsString(),
+                    respuesta.get("user").getAsJsonObject().get(updatedUsuario).getAsString());
+        } else {
+            return null;
+        }
     }
 
-    public void updateUsuario(Context context, Integer id, String email, String location){
+    public void updateUsuario(Context context, Integer id, String email, String location) {
         final String emailJSON = "email";
         final String locationJSON = "location";
 
         JsonObject json = new JsonObject();
-        if(email != null)       json.addProperty(emailJSON, email);
-        if(location != null)    json.addProperty(locationJSON, location);
+        if (email != null) json.addProperty(emailJSON, email);
+        if (location != null) json.addProperty(locationJSON, location);
 
         // Envía la petición PUT y no espera respuesta alguna
         Ion.with(context)
-                .load("PUT",HOST+UPDATE_USER+id.toString())
+                .load("PUT", HOST + UPDATE_USER + id.toString())
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .setJsonObjectBody(json);
     }
 
-    public void deleteUsuario(Context context, Integer id)  {
+    public void deleteUsuario(Context context, Integer id) {
         // Envía la petición DELETE y no espera respuesta alguna
         Ion.with(context)
-                .load("DELETE",HOST+DELETE_USER+id.toString())
+                .load("DELETE", HOST + DELETE_USER + id.toString())
                 .setHeader("Authorization", getToken());  // Token de autorización
     }
 
     public ArrayList<Partida> getPartidasPublicas(Context context) throws ExecutionException, InterruptedException {
         ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 
-        Ion.getDefault(context).getConscryptMiddleware().enable(false);
-
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
-                .load("GET",HOST+GET_PUBLICAS)
+                .load("GET", HOST + GET_PUBLICAS)
                 .setHeader("Authorization", getTokenTesting())  // Token de autorización
                 .asJsonObject()
                 .get();
 
-        Log.d("Mensaje Partidas Recibido",partidasJSON.toString());
+        Log.d("Mensaje Partidas Recibido", partidasJSON.toString());
 
         JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
-        if(partidasJSONArray == null) return partidasRecuperadas;
-        else    {
-            for(JsonElement par : partidasJSONArray)  {
+        if (partidasJSONArray == null) return partidasRecuperadas;
+        else {
+            for (JsonElement par : partidasJSONArray) {
                 JsonObject parObj = par.getAsJsonObject();
                 partidasRecuperadas.add(
                         new Partida(
@@ -204,26 +192,65 @@ public class GuinyoteClienteJWT implements Serializable {
         }
     }
 
-    public Partida createAndJoinGame(Context context, Integer userID) throws ExecutionException, InterruptedException {
+    public Partida createAndJoinGame(Context context, Integer userID,String nombre,boolean publica) throws ExecutionException, InterruptedException {
         Partida creada = null;
+
+        JsonObject json = new JsonObject();
+        if (nombre != null) json.addProperty("name", nombre);
+        json.addProperty("public", publica);
 
         // Espera síncrona
         JsonObject partidaJSON = Ion.with(context)
-                .load("GET",HOST+GET_PUBLICAS)
-                .setHeader("Authorization", getToken())  // Token de autorización
+                .load("POST", HOST + CREATE_GAME+userID)
+                .setHeader("Authorization", getTokenTesting())  // Token de autorización
+                .setJsonObjectBody(json)
                 .asJsonObject()
                 .get();
 
-        if(partidaJSON != null) {
+        if (partidaJSON.get("game") != null) {
             creada = new Partida(
-                    partidaJSON.get("id").getAsLong(),
-                    partidaJSON.get("name").getAsString(),
-                    partidaJSON.get("player_count").getAsInt(),
-                    partidaJSON.get("creation_date").getAsString(),
-                    partidaJSON.get("end_date").getAsString()
+                    partidaJSON.getAsJsonObject("game").get("id").getAsLong(),
+                    partidaJSON.getAsJsonObject("game").get("name").getAsString(),
+                    partidaJSON.getAsJsonObject("game").get("players_count").getAsInt(),
+                    partidaJSON.getAsJsonObject("game").get("creation_date").getAsString(),
+                    partidaJSON.getAsJsonObject("game").get("end_date").getAsString()
             );
         }
 
         return creada;
+    }
+
+    public ArrayList<Partida> getPartidasByUser(Context context, int userId) throws ExecutionException, InterruptedException {
+        ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
+
+        // Espera síncrona
+        JsonObject partidasJSON = Ion.with(context)
+                .load("GET", HOST + GET_USER_GAMES + userId)
+                .setHeader("Authorization", getTokenTesting())  // Token de autorización
+                .asJsonObject()
+                .get();
+
+        Log.d("Partidas Usuario", partidasJSON.toString());
+
+        JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
+        if (partidasJSONArray != null) {
+            for (JsonElement par : partidasJSONArray) {
+                JsonObject parObj = par.getAsJsonObject();
+                partidasRecuperadas.add(
+                        new Partida(
+                                parObj.get("id").getAsLong(),
+                                parObj.get("name").getAsString(),
+                                parObj.get("players_count").getAsInt(),
+                                parObj.get("creation_date").getAsString(),
+                                parObj.get("end_date").getAsString(),
+                                parObj.get("points").getAsInt(),
+                                parObj.get("winned").getAsBoolean()
+                        )
+
+                );
+            }
+            // Devuelve el listado de partidas publicas recuperadas del backend
+        }
+        return partidasRecuperadas;
     }
 }

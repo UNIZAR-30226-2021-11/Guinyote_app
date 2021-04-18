@@ -23,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Registrarse"
-        android:textSize="50dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

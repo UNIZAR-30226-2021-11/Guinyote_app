@@ -14,20 +14,18 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.util.GuinyoteClienteJWT;
+import manyosoft.guinyote.util.Usuario;
 
 public class MainMenuFragment extends Fragment {
 
     private static final int ACTIVITY_LOGIN = 0;
-
-    private GuinyoteClienteJWT cliente;
+    private static final int ACTIVITY_PROFILE = 1;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        cliente = GuinyoteClienteJWT.getInstance();
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.main_menu, container, false);
 
@@ -64,12 +62,14 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                if(true) {// no se ha logeado
+                Usuario user = Usuario.getInstance();
+                if(user == null) {// no se ha logeado
                     Intent i = new Intent(context, LoginActivity.class);
                     startActivityForResult(i, ACTIVITY_LOGIN);
                 }
                 else{//ya se ha logeado
-
+                    Intent i = new Intent(context, UserProfile.class);
+                    startActivityForResult(i, ACTIVITY_PROFILE);
                 }
             }
         });

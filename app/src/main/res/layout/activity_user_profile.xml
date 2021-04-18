@@ -73,8 +73,8 @@
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="@+id/tableLayout" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_borrar"
+        app:layout_constraintStart_toStartOf="@+id/User_tableLayout" />
 
     <TextView
         android:id="@+id/textView_numVictorias"
@@ -87,7 +87,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView_victorias" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_logout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -102,10 +102,10 @@
         android:layout_height="wrap_content"
         android:text="HISTORIAL COMPLETO"
         app:layout_constraintEnd_toEndOf="@+id/User_tableLayout"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/button_logout" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_borrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="BORRAR CUENTA"
@@ -126,7 +126,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2">
+        app:layout_constraintTop_toBottomOf="@+id/button_borrar">
 
         <TableRow
             android:layout_width="match_parent"

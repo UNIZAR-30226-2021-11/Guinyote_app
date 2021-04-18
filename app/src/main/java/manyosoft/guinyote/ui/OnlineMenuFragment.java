@@ -15,6 +15,8 @@ import manyosoft.guinyote.R;
 
 public class OnlineMenuFragment extends Fragment {
 
+    private static final int ACTIVITY_CREATE_GAME = 0;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -31,11 +33,8 @@ public class OnlineMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                CharSequence text = "Apertura página creación sala";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Intent i = new Intent(context, CrearPartidas.class);
+                startActivityForResult(i, ACTIVITY_CREATE_GAME);
             }
         });
 

@@ -1,8 +1,16 @@
 package manyosoft.guinyote.util;
 
+import com.koushikdutta.ion.builder.Builders;
+
 public class Usuario {
     private Integer id;
     private String username, email, location, created_at, updated_at;
+
+    private static Usuario instance = null;
+
+    public static synchronized Usuario getInstance() {
+        return instance;
+    }
 
     public Usuario(Integer id, String username, String email, String location, String created_at, String updated_at)    {
         this.id = id;
@@ -11,6 +19,14 @@ public class Usuario {
         this.location = location;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public Usuario(Usuario u){
+        instance = u;
+    }
+
+    public void logOut(){
+        instance = null;
     }
 
     public Integer getId() {

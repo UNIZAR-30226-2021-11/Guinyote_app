@@ -3,8 +3,9 @@ package manyosoft.guinyote.util;
 public class Partida {
     private Long id;
     private String nombre;
-    private Integer jugadores;
+    private Integer jugadores,puntos;
     private String created, end;
+    private boolean victoria;
 
     /**
      *  Resto de elementos necesarios para controlar la partida
@@ -15,9 +16,9 @@ public class Partida {
             this.id = id;
             this.nombre = name;
             this.jugadores = players;
+
         }
     }
-
 
     public Partida(Long id, String name, Integer players, String created, String end)   {
         if(id != null && name != null && players != null)   {
@@ -26,6 +27,18 @@ public class Partida {
             this.jugadores = players;
             this.created = created;
             this.end = end;
+        }
+    }
+
+    public Partida(Long id, String name, Integer players, String created, String end,Integer puntos,boolean victoria)   {
+        if(id != null && name != null && players != null)   {
+            this.id = id;
+            this.nombre = name;
+            this.jugadores = players;
+            this.created = created;
+            this.end = end;
+            this.puntos = puntos;
+            this.victoria = victoria;
         }
     }
 
@@ -60,4 +73,20 @@ public class Partida {
     public String getEnd() { return end;}
 
     public void setEnd(String end) {this.end = end;}
+
+    public Integer getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(Integer puntos) {
+        this.puntos = puntos;
+    }
+
+    public boolean getVictoria() {
+        return victoria;
+    }
+
+    public void setVictoria(boolean victoria) {
+        this.victoria = victoria;
+    }
 }
