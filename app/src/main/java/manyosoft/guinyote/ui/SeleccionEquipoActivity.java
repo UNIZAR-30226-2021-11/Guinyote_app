@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutionException;
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.util.GuinyoteClienteJWT;
 
+import static java.lang.Long.parseLong;
+
 public class SeleccionEquipoActivity extends AppCompatActivity {
     private long id;
     private TextView j1t1, j2t1, j1t2, j2t2;
@@ -89,5 +91,27 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
         });
 
 
+        Long idPareja1 = parseLong(jugadores.get(4));
+        Long idPareja2 = parseLong(jugadores.get(5));
+        joinT1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO mandar el id de jugador correctamente
+                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, 0L, idPareja1);
+                // TODO Iniciar partida
+                // ...
+            }
+        });
+
+
+        joinT2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO mandar el id de jugador correctamente
+                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, 0L, idPareja2);
+                // TODO Iniciar partida
+                // ...
+            }
+        });
     }
 }

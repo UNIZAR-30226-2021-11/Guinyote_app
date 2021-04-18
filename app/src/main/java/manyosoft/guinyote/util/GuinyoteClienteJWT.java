@@ -33,6 +33,9 @@ public class GuinyoteClienteJWT implements Serializable {
     static final String GET_PUBLICAS = "api/v1/games/";
     static final String GET_GAME = "api/v1/games/";
 
+    // Players
+    static final String JOIN_PAREJA = "api/v1/players/";
+
     private static GuinyoteClienteJWT instance = null;
 
     String token;
@@ -208,6 +211,8 @@ public class GuinyoteClienteJWT implements Serializable {
     public Partida createAndJoinGame(Context context, Integer userID) throws ExecutionException, InterruptedException {
         Partida creada = null;
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
+
         // Espera síncrona
         JsonObject partidaJSON = Ion.with(context)
                 .load("GET",HOST+GET_GAME+userID.toString())
@@ -230,8 +235,9 @@ public class GuinyoteClienteJWT implements Serializable {
 
 
     public ArrayList<String> getJugadores(Context context, Long idPartida) throws ExecutionException, InterruptedException {
-        ArrayList<String> jugadores = new ArrayList<>(4);
+        ArrayList<String> jugadores = new ArrayList<>(6);
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
 
         JsonObject game = Ion.with(context)
                 .load("GET",HOST+GET_PUBLICAS)
@@ -277,6 +283,38 @@ public class GuinyoteClienteJWT implements Serializable {
         if(jugador22 == null) jugadores.set(3, null);
         else                  jugadores.set(3, jugador22.getAsJsonObject().get("username").getAsString());
 
+        if(pareja1 == null) jugadores.set(0, null);
+        else                jugadores.set(0, ((Long)pareja1.get("id").getAsLong()).toString());
+        if(pareja2 == null) jugadores.set(0, null);
+        else                jugadores.set(0, ((Long)pareja2.get("id").getAsLong()).toString());
+
         return jugadores;
+    }
+
+
+    public Long joinGame(Context context, Long idJugador, Long idPareja)  {
+        // Objeto JSON a pasar al backend
+        JsonObject json = new JsonObject();
+        json.addProperty("user_id", idJugador);
+        json.addProperty("pair_id", idPareja);
+
+
+        // Retorna el id del jugador (-1 si hay algun problema)
+        Long id = null;
+        try {
+            Ion.getDefault(context).getConscryptMiddleware().enable(false);
+            // Espera síncrona
+            JsonObject respuesta = Ion.with(context)
+                    .load("POST",HOST+JOIN_PAREJA)
+                    .setHeader("Authorization", getToken())  // Token de autorización
+                    .asJsonObject()
+                    .get();
+
+            id = respuesta.get("player").getAsJsonObject().get("id").getAsLong();
+        } catch (Exception e)   {
+            id = -1L;
+        }
+
+        return id;
     }
 }
