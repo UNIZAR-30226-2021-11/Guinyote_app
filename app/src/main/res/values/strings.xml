@@ -43,10 +43,15 @@
     <string name="back_button_description">Back button</string>
     <string name="settings_button_description">Preferencias</string>
 
-    <!-- LISTADO PARTIDAS -->
+    <!-- Creacion PARTIDAS -->
     <string name="crearPartida">CREAR PARTIDA</string>
     <string name="nombreSala">Introduzca el nombre de la sala:</string>
     <string name="publica">Pública:</string>
     <string name="nombre">Nombre</string>
+
+    <!-- SELECCION EQUIPO -->
+    <string name="Error">Error</string>
+    <string name="Join">Unirse</string>
+    <string name="Full">Equipo lleno</string>
 
 </resources>

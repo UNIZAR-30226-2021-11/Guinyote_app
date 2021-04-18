@@ -33,6 +33,10 @@ public class GuinyoteClienteJWT implements Serializable {
     static final String GET_PUBLICAS = "api/v1/games/";
     static final String GET_USER_GAMES = "api/v1/games/user/";
     static final String CREATE_GAME = "api/v1/games/";
+    static final String GET_GAME = "api/v1/games/";
+
+    // Players
+    static final String JOIN_PAREJA = "api/v1/players/";
 
     private static GuinyoteClienteJWT instance = null;
 
@@ -252,5 +256,90 @@ public class GuinyoteClienteJWT implements Serializable {
             // Devuelve el listado de partidas publicas recuperadas del backend
         }
         return partidasRecuperadas;
+    }
+}
+
+    public ArrayList<String> getJugadores(Context context, Long idPartida) throws ExecutionException, InterruptedException {
+        ArrayList<String> jugadores = new ArrayList<>(6);
+
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
+
+        JsonObject game = Ion.with(context)
+                .load("GET",HOST+GET_PUBLICAS)
+                .setHeader("Authorization", getToken())  // Token de autorización
+                .asJsonObject()
+                .get();
+
+        JsonArray parejasJsonArray = game.getAsJsonArray("pairs");
+        JsonElement parejaElem1 = parejasJsonArray.get(0), parejaElem2 = parejasJsonArray.get(0);
+        JsonObject pareja1, pareja2;
+        pareja1 = parejaElem1.getAsJsonObject(); pareja2 = parejaElem2.getAsJsonObject();
+        JsonArray jugadoresPareja1 = pareja1.getAsJsonArray("users");
+        JsonArray jugadoresPareja2 = pareja2.getAsJsonArray("users");
+
+        JsonElement jugador11, jugador12, jugador21, jugador22;
+        try {
+            jugador11 = jugadoresPareja1.get(0);
+        } catch (IndexOutOfBoundsException e)   {
+            jugador11 = null;
+        }
+        try {
+            jugador12 = jugadoresPareja1.get(1);
+        } catch (IndexOutOfBoundsException e)   {
+            jugador12 = null;
+        }
+        try {
+            jugador21 = jugadoresPareja2.get(0);
+        } catch (IndexOutOfBoundsException e)   {
+            jugador21 = null;
+        }
+        try {
+            jugador22 = jugadoresPareja2.get(1);
+        } catch (IndexOutOfBoundsException e)   {
+            jugador22 = null;
+        }
+
+        if(jugador11 == null) jugadores.set(0, null);
+        else                  jugadores.set(0, jugador11.getAsJsonObject().get("username").getAsString());
+        if(jugador12 == null) jugadores.set(1, null);
+        else                  jugadores.set(1, jugador12.getAsJsonObject().get("username").getAsString());
+        if(jugador21 == null) jugadores.set(2, null);
+        else                  jugadores.set(2, jugador21.getAsJsonObject().get("username").getAsString());
+        if(jugador22 == null) jugadores.set(3, null);
+        else                  jugadores.set(3, jugador22.getAsJsonObject().get("username").getAsString());
+
+        if(pareja1 == null) jugadores.set(0, null);
+        else                jugadores.set(0, ((Long)pareja1.get("id").getAsLong()).toString());
+        if(pareja2 == null) jugadores.set(0, null);
+        else                jugadores.set(0, ((Long)pareja2.get("id").getAsLong()).toString());
+
+        return jugadores;
+    }
+
+
+    public Long joinGame(Context context, Long idJugador, Long idPareja)  {
+        // Objeto JSON a pasar al backend
+        JsonObject json = new JsonObject();
+        json.addProperty("user_id", idJugador);
+        json.addProperty("pair_id", idPareja);
+
+
+        // Retorna el id del jugador (-1 si hay algun problema)
+        Long id = null;
+        try {
+            Ion.getDefault(context).getConscryptMiddleware().enable(false);
+            // Espera síncrona
+            JsonObject respuesta = Ion.with(context)
+                    .load("POST",HOST+JOIN_PAREJA)
+                    .setHeader("Authorization", getToken())  // Token de autorización
+                    .asJsonObject()
+                    .get();
+
+            id = respuesta.get("player").getAsJsonObject().get("id").getAsLong();
+        } catch (Exception e)   {
+            id = -1L;
+        }
+
+        return id;
     }
 }
