@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.util.GuinyoteClienteJWT;
+import manyosoft.guinyote.util.Usuario;
 
 import static java.lang.Long.parseLong;
 
@@ -36,9 +37,9 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
 
         clienteJWT = GuinyoteClienteJWT.getInstance();
         j1t1 = findViewById(R.id.jugador1Team1);
-        j1t1 = findViewById(R.id.jugador2Team1);
-        j1t1 = findViewById(R.id.jugador1Team2);
-        j1t1 = findViewById(R.id.jugador2Team2);
+        j2t1 = findViewById(R.id.jugador2Team1);
+        j1t2 = findViewById(R.id.jugador1Team2);
+        j2t2 = findViewById(R.id.jugador2Team2);
         joinT1 = findViewById(R.id.buttonTeam1);
         joinT2 = findViewById(R.id.buttonTeam2);
 
@@ -56,22 +57,22 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             if(jugadores.get(1) != null) j2t1.setText(jugadores.get(1));
             else                         j2t1.setText("-----");
 
-            if(jugadores.get(2) != null) j1t2.setText(jugadores.get(2));
+            if(jugadores.get(3) != null) j1t2.setText(jugadores.get(3));
             else                         j1t2.setText("-----");
 
-            if(jugadores.get(3) != null) j2t2.setText(jugadores.get(3));
+            if(jugadores.get(4) != null) j2t2.setText(jugadores.get(4));
             else                         j2t2.setText("-----");
 
             if(jugadores.get(0) != null && jugadores.get(1) != null)    {
-                joinT1.setText(R.string.Join);
-            } else {
                 joinT1.setText(R.string.Full);
+            } else {
+                joinT1.setText(R.string.Join);
             }
 
-            if(jugadores.get(2) != null && jugadores.get(3) != null)    {
-                joinT2.setText(R.string.Join);
-            } else {
+            if(jugadores.get(3) != null && jugadores.get(4) != null)    {
                 joinT2.setText(R.string.Full);
+            } else {
+                joinT2.setText(R.string.Join);
             }
         }
         else {
@@ -89,15 +90,23 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
 
             }
         });
+        Long idPareja1,idPareja2;
+        if(jugadores.get(2) == null){
+            idPareja1 = Long.valueOf(-1);
+        }else{
+            idPareja1 = parseLong(jugadores.get(2));
+        }
+        if(jugadores.get(5) == null){
+            idPareja2 = Long.valueOf(-1);
+        }else{
+            idPareja2 = parseLong(jugadores.get(5));
+        }
 
-
-        Long idPareja1 = parseLong(jugadores.get(4));
-        Long idPareja2 = parseLong(jugadores.get(5));
         joinT1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO mandar el id de jugador correctamente
-                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, 0L, idPareja1);
+                Usuario user = Usuario.getInstance();
+                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this,user.getId().longValue(), idPareja1);
                 // TODO Iniciar partida
                 // ...
             }
@@ -107,8 +116,8 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
         joinT2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO mandar el id de jugador correctamente
-                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, 0L, idPareja2);
+                Usuario user = Usuario.getInstance();
+                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, user.getId().longValue(), idPareja2);
                 // TODO Iniciar partida
                 // ...
             }

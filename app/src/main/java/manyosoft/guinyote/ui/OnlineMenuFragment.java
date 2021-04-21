@@ -15,8 +15,6 @@ import manyosoft.guinyote.R;
 
 public class OnlineMenuFragment extends Fragment {
 
-    private static final int ACTIVITY_CREATE_GAME = 0;
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -34,7 +32,7 @@ public class OnlineMenuFragment extends Fragment {
             public void onClick(View view) {
                 Context context = getContext();
                 Intent i = new Intent(context, CrearPartidas.class);
-                startActivityForResult(i, ACTIVITY_CREATE_GAME);
+                startActivity(i);
             }
         });
 

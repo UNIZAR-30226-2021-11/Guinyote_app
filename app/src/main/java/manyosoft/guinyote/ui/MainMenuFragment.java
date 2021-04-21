@@ -18,9 +18,6 @@ import manyosoft.guinyote.util.Usuario;
 
 public class MainMenuFragment extends Fragment {
 
-    private static final int ACTIVITY_LOGIN = 0;
-    private static final int ACTIVITY_PROFILE = 1;
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -65,11 +62,11 @@ public class MainMenuFragment extends Fragment {
                 Usuario user = Usuario.getInstance();
                 if(user == null) {// no se ha logeado
                     Intent i = new Intent(context, LoginActivity.class);
-                    startActivityForResult(i, ACTIVITY_LOGIN);
+                    startActivity(i);
                 }
                 else{//ya se ha logeado
                     Intent i = new Intent(context, UserProfile.class);
-                    startActivityForResult(i, ACTIVITY_PROFILE);
+                    startActivity(i);
                 }
             }
         });

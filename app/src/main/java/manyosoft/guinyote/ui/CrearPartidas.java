@@ -19,8 +19,6 @@ import manyosoft.guinyote.util.Usuario;
 
 public class CrearPartidas extends AppCompatActivity {
 
-    private static final int ACTIVITY_SELECT_TEAM = 0;
-
     private EditText nombreSala;
     private CheckBox publica;
 
@@ -54,9 +52,10 @@ public class CrearPartidas extends AppCompatActivity {
         GuinyoteClienteJWT guinyoteClienteJWT = GuinyoteClienteJWT.getInstance();
         try {
             Usuario user = Usuario.getInstance();
-            guinyoteClienteJWT.createAndJoinGame(this, user.getId(), nombreSala.getText().toString(), publica.isChecked());
+            Partida nuevaPartida = guinyoteClienteJWT.createAndJoinGame(this, user.getId(), nombreSala.getText().toString(), publica.isChecked());
             Intent i = new Intent(this, SeleccionEquipoActivity.class);
-            startActivityForResult(i, ACTIVITY_SELECT_TEAM);
+            i.putExtra("id",nuevaPartida.getId());
+            startActivity(i);
         }catch (Exception e){
             Log.d("Crear Partida",e.getMessage());
         }

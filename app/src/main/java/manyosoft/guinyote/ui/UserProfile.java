@@ -24,9 +24,6 @@ import manyosoft.guinyote.util.Usuario;
 
 public class UserProfile extends AppCompatActivity {
 
-    private static final int ACTIVITY_HISTORY = 0;
-    private static final int ACTIVITY_MAIN = 1;
-
     private TextView userName;
     private TextView numPartidas;
     private TextView numVictorias;
@@ -79,19 +76,19 @@ public class UserProfile extends AppCompatActivity {
 
     private void act_history(){
         Intent i = new Intent(this, HistoryActivity.class);
-        startActivityForResult(i,ACTIVITY_HISTORY);
+        startActivity(i);
     }
 
     private void act_logOut(){
         Usuario user = Usuario.getInstance();
         user.logOut();
         Intent i = new Intent(this, MainActivity.class);
-        startActivityForResult(i,ACTIVITY_MAIN);
+        startActivity(i);
     }
 
     private void goBack(){
         Intent i = new Intent(this, MainActivity.class);
-        startActivityForResult(i,ACTIVITY_MAIN);
+        startActivity(i);
     }
 
     private void rellenarPantalla() throws ExecutionException, InterruptedException {

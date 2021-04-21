@@ -71,7 +71,7 @@ public class Registro extends AppCompatActivity {
 
             if (!error) {//registro correcto
                 Intent i = new Intent(this, LoginActivity.class);
-                startActivityForResult(i,0);
+                startActivity(i);
             } else {//registro incorrecto
                 CharSequence text = "ERROR AL CREAR EL USUARIO.";
                 int duration = Toast.LENGTH_LONG;

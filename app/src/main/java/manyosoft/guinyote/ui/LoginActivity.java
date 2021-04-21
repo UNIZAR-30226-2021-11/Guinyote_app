@@ -20,8 +20,6 @@ import manyosoft.guinyote.util.GuinyoteClienteJWT;
 import manyosoft.guinyote.util.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final int ACTIVITY_PROFILE = 0;
-    private static final int ACTIVITY_CREAR_CUENTA = 1;
 
     private EditText userName;
     private EditText password;
@@ -83,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             Intent i = new Intent(this, UserProfile.class);
-            startActivityForResult(i, ACTIVITY_PROFILE);
+            startActivity(i);
         }
         else{//error en el inicio de sesión
             CharSequence text = "ERROR EN EL INICIO DE SESION";
@@ -96,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void act_registro(){
         Intent i = new Intent(this, Registro.class);
-        startActivityForResult(i,ACTIVITY_CREAR_CUENTA);
+        startActivity(i);
     }
 
 }
