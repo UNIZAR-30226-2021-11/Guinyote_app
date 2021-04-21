@@ -50,8 +50,13 @@
     <string name="nombre">Nombre</string>
 
     <!-- SELECCION EQUIPO -->
+    <string name="Hueco">------</string>
     <string name="Error">Error</string>
     <string name="Join">Unirse</string>
     <string name="Full">Equipo lleno</string>
+
+    <!-- TABLERO DE JUEGO -->
+    <string name="pausarPartida">Solicitar pausa</string>
+    <string name="Cantar">Cantar</string>
 
 </resources>

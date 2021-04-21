@@ -7,6 +7,51 @@
     tools:context=".ui.JuegoActivity">
 
 
+    <!-- TABLERO -->
+    <ImageView
+        android:id="@+id/tablero"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:srcCompat="@drawable/casino_table"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- ID DE PARTIDA -->
+    <TextView
+        android:id="@+id/idPartida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/unknownName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:textColor="@color/white"
+        />
+
+    <Button
+        android:id="@+id/botonPausa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/pausarPartida"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <Button
+        android:id="@+id/botonCantar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/Cantar"
+        app:layout_constraintTop_toBottomOf="@id/botonPausa"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <!-- MANO DEL JUGADOR -->
     <ImageButton
         android:id="@+id/carta1"
         android:layout_width="@dimen/card_width"
@@ -73,5 +118,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <!-- TRIUNFO -->
+    <ImageButton
+        android:id="@+id/carta_triunfo"
+        android:layout_width="@dimen/rcard_width"
+        android:layout_height="@dimen/rcard_height"
+        android:rotation="90"
+        android:background="@drawable/espada_7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/carta2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <!-- MONTON PARA ROBAR -->
+    <ImageButton
+        android:id="@+id/monton0"
+        android:layout_width="@dimen/rcard_width"
+        android:layout_height="@dimen/rcard_height"
+        android:background="@drawable/reverso"
+        app:layout_constraintStart_toStartOf="@id/carta_triunfo"
+        app:layout_constraintEnd_toStartOf="@id/carta_triunfo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/carta2"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
