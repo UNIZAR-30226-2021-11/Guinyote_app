@@ -10,7 +10,9 @@ public class GuinyoteClienteWebSockets {
     /**
      * Servidor remoto del backend
      */
-    private static final String SERVER = /*"ws://15.188.14.213:27000/echo"*/"ws://echo.websocket.org";
+    private static final String SERVER      = "echo.websocket.org";
+    private static final String SECURE_DIR  = "wss://" + SERVER;
+    private static final String DIR         = "ws://" + SERVER;
 
     /**
      * The timeout value in milliseconds for socket connection.
@@ -38,7 +40,30 @@ public class GuinyoteClienteWebSockets {
         // Crea una conexión y la asocia al websocket de la clase
         ws =  new WebSocketFactory()
                 .setConnectionTimeout(TIMEOUT)
-                .createSocket(SERVER)
+                .createSocket(DIR)
+                .addListener(new WebSocketAdapter() {
+                    // A text message arrived from the server.
+                    public void onTextMessage(WebSocket websocket, String message) {
+                        buzon.add(message);
+                    }
+                })
+                .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
+                .connect();
+
+    }
+
+    /**
+     * Connect securely to the server.
+     */
+    public void connectSecure() throws IOException, WebSocketException
+    {
+        // Crea un buzón vacío
+        buzon = new LinkedList<>();
+
+        // Crea una conexión y la asocia al websocket de la clase
+        ws =  new WebSocketFactory()
+                .setConnectionTimeout(TIMEOUT)
+                .createSocket(SECURE_DIR)
                 .addListener(new WebSocketAdapter() {
                     // A text message arrived from the server.
                     public void onTextMessage(WebSocket websocket, String message) {

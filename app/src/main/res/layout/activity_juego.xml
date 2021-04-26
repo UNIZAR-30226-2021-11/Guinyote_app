@@ -31,6 +31,7 @@
         android:textColor="@color/white"
         />
 
+    <!-- BOTON PAUSA -->
     <Button
         android:id="@+id/botonPausa"
         android:layout_width="wrap_content"
@@ -41,15 +42,52 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <!-- BOTON CANTAR -->
     <Button
         android:id="@+id/botonCantar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
-        android:text="@string/Cantar"
+        android:text="@string/cantar"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/botonPausa"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/botonNoCantar"
         />
+    <Button
+        android:id="@+id/botonNoCantar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/noCantar"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/botonPausa"
+        app:layout_constraintStart_toEndOf="@id/botonCantar"
+        />
+
+    <!-- BOTON CAMBIAR -->
+    <Button
+        android:id="@+id/botonCambiar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/cambiar"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/botonPausa"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/botonNoCambiar"
+        />
+    <Button
+        android:id="@+id/botonNoCambiar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/noCambiar"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/botonPausa"
+        app:layout_constraintStart_toEndOf="@id/botonCambiar"
+        />
+
 
     <!-- MANO DEL JUGADOR -->
     <ImageButton
@@ -119,25 +157,60 @@
         />
 
     <!-- TRIUNFO -->
-    <ImageButton
+    <ImageView
         android:id="@+id/carta_triunfo"
-        android:layout_width="@dimen/rcard_width"
-        android:layout_height="@dimen/rcard_height"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
         android:rotation="90"
         android:background="@drawable/espada_7"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/carta2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/monton1"
         />
     <!-- MONTON PARA ROBAR -->
-    <ImageButton
-        android:id="@+id/monton0"
-        android:layout_width="@dimen/rcard_width"
-        android:layout_height="@dimen/rcard_height"
+    <ImageView
+        android:id="@+id/montonRobar"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
         android:background="@drawable/reverso"
         app:layout_constraintStart_toStartOf="@id/carta_triunfo"
         app:layout_constraintEnd_toStartOf="@id/carta_triunfo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/carta2"
+        />
+
+    <!-- CARTAS TIRADAS POR LOS JUGADORES -->
+    <ImageView
+        android:id="@+id/monton1"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
+        android:rotation="30"
+        android:background="@drawable/oro_7"
+        app:layout_constraintStart_toEndOf="@id/carta_triunfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/carta2"
+        />
+    <ImageView
+        android:id="@+id/monton2"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
+        android:rotation="80"
+        android:background="@drawable/copa_12"
+        app:layout_constraintStart_toEndOf="@id/carta_triunfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/carta2"
+        />
+    <ImageView
+        android:id="@+id/monton3"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
+        android:rotation="110"
+        android:background="@drawable/espada_10"
+        app:layout_constraintStart_toEndOf="@id/carta_triunfo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/carta2"
         />
