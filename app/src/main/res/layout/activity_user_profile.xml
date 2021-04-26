@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentStart="false"
-    android:layout_alignParentLeft="false"
     android:layout_alignParentTop="false"
     android:layout_alignParentEnd="false"
     android:layout_alignParentRight="false"
@@ -135,17 +134,18 @@
 
             <TextView
                 android:id="@+id/textView26"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
                 android:gravity="center"
                 android:text="@string/DURACION"
                 android:textColor="#000000"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView25"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="EQUIPOS"
                 android:textColor="#000000"
@@ -154,7 +154,7 @@
             <TextView
                 android:id="@+id/textView24"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="RESULTADO"
                 android:textColor="#000000"
@@ -162,8 +162,8 @@
 
             <TextView
                 android:id="@+id/textView23"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="PUNTOS"
                 android:textColor="#000000"
@@ -172,5 +172,28 @@
 
 
     </TableLayout>
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="@string/buscarUsuario"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/back"
+        app:layout_constraintEnd_toStartOf="@+id/button_buscar"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="@+id/back" />
+
+    <Button
+        android:id="@+id/button_buscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="BUSCAR"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -91,15 +91,20 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             }
         });
         Long idPareja1,idPareja2;
-        if(jugadores.get(2) == null){
+        if(jugadores != null) {
+            if (jugadores.get(2) == null) {
+                idPareja1 = Long.valueOf(-1);
+            } else {
+                idPareja1 = parseLong(jugadores.get(2));
+            }
+            if (jugadores.get(5) == null) {
+                idPareja2 = Long.valueOf(-1);
+            } else {
+                idPareja2 = parseLong(jugadores.get(5));
+            }
+        }else{
             idPareja1 = Long.valueOf(-1);
-        }else{
-            idPareja1 = parseLong(jugadores.get(2));
-        }
-        if(jugadores.get(5) == null){
             idPareja2 = Long.valueOf(-1);
-        }else{
-            idPareja2 = parseLong(jugadores.get(5));
         }
 
         joinT1.setOnClickListener(new View.OnClickListener() {

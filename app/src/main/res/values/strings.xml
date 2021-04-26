@@ -36,6 +36,8 @@
     <string name="RESULTADO">RESULTADO</string>
     <string name="PUNTOS">PUNTOS</string>
     <string name="DURACION">DURACION</string>
+    <string name="buscarUsuario">Escriba un usuario...</string>
+
 
     <!-- LISTADO PARTIDAS -->
     <string name="introduccir_codigo">Introduza el código de la partida</string>
