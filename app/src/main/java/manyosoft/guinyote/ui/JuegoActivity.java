@@ -19,6 +19,7 @@ import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 
 import manyosoft.guinyote.R;
@@ -168,46 +169,46 @@ public class JuegoActivity extends AppCompatActivity {
 
     // Actualiza el tablero a partir del json recibido
     private void actualizaTablero(String json) {
-        EstadoPartida est = new EstadoPartida(json, idPlayer);
+        EstadoPartida est = new EstadoPartida(json, idPlayer,this);
         // Si es arrastre no hay monton de robar
         if (est.isArrastre()) monton_robar.setVisibility(View.INVISIBLE);
         else monton_robar.setVisibility(View.VISIBLE);
 
         // Actualiza la mano del jugador
-        if (est.getCarta1() != null) {
-            carta1.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta1()));
+        if (est.getCarta(1) != null) {
+            carta1.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(1)));
             carta1.setVisibility(View.VISIBLE);
-            carta1.setClickable(est.isTirarCarta() && est.isPuedeCarta1());
+            carta1.setClickable(est.isTirarCarta() && est.isPuedeCarta(1));
         } else carta1.setVisibility(View.INVISIBLE);
 
-        if (est.getCarta2() != null) {
-            carta2.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta2()));
+        if (est.getCarta(2) != null) {
+            carta2.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(2)));
             carta2.setVisibility(View.VISIBLE);
-            carta2.setClickable(est.isTirarCarta() && est.isPuedeCarta2());
+            carta2.setClickable(est.isTirarCarta() && est.isPuedeCarta(2));
         } else carta2.setVisibility(View.INVISIBLE);
 
-        if (est.getCarta3() != null) {
-            carta3.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta3()));
+        if (est.getCarta(3) != null) {
+            carta3.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(3)));
             carta3.setVisibility(View.VISIBLE);
-            carta3.setClickable(est.isTirarCarta() && est.isPuedeCarta3());
+            carta3.setClickable(est.isTirarCarta() && est.isPuedeCarta(3));
         } else carta3.setVisibility(View.INVISIBLE);
 
-        if (est.getCarta4() != null) {
-            carta4.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta4()));
+        if (est.getCarta(4) != null) {
+            carta4.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(4)));
             carta4.setVisibility(View.VISIBLE);
-            carta4.setClickable(est.isTirarCarta() && est.isPuedeCarta4());
+            carta4.setClickable(est.isTirarCarta() && est.isPuedeCarta(4));
         } else carta4.setVisibility(View.INVISIBLE);
 
-        if (est.getCarta5() != null) {
-            carta5.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta5()));
+        if (est.getCarta(5) != null) {
+            carta5.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(5)));
             carta5.setVisibility(View.VISIBLE);
-            carta5.setClickable(est.isTirarCarta() && est.isPuedeCarta5());
+            carta5.setClickable(est.isTirarCarta() && est.isPuedeCarta(5));
         } else carta5.setVisibility(View.INVISIBLE);
 
-        if (est.getCarta6() != null) {
-            carta6.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta6()));
+        if (est.getCarta(6) != null) {
+            carta6.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(6)));
             carta6.setVisibility(View.VISIBLE);
-            carta6.setClickable(est.isTirarCarta() && est.isPuedeCarta6());
+            carta6.setClickable(est.isTirarCarta() && est.isPuedeCarta(6));
         } else carta6.setVisibility(View.INVISIBLE);
 
         // Si es posible cantar, muestra y activa los botones de cantar y no cantar

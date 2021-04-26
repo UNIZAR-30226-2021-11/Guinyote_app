@@ -1,10 +1,18 @@
 package manyosoft.guinyote.util;
 
+import android.content.Context;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.gson.GsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import manyosoft.guinyote.R;
 
 /**
  * Clase que representa el estado de una partida en un momento concreto
@@ -12,13 +20,17 @@ import org.json.JSONObject;
  * el BackEnd.
  */
 public class EstadoPartida {
+
     // Estado de la partida
     private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda;
     private boolean vueltas, arrastre;
+
     // Acciones requeridas al jugador
     private boolean tirarCarta, cantar, cambiar;
-    private Integer carta1, carta2, carta3, carta4, carta5, carta6;
-    private boolean puedeCarta1, puedeCarta2, puedeCarta3, puedeCarta4, puedeCarta5, puedeCarta6;
+    private ArrayList<Integer> cartas;
+    private ArrayList<Boolean> puedeCarta;
+
+    //
 
     public EstadoPartida(Long id, Long points_team_a, Long points_team_b, Long points_sing_a,
                          Long points_sing_b, Long ronda, boolean vueltas, boolean arrastre,
@@ -36,16 +48,16 @@ public class EstadoPartida {
         this.tirarCarta = tirarCarta;
         this.cantar = cantar;
         this.cambiar = cambiar;
-        this.carta1 = carta1;
-        this.carta2 = carta2;
-        this.carta3 = carta3;
-        this.carta4 = carta4;
-        this.carta5 = carta5;
-        this.carta6 = carta6;
+        this.cartas.add(carta1);
+        this.cartas.add(carta2);
+        this.cartas.add(carta3);
+        this.cartas.add(carta4);
+        this.cartas.add(carta5);
+        this.cartas.add(carta6);
     }
 
     // TODO Recoger el estado de la partida a partir del JSON que el backend envia
-    public EstadoPartida(String json, Long idPlayer)   {
+    public EstadoPartida(String json, Long idPlayer, Context context)   {
         JSONObject root = null;
         try {
             root = new JSONObject(json);
@@ -61,20 +73,40 @@ public class EstadoPartida {
                 points_sing_a = root.getLong("points_sing_b");
                 ronda = root.getLong("round");
                 vueltas = root.getBoolean("vueltas");
+                arrastre = root.getBoolean("arrastre");
+                JSONArray jugadores = root.getJSONArray("players");
+                JSONObject jugador;
+                boolean encontrado = false;
+                int i = 0;
+                while (!encontrado){
+                    jugador = (JSONObject) jugadores.get(i);
+                    if(jugador.getLong("id") == idPlayer){
+                        encontrado = true;
+                        id = idPlayer;
+                        tirarCarta = jugador.getBoolean("can_play");
+                        cantar = jugador.getBoolean("can_sing");
+                        cambiar = jugador.getBoolean("can_change");
+                        for(int j = 0; j<6; j++){
+                            JSONObject carta = (JSONObject) jugador.getJSONArray("cards").get(i);
+                            if(carta != null){
+                                int valorCarta = carta.getInt("val");
+                                String paloCarta = carta.getString("suit");
+                                String nombreCarta = paloCarta + "_" + valorCarta;
+                                int id = context.getResources().getIdentifier(nombreCarta,"drawable",context.getPackageName());
+                                cartas.add(id);
+                                puedeCarta.add(carta.getBoolean("playable"));
+                            }else{
+                                cartas.add(null);
+                                puedeCarta.add(false);
+                            }
+                        }
+                    }
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        /**
-         * DE LAS CARTAS SE TIENE QUE GUARDAR SU ID EN DRAWABLES
-         */
-
-
-
-        /**
-         * INCOMPLETO....
-         */
     }
 
     public Long getId() {
@@ -165,99 +197,19 @@ public class EstadoPartida {
         this.cambiar = cambiar;
     }
 
-    public Integer getCarta1() {
-        return carta1;
+    public Integer getCarta(int indice){
+        return cartas.get(indice-1);
     }
 
-    public void setCarta1(Integer carta1) {
-        this.carta1 = carta1;
+    public void setCarta(int indice, Integer carta){
+        cartas.add(indice-1,carta);
     }
 
-    public Integer getCarta2() {
-        return carta2;
+    public boolean isPuedeCarta(int indice){
+        return puedeCarta.get(indice-1);
     }
 
-    public void setCarta2(Integer carta2) {
-        this.carta2 = carta2;
-    }
-
-    public Integer getCarta3() {
-        return carta3;
-    }
-
-    public void setCarta3(Integer carta3) {
-        this.carta3 = carta3;
-    }
-
-    public Integer getCarta4() {
-        return carta4;
-    }
-
-    public void setCarta4(Integer carta4) {
-        this.carta4 = carta4;
-    }
-
-    public Integer getCarta5() {
-        return carta5;
-    }
-
-    public void setCarta5(Integer carta5) {
-        this.carta5 = carta5;
-    }
-
-    public Integer getCarta6() {
-        return carta6;
-    }
-
-    public void setCarta6(Integer carta6) {
-        this.carta6 = carta6;
-    }
-
-    public boolean isPuedeCarta1() {
-        return puedeCarta1;
-    }
-
-    public void setPuedeCarta1(boolean puedeCarta1) {
-        this.puedeCarta1 = puedeCarta1;
-    }
-
-    public boolean isPuedeCarta2() {
-        return puedeCarta2;
-    }
-
-    public void setPuedeCarta2(boolean puedeCarta2) {
-        this.puedeCarta2 = puedeCarta2;
-    }
-
-    public boolean isPuedeCarta3() {
-        return puedeCarta3;
-    }
-
-    public void setPuedeCarta3(boolean puedeCarta3) {
-        this.puedeCarta3 = puedeCarta3;
-    }
-
-    public boolean isPuedeCarta4() {
-        return puedeCarta4;
-    }
-
-    public void setPuedeCarta4(boolean puedeCarta4) {
-        this.puedeCarta4 = puedeCarta4;
-    }
-
-    public boolean isPuedeCarta5() {
-        return puedeCarta5;
-    }
-
-    public void setPuedeCarta5(boolean puedeCarta5) {
-        this.puedeCarta5 = puedeCarta5;
-    }
-
-    public boolean isPuedeCarta6() {
-        return puedeCarta6;
-    }
-
-    public void setPuedeCarta6(boolean puedeCarta6) {
-        this.puedeCarta6 = puedeCarta6;
+    public void setPuedeCarta(int indice, boolean puede) {
+        puedeCarta.add(indice-1,puede);
     }
 }
