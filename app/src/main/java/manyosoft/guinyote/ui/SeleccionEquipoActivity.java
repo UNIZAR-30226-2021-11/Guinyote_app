@@ -57,10 +57,10 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             if(jugadores.get(1) != null) j2t1.setText(jugadores.get(1));
             else                         j2t1.setText("-----");
 
-            if(jugadores.get(3) != null) j1t2.setText(jugadores.get(3));
+            if(jugadores.get(2) != null) j1t2.setText(jugadores.get(3));
             else                         j1t2.setText("-----");
 
-            if(jugadores.get(4) != null) j2t2.setText(jugadores.get(4));
+            if(jugadores.get(3) != null) j2t2.setText(jugadores.get(4));
             else                         j2t2.setText("-----");
 
             if(jugadores.get(0) != null && jugadores.get(1) != null)    {
@@ -69,7 +69,7 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
                 joinT1.setText(R.string.Join);
             }
 
-            if(jugadores.get(3) != null && jugadores.get(4) != null)    {
+            if(jugadores.get(2) != null && jugadores.get(3) != null)    {
                 joinT2.setText(R.string.Full);
             } else {
                 joinT2.setText(R.string.Join);
@@ -91,13 +91,13 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             }
         });
         Long idPareja1,idPareja2;
-        if(jugadores.get(2) == null){
-            idPareja1 = Long.valueOf(-1);
+        if(jugadores.get(4) == null){
+            idPareja1 = (long) -1;
         }else{
-            idPareja1 = parseLong(jugadores.get(2));
+            idPareja1 = parseLong(jugadores.get(4));
         }
         if(jugadores.get(5) == null){
-            idPareja2 = Long.valueOf(-1);
+            idPareja2 = (long) -1;
         }else{
             idPareja2 = parseLong(jugadores.get(5));
         }

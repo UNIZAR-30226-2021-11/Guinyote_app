@@ -57,6 +57,9 @@
 
     <!-- TABLERO DE JUEGO -->
     <string name="pausarPartida">Solicitar pausa</string>
-    <string name="Cantar">Cantar</string>
+    <string name="cantar">Cantar</string>
+    <string name="noCantar">No cantar</string>
+    <string name="cambiar">Cambiar carta</string>
+    <string name="noCambiar">No Cambiar</string>
 
 </resources>

@@ -13,6 +13,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 
@@ -59,7 +60,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
 
     public String getTokenTesting() {
-        return "Bearer: " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.Qi0Tc-jTChzascHaZhl0e6rRaCvAS6OJ8RLsI8Y-R78";
+        return "Bearer: " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTB9.OdMJ_aDX6KvAoOePuOSgkK1YhZgny9OMcTWFWYq8EzU";
     }
 
     public boolean loginUsuario(Context context, String username, String password) throws ExecutionException, InterruptedException {
@@ -170,7 +171,7 @@ public class GuinyoteClienteJWT implements Serializable {
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET", HOST + GET_PUBLICAS)
-                .setHeader("Authorization", getTokenTesting())  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
 
@@ -206,7 +207,7 @@ public class GuinyoteClienteJWT implements Serializable {
         // Espera síncrona
         JsonObject partidaJSON = Ion.with(context)
                 .load("POST", HOST + CREATE_GAME+userID)
-                .setHeader("Authorization", getTokenTesting())  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .get();
@@ -230,7 +231,7 @@ public class GuinyoteClienteJWT implements Serializable {
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET", HOST + GET_USER_GAMES + userId)
-                .setHeader("Authorization", getTokenTesting())  // Token de autorización
+                .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
 
@@ -244,7 +245,7 @@ public class GuinyoteClienteJWT implements Serializable {
                         new Partida(
                                 parObj.get("id").getAsLong(),
                                 parObj.get("name").getAsString(),
-                                null,
+                                parObj.get("players_count").getAsInt(),
                                 parObj.get("creation_date").getAsString(),
                                 parObj.get("end_date").getAsString(),
                                 parObj.get("points").getAsInt(),
@@ -259,23 +260,52 @@ public class GuinyoteClienteJWT implements Serializable {
     }
 
     public ArrayList<String> getJugadores(Context context, Long idPartida) throws ExecutionException, InterruptedException {
-        ArrayList<String> jugadores = new ArrayList<>();
+        ArrayList<String> jugadores = new ArrayList<>(Collections.nCopies(6, null));
 
         Ion.getDefault(context).getConscryptMiddleware().enable(false);
 
         JsonObject game = Ion.with(context)
-                .load("GET",HOST+GET_PUBLICAS+idPartida)
+                .load("GET",HOST+GET_PUBLICAS+idPartida.toString())
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
+        Log.d("getJugadores JSON received",game.toString());
 
-        JsonArray parejasJsonArray = game.getAsJsonObject("game").getAsJsonArray("pairs");
-        //EQUIPO 1 SI HAY
-        JsonElement parejaElem1 = parejasJsonArray.get(0);
-        JsonObject pareja1;
-        pareja1 = parejaElem1.getAsJsonObject();
+        game = game.get("game").getAsJsonObject();
+        Log.d("getJugadores JSON game",game.toString());
+
+
+        JsonArray parejasJsonArray = game.getAsJsonArray("pairs");
+        Log.d("getJugadores JSON pair array", parejasJsonArray.toString());
+
+        //JsonElement jugador11 = null, jugador12 = null, jugador21 = null, jugador22 = null;
+        //ArrayList<JsonElement> jugadoresElem = new ArrayList<>(Collections.nCopies(4, null));
+        int i = 0, j;
+        for (JsonElement parejaElem : parejasJsonArray)
+        {
+            JsonObject pareja = parejaElem.getAsJsonObject();
+            Log.d("getJugadores JSON pareja",pareja.toString());
+            j = 0;
+            JsonArray jugadoresArray = pareja.getAsJsonArray("users");
+            if (jugadoresArray != null) {
+                for (JsonElement jugadorElem : jugadoresArray) {
+                    JsonObject jugador = jugadorElem.getAsJsonObject();
+                    Log.d("getJugadores JSON pareja:jugador", jugador.toString());
+                    Log.d("Index", ((Integer) (j + i * 2)).toString());
+                    jugadores.set(j + i * 2, jugador.get("username").getAsString());
+                    j++;
+                }
+            }
+            jugadores.set(4+i,((Long)pareja.get("id").getAsLong()).toString());
+            i++;
+        }
+        /*
+        JsonObject pareja1 = parejasJsonArray.get(0).getAsJsonObject(), pareja2 = parejasJsonArray.get(0).getAsJsonObject();
+        Log.d("getJugadores JSON parejas","1: "+pareja1.toString()+", 2: "+pareja2.toString());
         JsonArray jugadoresPareja1 = pareja1.getAsJsonArray("users");
-        JsonElement jugador11, jugador12;
+        JsonArray jugadoresPareja2 = pareja2.getAsJsonArray("users");
+
+        JsonElement jugador11, jugador12, jugador21, jugador22;
         try {
             jugador11 = jugadoresPareja1.get(0);
         } catch (IndexOutOfBoundsException e)   {
@@ -286,49 +316,32 @@ public class GuinyoteClienteJWT implements Serializable {
         } catch (IndexOutOfBoundsException e)   {
             jugador12 = null;
         }
-
-        if(jugador11 == null) jugadores.add(null);
-        else                  jugadores.add(jugador11.getAsJsonObject().get("username").getAsString());
-        if(jugador12 == null) jugadores.add(null);
-        else                  jugadores.add(jugador12.getAsJsonObject().get("username").getAsString());
-
-        if(pareja1 == null) jugadores.add(null);
-        else                jugadores.add(((Long)pareja1.get("id").getAsLong()).toString());
-
-        //EQUIPO 2 SI HAY
-        if(parejasJsonArray.size() > 1){
-
-            JsonElement parejaElem2 = parejasJsonArray.get(1);
-            JsonObject pareja2;
-            pareja2 = parejaElem2.getAsJsonObject();
-            JsonArray jugadoresPareja2 = pareja2.getAsJsonArray("users");
-            JsonElement jugador21, jugador22;
-
-            try {
-                jugador21 = jugadoresPareja2.get(0);
-            } catch (IndexOutOfBoundsException e)   {
-                jugador21 = null;
-            }
-            try {
-                jugador22 = jugadoresPareja2.get(1);
-            } catch (IndexOutOfBoundsException e)   {
-                jugador22 = null;
-            }
-
-            if(jugador21 == null) jugadores.add(null);
-            else                  jugadores.add(jugador21.getAsJsonObject().get("username").getAsString());
-            if(jugador22 == null) jugadores.add(null);
-            else                  jugadores.add(jugador22.getAsJsonObject().get("username").getAsString());
-
-            if(pareja2 == null) jugadores.add(null);
-            else                jugadores.add(((Long)pareja2.get("id").getAsLong()).toString());
+        try {
+            jugador21 = jugadoresPareja2.get(0);
+        } catch (IndexOutOfBoundsException e)   {
+            jugador21 = null;
         }
-        else{
-            jugadores.add(null);
-            jugadores.add(null);
-            jugadores.add(null);
+        try {
+            jugador22 = jugadoresPareja2.get(1);
+        } catch (IndexOutOfBoundsException e)   {
+            jugador22 = null;
         }
 
+
+        if(jugadoresElem.get(0) == null) jugadores.set(0, null);
+        else                  jugadores.set(0, jugadoresElem.get(0).getAsJsonObject().get("username").getAsString());
+        if(jugadoresElem.get(1) == null) jugadores.set(1, null);
+        else                  jugadores.set(1, jugadoresElem.get(1).getAsJsonObject().get("username").getAsString());
+        if(jugadoresElem.get(2) == null) jugadores.set(2, null);
+        else                  jugadores.set(2, jugadoresElem.get(2).getAsJsonObject().get("username").getAsString());
+        if(jugadoresElem.get(3) == null) jugadores.set(3, null);
+        else                  jugadores.set(3, jugadoresElem.get(3).getAsJsonObject().get("username").getAsString());
+
+        if(pareja1 == null) jugadores.set(4, null);
+        else                jugadores.set(4, ((Long)pareja1.get("id").getAsLong()).toString());
+        if(pareja2 == null) jugadores.set(5, null);
+        else                jugadores.set(5, ((Long)pareja2.get("id").getAsLong()).toString());
+*/
         return jugadores;
     }
 
@@ -339,7 +352,7 @@ public class GuinyoteClienteJWT implements Serializable {
         json.addProperty("user_id", idJugador);
         json.addProperty("pair_id", idPareja);
 
-
+        Log.d("Envio join pareja", json.toString());
         // Retorna el id del jugador (-1 si hay algun problema)
         Long id = null;
         try {
@@ -351,9 +364,11 @@ public class GuinyoteClienteJWT implements Serializable {
                     .asJsonObject()
                     .get();
 
+            Log.d("Respuesta join pareja", respuesta.toString());
             id = respuesta.get("player").getAsJsonObject().get("id").getAsLong();
         } catch (Exception e)   {
             id = -1L;
+            Log.d("Respuesta join pareja", "fallo");
         }
 
         return id;
