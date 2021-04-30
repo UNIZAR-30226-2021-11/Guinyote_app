@@ -91,7 +91,7 @@ public class EstadoPartida {
                             if(carta != null){
                                 int valorCarta = carta.getInt("val");
                                 String paloCarta = carta.getString("suit");
-                                String nombreCarta = paloCarta + "_" + valorCarta;
+                                String nombreCarta = paloCarta + "_" + valorCarta+".png";
                                 int id = context.getResources().getIdentifier(nombreCarta,"drawable",context.getPackageName());
                                 cartas.add(id);
                                 puedeCarta.add(carta.getBoolean("playable"));

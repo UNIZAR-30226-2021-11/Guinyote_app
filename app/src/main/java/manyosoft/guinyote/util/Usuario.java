@@ -3,7 +3,7 @@ package manyosoft.guinyote.util;
 import com.koushikdutta.ion.builder.Builders;
 
 public class Usuario {
-    private Integer id;
+    private Integer id,victorias,derrotas;
     private String username, email, location, created_at, updated_at;
 
     private static Usuario instance = null;
@@ -12,8 +12,10 @@ public class Usuario {
         return instance;
     }
 
-    public Usuario(Integer id, String username, String email, String location, String created_at, String updated_at)    {
+    public Usuario(Integer id, Integer victorias, Integer derrotas, String username, String email, String location, String created_at, String updated_at) {
         this.id = id;
+        this.victorias = victorias;
+        this.derrotas = derrotas;
         this.username = username;
         this.email = email;
         this.location = location;
@@ -75,5 +77,21 @@ public class Usuario {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Integer getVictorias() {
+        return victorias;
+    }
+
+    public void setVictorias(Integer victorias) {
+        this.victorias = victorias;
+    }
+
+    public Integer getDerrotas() {
+        return derrotas;
+    }
+
+    public void setDerrotas(Integer derrotas) {
+        this.derrotas = derrotas;
     }
 }

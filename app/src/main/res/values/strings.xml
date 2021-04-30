@@ -37,7 +37,8 @@
     <string name="PUNTOS">PUNTOS</string>
     <string name="DURACION">DURACION</string>
     <string name="buscarUsuario">Escriba un usuario...</string>
-
+    <string name="seleccionCartas">Seleccione el reverso</string>
+    <string name="seleccionTapete">Seleccione el tapete</string>
 
     <!-- LISTADO PARTIDAS -->
     <string name="introduccir_codigo">Introduza el código de la partida</string>

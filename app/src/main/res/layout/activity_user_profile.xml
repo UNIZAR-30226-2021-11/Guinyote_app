@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pantalla"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentStart="false"
@@ -21,16 +22,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/homeAsUpIndicator" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/settings_button_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_preferences"
+        tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre:"
+        android:layout_marginTop="8dp"
+        android:text="Nombre: "
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView_partidas"
-        app:layout_constraintStart_toStartOf="@+id/textView_partidas" />
+        app:layout_constraintStart_toStartOf="@+id/textView_partidas"
+        app:layout_constraintTop_toBottomOf="@+id/back" />
 
     <TextView
         android:id="@+id/textView_user"
@@ -46,12 +61,13 @@
         android:id="@+id/textView_partidas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Partidas online:"
+        android:text="Partidas online: "
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView_victorias"
-        app:layout_constraintStart_toStartOf="@+id/textView_victorias" />
+        app:layout_constraintStart_toStartOf="@+id/textView_victorias"
+        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
 
     <TextView
         android:id="@+id/textView_num_partidas"
@@ -68,12 +84,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="Victorias:"
+        android:text="Victorias: "
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/button_borrar"
-        app:layout_constraintStart_toStartOf="@+id/User_tableLayout" />
+        app:layout_constraintStart_toStartOf="@+id/User_tableLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textView_num_partidas" />
 
     <TextView
         android:id="@+id/textView_numVictorias"
@@ -86,32 +102,13 @@
         app:layout_constraintTop_toTopOf="@+id/textView_victorias" />
 
     <Button
-        android:id="@+id/button_logout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="LOG OUT"
-        app:layout_constraintEnd_toEndOf="@+id/button_historial"
-        app:layout_constraintStart_toStartOf="@+id/button_historial"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/button_historial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="HISTORIAL COMPLETO"
+        app:layout_constraintBottom_toTopOf="@+id/User_tableLayout"
         app:layout_constraintEnd_toEndOf="@+id/User_tableLayout"
-        app:layout_constraintTop_toBottomOf="@+id/button_logout" />
-
-    <Button
-        android:id="@+id/button_borrar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="BORRAR CUENTA"
-        app:layout_constraintEnd_toEndOf="@+id/button_historial"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/button_historial"
-        app:layout_constraintTop_toBottomOf="@+id/button_historial" />
+        app:layout_constraintTop_toBottomOf="@+id/fab" />
 
     <TableLayout
         android:id="@+id/User_tableLayout"
@@ -125,7 +122,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_borrar">
+        app:layout_constraintTop_toBottomOf="@+id/textView_victorias">
 
         <TableRow
             android:layout_width="match_parent"
@@ -168,6 +165,7 @@
                 android:text="PUNTOS"
                 android:textColor="#000000"
                 android:textStyle="bold" />
+
         </TableRow>
 
 
@@ -195,5 +193,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
         app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
         app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/desplegable"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="false"
+        android:visibility="invisible"
+        app:headerLayout="@layout/menu_personalizacion"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

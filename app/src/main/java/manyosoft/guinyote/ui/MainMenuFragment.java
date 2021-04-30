@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import manyosoft.guinyote.util.GuinyoteClienteJWT;
 import manyosoft.guinyote.util.Usuario;
 
 public class MainMenuFragment extends Fragment {
+
+    private Button logout;
 
     @Override
     public View onCreateView(
@@ -59,16 +62,26 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                Usuario user = Usuario.getInstance();
-                if(user == null) {// no se ha logeado
-                    Intent i = new Intent(context, LoginActivity.class);
-                    startActivity(i);
-                }
-                else{//ya se ha logeado
-                    Intent i = new Intent(context, UserProfile.class);
-                    startActivity(i);
-                }
+                Intent i = new Intent(context, UserProfile.class);
+                startActivity(i);
             }
         });
+
+        logout = view.findViewById(R.id.button_logout);
+        logout.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        act_logOut();
+                    }
+                }
+        );
+    }
+
+    private void act_logOut(){
+        Usuario user = Usuario.getInstance();
+        user.logOut();
+        Intent i = new Intent(getContext(), LoginActivity.class);
+        startActivity(i);
     }
 }

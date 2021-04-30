@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import manyosoft.guinyote.R;
 
@@ -48,6 +51,15 @@ public class OnlineMenuFragment extends Fragment {
 
                 Intent i = new Intent(context, ListadoPartidasActivity.class);
                 startActivity(i);
+            }
+        });
+
+        FloatingActionButton back = view.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(OnlineMenuFragment.this)
+                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
         });
     }

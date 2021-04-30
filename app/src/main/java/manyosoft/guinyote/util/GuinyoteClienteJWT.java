@@ -118,6 +118,9 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
         final String idUsuario = "id";
+        //TODO actualizar victorias y derrotas con el string del back
+        final String victorias = "id";
+        final String derrotas = "id";
         final String usernameUsuario = "username";
         final String emailUsuario = "email";
         final String locationUsuario = "location";
@@ -133,6 +136,8 @@ public class GuinyoteClienteJWT implements Serializable {
         if (respuesta.get("user") != null) {
             return new Usuario(
                     respuesta.get("user").getAsJsonObject().get(idUsuario).getAsInt(),
+                    respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
+                    respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
                     respuesta.get("user").getAsJsonObject().get(usernameUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(emailUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(locationUsuario).getAsString(),

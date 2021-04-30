@@ -32,14 +32,6 @@ public class LoginActivity extends AppCompatActivity {
         userName = findViewById(R.id.iniciarSesion_usuario);
         password = findViewById(R.id.iniciarSesion_password);
 
-        FloatingActionButton back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
         Button acceder = (Button) findViewById(R.id.iniciarSesion_acceder);
         acceder.setOnClickListener(
                 new View.OnClickListener() {
@@ -79,9 +71,10 @@ public class LoginActivity extends AppCompatActivity {
             }catch(Exception e){
                 Log.d("GET USUARIO",e.getMessage());
             }
-
-            Intent i = new Intent(this, UserProfile.class);
+            finish();
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
+
         }
         else{//error en el inicio de sesión
             CharSequence text = "ERROR EN EL INICIO DE SESION";
@@ -89,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, text, duration);
             toast.show();
         }
-
     }
 
     private void act_registro(){

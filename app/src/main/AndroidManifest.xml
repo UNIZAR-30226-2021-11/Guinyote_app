@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.CrearPartidas"></activity>
+        <activity android:name=".ui.CrearPartidas"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.ListadoPartidasActivity"
             android:screenOrientation="landscape"
@@ -22,8 +24,12 @@
         <activity android:name=".ui.SeleccionEquipoActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.HistoryActivity" />
-        <activity android:name=".ui.UserProfile" />
+        <activity android:name=".ui.HistoryActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.UserProfile"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.Registro"
             android:screenOrientation="landscape"
