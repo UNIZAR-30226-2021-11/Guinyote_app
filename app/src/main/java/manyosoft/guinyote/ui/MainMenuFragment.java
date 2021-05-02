@@ -49,11 +49,12 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                CharSequence text = "Inicio de partida rápido vs IA";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Intent juegoIntent = new Intent(context, JuegoActivity.class);
+                juegoIntent.putExtra("idPartida",1L);
+                juegoIntent.putExtra("idPlayer",1L);
+                juegoIntent.putExtra("idPair",1L);
+                juegoIntent.putExtra("create",true);
+                startActivity(juegoIntent);
             }
         });
 
