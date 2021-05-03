@@ -1,12 +1,20 @@
 package manyosoft.guinyote.util;
 
 import android.content.Context;
+import android.net.Uri;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import manyosoft.guinyote.R;
 
 /**
  * Clase que representa el estado de una partida en un momento concreto
@@ -16,9 +24,14 @@ import java.util.ArrayList;
 public class EstadoPartida {
 
     // Estado de la partida
-    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda;
-    private boolean vueltas, arrastre;
-    private String singsuit;
+    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair,cards_played_round;
+    private boolean vueltas, arrastre,ended;
+    private String singsuit,status;
+
+    //Carta de triunfo
+    private String triumph_suit;
+    private Long triumph_val,triumph_points;
+    private boolean triumph_playable;
 
     // Acciones requeridas al jugador
     private boolean tirarCarta, cantar, cambiar;
@@ -55,63 +68,71 @@ public class EstadoPartida {
         this.cartas.add(carta6);
     }
 
-    // TODO Recoger el estado de la partida a partir del JSON que el backend envia
     public EstadoPartida(String json, Long idPlayer, Context context)   {
-        JSONObject root = null;
-        try {
-            root = new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        JsonObject root = null;
+        root = new Gson().fromJson(json, JsonObject.class);
         if(root != null)  {
-            try {
-                cartas = new ArrayList<>();
-                cartasSuit = new ArrayList<>();
-                cartasValue = new ArrayList<>();
-                puedeCarta = new ArrayList<>();
+            cartas = new ArrayList<>();
+            cartasSuit = new ArrayList<>();
+            cartasValue = new ArrayList<>();
+            puedeCarta = new ArrayList<>();
+            //Obtencion de valores de la partida
+            status = root.get("status").getAsString();
+            root = root.get("game").getAsJsonObject();
+            points_team_a = root.get("points_team_a").getAsLong();
+            points_team_b = root.get("points_team_b").getAsLong();
+            points_sing_a = root.get("points_sing_a").getAsLong();
+            points_sing_a = root.get("points_sing_b").getAsLong();
+            ronda = root.get("current_round").getAsLong();
+            vueltas = root.get("vueltas").getAsBoolean();
+            arrastre = root.get("arrastre").getAsBoolean();
+            ended = root.get("ended").getAsBoolean();
+            winner_pair = root.get("winner_pair").getAsLong();
+            if(!root.get("cards_played_round").isJsonNull()) {
+                cards_played_round = root.get("cards_played_round").getAsLong();
+            }else{
+                cards_played_round = null;
+            }
 
-                points_team_a = root.getLong("points_team_a");
-                points_team_b = root.getLong("points_team_b");
-                points_sing_a = root.getLong("points_sing_a");
-                points_sing_a = root.getLong("points_sing_b");
-                ronda = root.getLong("round");
-                vueltas = root.getBoolean("vueltas");
-                arrastre = root.getBoolean("arrastre");
-                JSONArray jugadores = root.getJSONArray("players");
-                JSONObject jugador;
-                boolean encontrado = false;
-                int i = 0;
-                while (!encontrado){
-                    jugador = (JSONObject) jugadores.get(i);
-                    if(jugador.getLong("id") == idPlayer){
-                        encontrado = true;
-                        id = idPlayer;
-                        tirarCarta = jugador.getBoolean("can_play");
-                        cantar = jugador.getBoolean("can_sing");
-                        singsuit = jugador.getString("sing_suit");
-                        cambiar = jugador.getBoolean("can_change");
-                        for(int j = 0; j<6; j++){
-                            JSONObject carta = (JSONObject) jugador.getJSONArray("cards").get(i);
-                            if(carta != null){
-                                int valorCarta = carta.getInt("val");
-                                String paloCarta = carta.getString("suit");
-                                String nombreCarta = paloCarta + "_" + valorCarta+".png";
-                                int id = context.getResources().getIdentifier(nombreCarta,"drawable",context.getPackageName());
-                                cartas.add(id);
-                                cartasSuit.add(paloCarta);
-                                cartasValue.add(valorCarta);
-                                puedeCarta.add(carta.getBoolean("playable"));
-                            }else{
-                                cartas.add(null);
-                                puedeCarta.add(false);
-                            }
+            //Obtencion valores del triunfo
+            triumph_suit = root.get("triumph_card").getAsJsonObject().get("suit").getAsString();
+            triumph_val =  root.get("triumph_card").getAsJsonObject().get("val").getAsLong();
+            triumph_points =  root.get("triumph_card").getAsJsonObject().get("points").getAsLong();
+            triumph_playable =  root.get("triumph_card").getAsJsonObject().get("playable").getAsBoolean();
+
+            //Obtencion de las cartas
+            JsonArray jugadores = root.get("players").getAsJsonObject().get("players").getAsJsonArray();
+            JsonObject jugador;
+            boolean encontrado = false;
+            int i = 0;
+            while (!encontrado){
+                jugador = jugadores.get(i).getAsJsonObject();
+                if(jugador.get("id").getAsInt() == idPlayer){
+                    encontrado = true;
+                    id = idPlayer;
+                    tirarCarta = jugador.get("can_play").getAsBoolean();
+                    cantar = jugador.get("can_sing").getAsBoolean();
+                    singsuit = jugador.get("sing_suit").getAsString();
+                    cambiar = jugador.get("can_change").getAsBoolean();
+                    for(int j = 0; j<6; j++){
+                        JsonObject carta = (JsonObject) jugador.get("cards").getAsJsonArray().get(j);
+                        if(carta != null){
+                           int valorCarta = carta.get("val").getAsInt();
+                            String paloCarta = carta.get("suit").getAsString();
+                            String nombreCarta = paloCarta + "_" + valorCarta;
+                            int id = context.getResources().getIdentifier(nombreCarta,"drawable",context.getPackageName());
+                            cartas.add(id);
+                            cartasSuit.add(paloCarta);
+                            cartasValue.add(valorCarta);
+                            puedeCarta.add(carta.get("playable").getAsBoolean());
+                        }else{
+                            cartas.add(null);
+                            puedeCarta.add(false);
                         }
                     }
+                }else{
+                    i++;
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -243,4 +264,70 @@ public class EstadoPartida {
     public void setSingsuit(String singsuit) {
         this.singsuit = singsuit;
     }
+
+    public Long getWinner_pair() {
+        return winner_pair;
+    }
+
+    public void setWinner_pair(Long winner_pair) {
+        this.winner_pair = winner_pair;
+    }
+
+    public Long getCards_played_round() {
+        return cards_played_round;
+    }
+
+    public void setCards_played_round(Long cards_played_round) {
+        this.cards_played_round = cards_played_round;
+    }
+
+    public boolean isEnded() {
+        return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTriumph_suit() {
+        return triumph_suit;
+    }
+
+    public void setTriumph_suit(String triumph_suit) {
+        this.triumph_suit = triumph_suit;
+    }
+
+    public Long getTriumph_val() {
+        return triumph_val;
+    }
+
+    public void setTriumph_val(Long triumph_val) {
+        this.triumph_val = triumph_val;
+    }
+
+    public Long getTriumph_points() {
+        return triumph_points;
+    }
+
+    public void setTriumph_points(Long triumph_points) {
+        this.triumph_points = triumph_points;
+    }
+
+    public boolean isTriumph_playable() {
+        return triumph_playable;
+    }
+
+    public void setTriumph_playable(boolean triumph_playable) {
+        this.triumph_playable = triumph_playable;
+    }
 }
+
+

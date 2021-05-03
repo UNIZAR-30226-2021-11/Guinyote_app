@@ -8,18 +8,22 @@
 
 
     <!-- TABLERO -->
+
+    <!-- ID DE PARTIDA -->
+
     <ImageView
         android:id="@+id/tablero"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        app:srcCompat="@drawable/casino_table"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/casino_table" />
 
-    <!-- ID DE PARTIDA -->
     <TextView
         android:id="@+id/idPartida"
         android:layout_width="wrap_content"
@@ -90,16 +94,16 @@
 
 
     <!-- MANO DEL JUGADOR -->
+
+
     <ImageButton
         android:id="@+id/carta1"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
         android:background="@drawable/bastos_1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/carta2"
-        />
-
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/carta2"

@@ -26,7 +26,8 @@ public class SplashScreen extends Activity {
                 // run() method will be executed when 3 seconds have passed
 
                 //Time to start MainActivity
-                Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                //TODO poner el inicio en el login activity
+                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(intent );
 
                 finish();
