@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +24,7 @@ import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
 import java.io.IOException;
+import java.nio.channels.AsynchronousByteChannel;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
@@ -79,6 +83,7 @@ public class JuegoActivity extends AppCompatActivity {
     // Botones para cambiar la carta por el triunfo o no
     private Button cambiar, noCambiar;
 
+    private String jsonReceived;
 
     private Long idPartida, idPlayer, idPair;
 
@@ -114,6 +119,15 @@ public class JuegoActivity extends AppCompatActivity {
         cambiar = findViewById(R.id.botonCambiar);
         noCambiar = findViewById(R.id.botonNoCambiar);
 
+        Handler handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg)
+            {
+                actualizaTablero();
+            }
+        };
+
         // Crea una conexión y la asocia al websocket de la clase
         try {
             ws =  new WebSocketFactory()
@@ -123,7 +137,8 @@ public class JuegoActivity extends AppCompatActivity {
                         // A text message arrived from the server.
                         public void onTextMessage(WebSocket websocket, String message) {
                             Log.d("Mensaje recibido ws", "a"+message);
-                            actualizaTablero(message);
+                            jsonReceived = message;
+                            handler.sendMessage(handler.obtainMessage());
                         }
                     })
                     .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
@@ -309,8 +324,8 @@ public class JuegoActivity extends AppCompatActivity {
     }
 
     // Actualiza el tablero a partir del json recibido
-    private void actualizaTablero(String json) {
-        EstadoPartida est = new EstadoPartida(json, idPlayer,this);
+    private void actualizaTablero() {
+        EstadoPartida est = new EstadoPartida(jsonReceived, idPlayer, this);
         // Si es arrastre no hay monton de robar
         if (est.isArrastre()) monton_robar.setVisibility(View.INVISIBLE);
         else monton_robar.setVisibility(View.VISIBLE);
