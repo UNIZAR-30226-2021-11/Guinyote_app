@@ -230,6 +230,29 @@ public class GuinyoteClienteJWT implements Serializable {
         return creada;
     }
 
+    public Partida getGameById(Context context, Long id) throws ExecutionException, InterruptedException {
+        Partida recuperada = null;
+
+        // Espera síncrona
+        JsonObject partidaJSON = Ion.with(context)
+                .load("GET", HOST + CREATE_GAME+id)
+                .setHeader("Authorization", getToken())  // Token de autorización
+                .asJsonObject()
+                .get();
+
+        if (partidaJSON.get("game") != null) {
+            recuperada = new Partida(
+                    partidaJSON.getAsJsonObject("game").get("id").getAsLong(),
+                    partidaJSON.getAsJsonObject("game").get("name").getAsString(),
+                    partidaJSON.getAsJsonObject("game").get("players_count").getAsInt(),
+                    partidaJSON.getAsJsonObject("game").get("creation_date").getAsString(),
+                    partidaJSON.getAsJsonObject("game").get("end_date").getAsString()
+            );
+        }
+
+        return recuperada;
+    }
+
     public ArrayList<Partida> getPartidasByUser(Context context, int userId) throws ExecutionException, InterruptedException {
         ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 

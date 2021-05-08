@@ -25,13 +25,15 @@ public class EstadoPartida {
 
     // Estado de la partida
     private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair,cards_played_round;
-    private boolean vueltas, arrastre,ended;
+    private boolean vueltas, arrastre, ended;
     private String singsuit,status;
 
     //Carta de triunfo
     private String triumph_suit;
-    private Long triumph_val,triumph_points;
+    private Long triumph_val, triumph_points;
     private boolean triumph_playable;
+
+    // TODO Cartas lanzadas por otros jugadores (las que hay sobre el tablero en la ronda)
 
     // Acciones requeridas al jugador
     private boolean tirarCarta, cantar, cambiar;

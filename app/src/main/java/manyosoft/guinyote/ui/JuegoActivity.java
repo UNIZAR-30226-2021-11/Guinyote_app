@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +26,8 @@ import java.io.IOException;
 import java.nio.channels.AsynchronousByteChannel;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.List;
+import java.util.Map;
 
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.util.EstadoPartida;
@@ -47,15 +48,15 @@ public class JuegoActivity extends AppCompatActivity {
     private static final String event_type = "event_type";
 
     // Eventos con los que se trabaja
-    private static final Long EVENTO_CREATE_JOIN    = 0L;
-    private static final Long EVENTO_JOIN           = 1L;
-    private static final Long EVENTO_LEAVE          = 2L;
-    private static final Long EVENTO_JUGAR_CARTA    = 3L;
-    private static final Long EVENTO_CANTAR         = 5L;
-    private static final Long EVENTO_NOCANTAR       = 5L;
-    private static final Long EVENTO_CAMBIAR        = 4L;
-    private static final Long EVENTO_NOCAMBIAR      = 4L;
-    private static final Long EVENTO_PAUSAR         = 6L;
+    private static final Integer EVENTO_CREATE_JOIN    = 0;
+    private static final Integer EVENTO_JOIN           = 1;
+    private static final Integer EVENTO_LEAVE          = 2;
+    private static final Integer EVENTO_JUGAR_CARTA    = 3;
+    private static final Integer EVENTO_CANTAR         = 5;
+    private static final Integer EVENTO_NOCANTAR       = 5;
+    private static final Integer EVENTO_CAMBIAR        = 4;
+    private static final Integer EVENTO_NOCAMBIAR      = 4;
+    private static final Integer EVENTO_PAUSAR         = 6;
 
     /**
      * The timeout value in milliseconds for socket connection.
@@ -82,6 +83,11 @@ public class JuegoActivity extends AppCompatActivity {
     private String singsuit;
     // Botones para cambiar la carta por el triunfo o no
     private Button cambiar, noCambiar;
+    // Mensaje de victoria
+    private TextView mensajeFin, parejaGanadora;
+    // Boton de volver (final partida)
+    private Button botonVolver;
+
 
     private String jsonReceived;
 
@@ -95,14 +101,17 @@ public class JuegoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         idPartida = intent.getLongExtra("idPartida",-1);
         idPlayer = intent.getLongExtra("idPlayer",-1);
+        // TODO ESTO SOLO ES PARA DEPURAR
+        idPlayer = 2L;
+
         idPair = intent.getLongExtra("idPair", -1);
 
-        carta1 = findViewById(R.id.carta1);
-        carta2 = findViewById(R.id.carta2);
-        carta3 = findViewById(R.id.carta3);
-        carta4 = findViewById(R.id.carta4);
-        carta5 = findViewById(R.id.carta5);
-        carta6 = findViewById(R.id.carta6);
+        carta1 = (ImageButton) findViewById(R.id.carta1);
+        carta2 = (ImageButton) findViewById(R.id.carta2);
+        carta3 = (ImageButton) findViewById(R.id.carta3);
+        carta4 = (ImageButton) findViewById(R.id.carta4);
+        carta5 = (ImageButton) findViewById(R.id.carta5);
+        carta6 = (ImageButton) findViewById(R.id.carta6);
 
         triunfo = findViewById(R.id.carta_triunfo);
         monton_robar = findViewById(R.id.montonRobar);
@@ -119,6 +128,10 @@ public class JuegoActivity extends AppCompatActivity {
         cambiar = findViewById(R.id.botonCambiar);
         noCambiar = findViewById(R.id.botonNoCambiar);
 
+        mensajeFin = findViewById(R.id.textoFin);
+        parejaGanadora = findViewById(R.id.textoGanador);
+        botonVolver = findViewById(R.id.botonVolver);
+
         Handler handler = new Handler()
         {
             @Override
@@ -128,6 +141,12 @@ public class JuegoActivity extends AppCompatActivity {
             }
         };
 
+        if(intent.getBooleanExtra("create", false))  {
+            generateCreateJoinEvent();
+        } else {
+            generateJoinEvent();
+        }
+
         // Crea una conexión y la asocia al websocket de la clase
         try {
             ws =  new WebSocketFactory()
@@ -135,16 +154,26 @@ public class JuegoActivity extends AppCompatActivity {
                     .createSocket(DIR)
                     .addListener(new WebSocketAdapter() {
                         // A text message arrived from the server.
+                        @Override
                         public void onTextMessage(WebSocket websocket, String message) {
                             Log.d("Mensaje recibido ws", "a"+message);
                             jsonReceived = message;
                             handler.sendMessage(handler.obtainMessage());
                         }
+
+                        // Cuando se conecta con el servidor
+                        @Override
+                        public void onConnected(WebSocket websocket, Map<String, List<String>> headers)   {
+                            if(intent.getBooleanExtra("create", false))  {
+                                websocket.sendText(generateCreateJoinEvent());
+                            } else {
+                                websocket.sendText(generateJoinEvent());
+                            }
+                        }
+
                     })
                     .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
                     .connectAsynchronously();
-
-            ws.sendText("Hola!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -316,19 +345,33 @@ public class JuegoActivity extends AppCompatActivity {
 
         namePartida_textView.setText(idPartida.toString());
 
-        if(intent.getBooleanExtra("create", false))  {
-            generateCreateJoinEvent();
-        } else {
-            generateJoinEvent();
-        }
+
+
+        // Elementos de fin de pantalla
+        mensajeFin.setVisibility(View.INVISIBLE);
+        parejaGanadora.setVisibility(View.INVISIBLE);
+
+        botonVolver.setVisibility(View.INVISIBLE);
+        botonVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     // Actualiza el tablero a partir del json recibido
     private void actualizaTablero() {
-        EstadoPartida est = new EstadoPartida(jsonReceived, idPlayer, this);
+        EstadoPartida est = new EstadoPartida(jsonReceived, idPlayer,this);
         // Si es arrastre no hay monton de robar
         if (est.isArrastre()) monton_robar.setVisibility(View.INVISIBLE);
         else monton_robar.setVisibility(View.VISIBLE);
+
+        // Log de la mano del jugador
+        for(int i = 1; i <= 6; i++) {
+            if(est.getCarta(i) != null) Log.d("carta "+i, est.getCarta(i)+ ", "+est.getCartaVal(i) + " de "+ est.getCartaSuit(i));
+            else Log.d("carta "+i, "null");
+        }
 
         // Actualiza la mano del jugador
         if (est.getCarta(1) != null) {
@@ -381,6 +424,7 @@ public class JuegoActivity extends AppCompatActivity {
 
         // Si es posible cantar, muestra y activa los botones de cantar y no cantar
         if (est.isCantar()) {
+            Log.d("Evento","Se esta cantando!");
             singsuit = est.getSingsuit();
             cantar.setVisibility(View.VISIBLE);
             cantar.setClickable(true);
@@ -395,6 +439,7 @@ public class JuegoActivity extends AppCompatActivity {
 
         // Si es posible cambiar, muestra los botones de cambiar y no cambiar
         if (est.isCambiar()) {
+            Log.d("Evento","Se esta cambiando!");
             cambiar.setVisibility(View.VISIBLE);
             cambiar.setClickable(true);
             noCambiar.setVisibility(View.VISIBLE);
@@ -405,6 +450,33 @@ public class JuegoActivity extends AppCompatActivity {
             noCambiar.setVisibility(View.INVISIBLE);
             noCambiar.setClickable(false);
         }
+
+        // Actualiza el triunfo
+        if(est.getTriumph_suit() != null && est.getTriumph_val() != null)    {
+            triunfo.setBackgroundResource(
+                    getResources().getIdentifier(
+                            est.getTriumph_suit()+"_"+est.getTriumph_val(),
+                            "drawable", getPackageName()
+                    )
+            );
+        }
+
+        // TODO (falta los metodos en EstadoPartida) Actualiza las cartas lanzadas por el resto de jugadores
+        /*if(est.get)
+
+        */
+
+        // Si la partida ha finalizado lo muestra al jugador
+        if(est.isEnded())   {
+            mensajeFin.setVisibility(View.VISIBLE);
+            boolean heGanado = est.getWinner_pair().equals(idPair);
+
+            if(heGanado)    parejaGanadora.setText(R.string.parejaGanadora);
+            else            parejaGanadora.setText(R.string.parejaPerdedora);
+            parejaGanadora.setVisibility(View.VISIBLE);
+
+            botonVolver.setVisibility(View.VISIBLE);
+        }
     }
 
     // Genera un evento de creación de partida
@@ -413,7 +485,7 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
         json.addProperty(pair_id, idPair);
-        json.addProperty(event_type, EVENTO_CREATE_JOIN.toString());
+        json.addProperty(event_type, EVENTO_CREATE_JOIN);
         return json.toString();
     }
 
@@ -423,7 +495,7 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
         json.addProperty(pair_id, idPair);
-        json.addProperty(event_type, EVENTO_JOIN.toString());
+        json.addProperty(event_type, EVENTO_JOIN);
         return json.toString();
     }
 
@@ -432,7 +504,7 @@ public class JuegoActivity extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
-        json.addProperty(event_type, EVENTO_LEAVE.toString());
+        json.addProperty(event_type, EVENTO_LEAVE);
         return json.toString();
     }
 
@@ -447,7 +519,7 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
         json.add("card", card);
-        json.addProperty(event_type, EVENTO_LEAVE.toString());
+        json.addProperty(event_type, EVENTO_LEAVE);
         return json.toString();
     }
 
@@ -458,7 +530,7 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(player_id, idPlayer);
         json.addProperty("suit", suit);
         json.addProperty("has_singed", canta);
-        json.addProperty(event_type, EVENTO_CANTAR.toString());
+        json.addProperty(event_type, EVENTO_CANTAR);
         return json.toString();
     }
 
@@ -468,7 +540,7 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
         json.addProperty("changed", cambia);
-        json.addProperty(event_type, EVENTO_CAMBIAR.toString());
+        json.addProperty(event_type, EVENTO_CAMBIAR);
         return json.toString();
     }
 
@@ -477,15 +549,14 @@ public class JuegoActivity extends AppCompatActivity {
         JsonObject json = new JsonObject();
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
-        json.addProperty(event_type, EVENTO_PAUSAR.toString());
+        json.addProperty(event_type, EVENTO_PAUSAR);
         return json.toString();
     }
 
     private void reconectar()    {
         try {
-            ws = ws.recreate();
-            ws.connect();
-        } catch (IOException | WebSocketException e) {
+            ws = ws.recreate().connectAsynchronously();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -495,7 +566,7 @@ public class JuegoActivity extends AppCompatActivity {
     {
         if(ws.isOpen()) {
             ws.sendText(generateLeaveEvent());
-            ws.sendClose();
+            ws.disconnect();
         }
         finish();
         super.onBackPressed();  // optional

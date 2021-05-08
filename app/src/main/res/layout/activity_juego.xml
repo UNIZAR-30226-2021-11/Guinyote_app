@@ -100,7 +100,8 @@
         android:id="@+id/carta1"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
-        android:background="@drawable/bastos_1"
+        android:background="@drawable/reverso"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/carta2"
         app:layout_constraintStart_toStartOf="parent" />
@@ -109,7 +110,7 @@
         android:id="@+id/carta2"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
-        android:background="@drawable/espadas_1"
+        android:background="@drawable/reverso"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/carta1"
         app:layout_constraintEnd_toStartOf="@id/carta3"
@@ -121,7 +122,7 @@
         android:id="@+id/carta3"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
-        android:background="@drawable/copas_1"
+        android:background="@drawable/reverso"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/carta2"
         app:layout_constraintEnd_toStartOf="@id/carta4"
@@ -132,7 +133,7 @@
         android:id="@+id/carta4"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
-        android:background="@drawable/oros_1"
+        android:background="@drawable/reverso"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/carta3"
         app:layout_constraintEnd_toStartOf="@id/carta5"
@@ -143,7 +144,7 @@
         android:id="@+id/carta5"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
-        android:background="@drawable/oros_3"
+        android:background="@drawable/reverso"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/carta4"
         app:layout_constraintEnd_toStartOf="@id/carta6"
@@ -154,7 +155,7 @@
         android:id="@+id/carta6"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
-        android:background="@drawable/espadas_7"
+        android:background="@drawable/reverso"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/carta5"
         app:layout_constraintEnd_toEndOf="parent"
@@ -219,4 +220,47 @@
         app:layout_constraintBottom_toTopOf="@id/carta2"
         />
 
+    <TextView
+        android:id="@+id/textoFin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fin_partida"
+        android:textSize="@dimen/_50sdp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/textoGanador"
+        />
+
+    <TextView
+        android:id="@+id/textoGanador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/unknownName"
+        android:textSize="@dimen/_25sdp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textoFin"
+        app:layout_constraintBottom_toBottomOf="@id/botonVolver"
+        />
+
+    <Button
+        android:id="@+id/botonVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_20sdp"
+        android:text="@string/volver"
+        android:visibility="invisible"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textoGanador"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
