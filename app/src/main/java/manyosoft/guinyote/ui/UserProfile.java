@@ -1,14 +1,18 @@
 package manyosoft.guinyote.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -16,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -30,10 +35,13 @@ public class UserProfile extends AppCompatActivity {
     private TextView userName,numPartidas,numVictorias;
     private TableRow fila;
     private TableLayout tabla;
-    private Button buscar,borrar,history;
+    private Button buscar,borrar,history,guardar;
     private EditText buscarUser;
+
     private NavigationView desplegable;
     private ConstraintLayout pantalla;
+    private ImageButton negro,rojo,azul;
+    private Integer colorCarta,colorTapete;
 
     private FloatingActionButton fab;
 
@@ -52,12 +60,19 @@ public class UserProfile extends AppCompatActivity {
         numPartidas = findViewById(R.id.textView_num_partidas);
         numVictorias = findViewById(R.id.textView_numVictorias);
         tabla = findViewById(R.id.User_tableLayout);
+
         buscar = findViewById(R.id.button_buscar);
-        borrar = findViewById(R.id.button_borrar);
         buscarUser = findViewById(R.id.editTextTextPersonName);
-        fab = findViewById(R.id.fab);
+
         desplegable = findViewById(R.id.desplegable);
+        View headerView = desplegable.getHeaderView(0);
+        borrar = headerView.findViewById(R.id.button_borrar);
+        guardar = headerView.findViewById(R.id.button_guardar);
+        fab = findViewById(R.id.fab);
         pantalla = findViewById(R.id.pantalla);
+        rojo = headerView.findViewById(R.id.imageButton_rojo);
+        azul = headerView.findViewById(R.id.imageButton_azul);
+        negro = headerView.findViewById(R.id.imageButton_negro);
 
         try {
             Usuario user = Usuario.getInstance();
@@ -106,6 +121,40 @@ public class UserProfile extends AppCompatActivity {
                     }
                 }
         );
+        rojo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorCarta = R.drawable.reverso_rojo;
+                rojo.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+            }
+        });
+        azul.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorCarta = R.drawable.reverso;
+                azul.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+            }
+        });
+        negro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorCarta = R.drawable.reverso_negro;
+                negro.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+            }
+        });
+        borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+            }
+        });
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Usuario user = Usuario.getInstance();
+                user.setColorCarta(colorCarta);
+            }
+        });
 
     }
 

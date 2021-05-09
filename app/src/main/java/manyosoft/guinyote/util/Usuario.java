@@ -1,10 +1,15 @@
 package manyosoft.guinyote.util;
 
+import android.graphics.drawable.Drawable;
+
 import com.koushikdutta.ion.builder.Builders;
+
+import manyosoft.guinyote.R;
 
 public class Usuario {
     private Integer id,victorias,derrotas;
     private String username, email, location, created_at, updated_at;
+    private Integer colorCarta,colorTapete;
 
     private static Usuario instance = null;
 
@@ -21,6 +26,8 @@ public class Usuario {
         this.location = location;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        colorCarta = R.drawable.reverso;
+        colorTapete = R.drawable.casino_table;
     }
 
     public Usuario(Usuario u){
@@ -93,5 +100,21 @@ public class Usuario {
 
     public void setDerrotas(Integer derrotas) {
         this.derrotas = derrotas;
+    }
+
+    public Integer getColorCarta() {
+        return colorCarta;
+    }
+
+    public void setColorCarta(Integer colorCarta) {
+        this.colorCarta = colorCarta;
+    }
+
+    public Integer getColorTapete() {
+        return colorTapete;
+    }
+
+    public void setColorTapete(Integer colorTapete) {
+        this.colorTapete = colorTapete;
     }
 }

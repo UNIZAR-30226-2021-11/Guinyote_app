@@ -118,12 +118,11 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
         final String idUsuario = "id";
-        //TODO actualizar victorias y derrotas con el string del back
-        final String victorias = "id";
-        final String derrotas = "id";
+        //final String victorias = "games_won";
+        //final String derrotas = "games_lost";
         final String usernameUsuario = "username";
         final String emailUsuario = "email";
-        final String locationUsuario = "location";
+        final String locationUsuario = "Location";
         final String createdUsuario = "created_at";
         final String updatedUsuario = "updated_at";
 
@@ -136,8 +135,8 @@ public class GuinyoteClienteJWT implements Serializable {
         if (respuesta.get("user") != null) {
             return new Usuario(
                     respuesta.get("user").getAsJsonObject().get(idUsuario).getAsInt(),
-                    respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
-                    respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
+                    0,//respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
+                    0,//respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
                     respuesta.get("user").getAsJsonObject().get(usernameUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(emailUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(locationUsuario).getAsString(),
@@ -242,8 +241,8 @@ public class GuinyoteClienteJWT implements Serializable {
 
         Log.d("Partidas Usuario", partidasJSON.toString());
 
-        JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
-        if (partidasJSONArray != null) {
+        if (!partidasJSON.get("games").isJsonNull()) {
+            JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
                 JsonObject parObj = par.getAsJsonObject();
                 partidasRecuperadas.add(

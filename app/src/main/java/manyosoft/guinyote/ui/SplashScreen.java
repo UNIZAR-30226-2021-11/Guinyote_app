@@ -27,7 +27,7 @@ public class SplashScreen extends Activity {
 
                 //Time to start MainActivity
                 //TODO poner el inicio en el login activity
-                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
                 startActivity(intent );
 
                 finish();

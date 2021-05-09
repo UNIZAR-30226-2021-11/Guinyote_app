@@ -1,4 +1,4 @@
-package manyosoft.guinyote.ui;
+ package manyosoft.guinyote.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -104,8 +104,10 @@ public class JuegoActivity extends AppCompatActivity {
         carta5 = findViewById(R.id.carta5);
         carta6 = findViewById(R.id.carta6);
 
+        Usuario user = Usuario.getInstance();
         triunfo = findViewById(R.id.carta_triunfo);
         monton_robar = findViewById(R.id.montonRobar);
+        monton_robar.setBackground(ContextCompat.getDrawable(JuegoActivity.this,user.getColorCarta()));
         monton1 = findViewById(R.id.monton1);
         monton2 = findViewById(R.id.monton2);
         monton3 = findViewById(R.id.monton3);
