@@ -64,6 +64,11 @@
     <string name="noCantar">No cantar</string>
     <string name="cambiar">Cambiar carta</string>
     <string name="noCambiar">No Cambiar</string>
+    <string name="fin_partida">La partida ha finalizado</string>
+    <string name="volver">Volver al menu principal</string>
+    <string name="parejaGanadora">¡Has ganado!</string>
+    <string name="parejaPerdedora">La próxima será</string>
+    <string name="back_button">Back button</string>
 
 
 </resources>

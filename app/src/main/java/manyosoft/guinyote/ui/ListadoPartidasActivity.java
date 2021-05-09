@@ -9,6 +9,8 @@ import android.view.ContextMenu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,6 +28,8 @@ public class ListadoPartidasActivity extends AppCompatActivity {
 
     private ListView listadoPartidas;
     private ArrayList<Partida> partidas;
+    private EditText codigoPartida;
+    private Button unirsePorCodigo;
     private GuinyoteClienteJWT clienteJWT;
 
     @Override
@@ -36,17 +40,14 @@ public class ListadoPartidasActivity extends AppCompatActivity {
 
         // Botón de retroceso
         FloatingActionButton back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        back.setOnClickListener(view -> onBackPressed());
 
         clienteJWT = GuinyoteClienteJWT.getInstance();
 
-        listadoPartidas = (ListView) findViewById(R.id.listadoPartidas);
+        listadoPartidas = findViewById(R.id.listadoPartidas);
 
+        codigoPartida = findViewById(R.id.codigoPartida);
+        unirsePorCodigo = findViewById(R.id.boton_buscar);
 
         // SOLICITA PARTIDAS
         try {
@@ -61,13 +62,33 @@ public class ListadoPartidasActivity extends AppCompatActivity {
         listadoPartidas.setAdapter(adaptador);
         listadoPartidas.setClickable(true);
 
-        listadoPartidas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(ListadoPartidasActivity.this, "Seleccionaste la partida: " + partidas.get(position).getNombre() + ", id:"+id, Toast.LENGTH_SHORT).show();
+        listadoPartidas.setOnItemClickListener((adapterView, view, position, id) -> {
+            Toast.makeText(ListadoPartidasActivity.this, "Seleccionaste la partida: " + partidas.get(position).getNombre() + ", id:"+id, Toast.LENGTH_SHORT).show();
+            Intent teamSelection = new Intent(ListadoPartidasActivity.this, SeleccionEquipoActivity.class);
+            teamSelection.putExtra("id",id);
+            startActivity(teamSelection);
+        });
+
+        unirsePorCodigo.setOnClickListener(view -> {
+            Partida recuperada;
+            Long idPartida;
+            try {
+                idPartida = Long.valueOf(codigoPartida.getText().toString());
+                recuperada = clienteJWT.getGameById(ListadoPartidasActivity.this, idPartida);
+            } catch (InterruptedException | NumberFormatException | ExecutionException e) {
+                e.printStackTrace();
+                recuperada = null;
+                idPartida = null;
+            }
+
+            // TODO Buscar también por nombre (no hay método en la API Rest de momento)
+
+            if(recuperada != null)  {
                 Intent teamSelection = new Intent(ListadoPartidasActivity.this, SeleccionEquipoActivity.class);
-                teamSelection.putExtra("id",id);
+                teamSelection.putExtra("id",idPartida);
                 startActivity(teamSelection);
+            } else {
+                Toast.makeText(ListadoPartidasActivity.this, "No se ha podido encontrar la partida indicada", Toast.LENGTH_SHORT).show();
             }
         });
     }
