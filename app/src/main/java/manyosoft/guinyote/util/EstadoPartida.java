@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -24,7 +25,7 @@ import manyosoft.guinyote.R;
 public class EstadoPartida {
 
     // Estado de la partida
-    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair,cards_played_round;
+    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair;
     private boolean vueltas, arrastre,ended;
     private String singsuit,status;
 
@@ -39,7 +40,7 @@ public class EstadoPartida {
     private ArrayList<String> cartasSuit;
     private ArrayList<Integer> cartasValue;
     private ArrayList<Boolean> puedeCarta;
-
+    private ArrayList<Integer> cards_played_round;
     //
 
     public EstadoPartida(Long id, Long points_team_a, Long points_team_b, Long points_sing_a,
@@ -78,7 +79,7 @@ public class EstadoPartida {
             puedeCarta = new ArrayList<>();
             //Obtencion de valores de la partida
             status = root.get("status").getAsString();
-            root = root.get("game").getAsJsonObject();
+            root = root.get("game_state").getAsJsonObject();
             points_team_a = root.get("points_team_a").getAsLong();
             points_team_b = root.get("points_team_b").getAsLong();
             points_sing_a = root.get("points_sing_a").getAsLong();
@@ -89,7 +90,16 @@ public class EstadoPartida {
             ended = root.get("ended").getAsBoolean();
             winner_pair = root.get("winner_pair").getAsLong();
             if(!root.get("cards_played_round").isJsonNull()) {
-                cards_played_round = root.get("cards_played_round").getAsLong();
+                JsonArray cards_played_json = root.get("cards_played_round").getAsJsonArray();
+                cards_played_round = new ArrayList<Integer>();
+                for(JsonElement card_played : cards_played_json){
+                    JsonObject card_played_object = card_played.getAsJsonObject();
+                    int valorCarta = card_played_object.get("val").getAsInt();
+                    String paloCarta = card_played_object.get("suit").getAsString();
+                    String nombreCarta = paloCarta + "_" + valorCarta;
+                    int id = context.getResources().getIdentifier(nombreCarta,"drawable",context.getPackageName());
+                    cards_played_round.add(id);
+                }
             }else{
                 cards_played_round = null;
             }
@@ -273,11 +283,11 @@ public class EstadoPartida {
         this.winner_pair = winner_pair;
     }
 
-    public Long getCards_played_round() {
+    public ArrayList<Integer> getCards_played_round() {
         return cards_played_round;
     }
 
-    public void setCards_played_round(Long cards_played_round) {
+    public void setCards_played_round(ArrayList<Integer> cards_played_round) {
         this.cards_played_round = cards_played_round;
     }
 
