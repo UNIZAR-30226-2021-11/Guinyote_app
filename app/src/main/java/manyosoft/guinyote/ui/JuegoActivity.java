@@ -48,15 +48,17 @@ public class JuegoActivity extends AppCompatActivity {
     private static final String event_type = "event_type";
 
     // Eventos con los que se trabaja
-    private static final Integer EVENTO_CREATE_JOIN    = 0;
-    private static final Integer EVENTO_JOIN           = 1;
-    private static final Integer EVENTO_LEAVE          = 2;
-    private static final Integer EVENTO_JUGAR_CARTA    = 3;
-    private static final Integer EVENTO_CANTAR         = 5;
-    private static final Integer EVENTO_NOCANTAR       = 5;
-    private static final Integer EVENTO_CAMBIAR        = 4;
-    private static final Integer EVENTO_NOCAMBIAR      = 4;
-    private static final Integer EVENTO_PAUSAR         = 6;
+    private static final Integer EVENTO_CREATE_JOIN_SOLO    = 8;
+    private static final Integer EVENTO_CREATE_JOIN         = 0;
+    private static final Integer EVENTO_JOIN                = 1;
+    private static final Integer EVENTO_LEAVE               = 2;
+    private static final Integer EVENTO_JUGAR_CARTA         = 3;
+    private static final Integer EVENTO_CANTAR              = 5;
+    private static final Integer EVENTO_NOCANTAR            = 5;
+    private static final Integer EVENTO_CAMBIAR             = 4;
+    private static final Integer EVENTO_NOCAMBIAR           = 4;
+    private static final Integer EVENTO_PAUSAR              = 6;
+    private static final Integer EVENTO_VOTAR_PAUSAR        = 7;
 
     /**
      * The timeout value in milliseconds for socket connection.
@@ -84,9 +86,11 @@ public class JuegoActivity extends AppCompatActivity {
     // Botones para cambiar la carta por el triunfo o no
     private Button cambiar, noCambiar;
     // Mensaje de victoria
-    private TextView mensajeFin, parejaGanadora;
+    private TextView mensajeFin, parejaGanadora, mensajePausa;
     // Boton de volver (final partida)
     private Button botonVolver;
+
+    private Button votarPausa, votarNoPausa;
 
 
     private String jsonReceived;
@@ -101,10 +105,12 @@ public class JuegoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         idPartida = intent.getLongExtra("idPartida",-1);
         idPlayer = intent.getLongExtra("idPlayer",-1);
-        // TODO ESTO SOLO ES PARA DEPURAR
-        idPlayer = 2L;
 
         idPair = intent.getLongExtra("idPair", -1);
+        // TODO DEBUG ONLY
+        //idPair = 1L;
+        //idPlayer = 3L;
+
 
         carta1 = (ImageButton) findViewById(R.id.carta1);
         carta2 = (ImageButton) findViewById(R.id.carta2);
@@ -116,7 +122,7 @@ public class JuegoActivity extends AppCompatActivity {
         Usuario user = Usuario.getInstance();
         triunfo = findViewById(R.id.carta_triunfo);
         monton_robar = findViewById(R.id.montonRobar);
-        monton_robar.setBackground(ContextCompat.getDrawable(JuegoActivity.this,user.getColorCarta()));
+        //monton_robar.setBackground(ContextCompat.getDrawable(JuegoActivity.this,user.getColorCarta()));
         monton1 = findViewById(R.id.monton1);
         monton2 = findViewById(R.id.monton2);
         monton3 = findViewById(R.id.monton3);
@@ -131,8 +137,12 @@ public class JuegoActivity extends AppCompatActivity {
         noCambiar = findViewById(R.id.botonNoCambiar);
 
         mensajeFin = findViewById(R.id.textoFin);
+        mensajePausa = findViewById(R.id.textoPausado);
         parejaGanadora = findViewById(R.id.textoGanador);
         botonVolver = findViewById(R.id.botonVolver);
+
+        votarPausa = findViewById(R.id.botonVotarPausar);
+        votarNoPausa = findViewById(R.id.botonVotarNoPausar);
 
         Handler handler = new Handler()
         {
@@ -158,7 +168,7 @@ public class JuegoActivity extends AppCompatActivity {
                         // A text message arrived from the server.
                         @Override
                         public void onTextMessage(WebSocket websocket, String message) {
-                            Log.d("Mensaje recibido ws", "a"+message);
+                            Log.d("Mensaje recibido ws", message);
                             jsonReceived = message;
                             handler.sendMessage(handler.obtainMessage());
                         }
@@ -166,7 +176,13 @@ public class JuegoActivity extends AppCompatActivity {
                         // Cuando se conecta con el servidor
                         @Override
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers)   {
-                            if(intent.getBooleanExtra("create", false))  {
+                            // Manda mi player id y pair id
+                            Log.d("Primer envio", sendMyself());
+                            websocket.sendText(sendMyself());
+                            // Manda evento de creacion o union
+                            if(intent.getBooleanExtra("solo", false)){
+                                websocket.sendText(generateCreateJoinSoloEvent());
+                            } else if(intent.getBooleanExtra("create", false))  {
                                 websocket.sendText(generateCreateJoinEvent());
                             } else {
                                 websocket.sendText(generateJoinEvent());
@@ -197,6 +213,8 @@ public class JuegoActivity extends AppCompatActivity {
                 }
 */            }
         });
+
+        if(intent.getBooleanExtra("solo", false)) pausar.setVisibility(View.INVISIBLE);
 
         // Funcionalidad boton cantar
         // Responde al Backend con el evento cantar
@@ -260,8 +278,10 @@ public class JuegoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Enviar evento no cambiar
+                Log.d("Envio carta 1", "Mandara: "+generatePlayCardEvent(carta1suit, carta1value));
                 if(ws.isOpen()) ws.sendText(generatePlayCardEvent(carta1suit, carta1value));
                 else    {
+                    Log.d("Envio carta 1", "Se va a reconectar");
                     Snackbar.make(view, "Hubo un error en la conexión, reintente", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     reconectar();
@@ -352,6 +372,7 @@ public class JuegoActivity extends AppCompatActivity {
         // Elementos de fin de pantalla
         mensajeFin.setVisibility(View.INVISIBLE);
         parejaGanadora.setVisibility(View.INVISIBLE);
+        mensajePausa.setVisibility(View.INVISIBLE);
 
         botonVolver.setVisibility(View.INVISIBLE);
         botonVolver.setOnClickListener(new View.OnClickListener() {
@@ -360,6 +381,10 @@ public class JuegoActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        votarPausa.setOnClickListener(view -> ws.sendText(generateVotePauseEvent(true)));
+
+        votarNoPausa.setOnClickListener(view -> ws.sendText(generateVotePauseEvent(false)));
     }
 
     // Actualiza el tablero a partir del json recibido
@@ -379,50 +404,143 @@ public class JuegoActivity extends AppCompatActivity {
         if (est.getCarta(1) != null) {
             carta1.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(1)));
             carta1.setVisibility(View.VISIBLE);
-            carta1.setClickable(est.isTirarCarta() && est.isPuedeCarta(1));
+            if(est.isTirarCarta() && est.isPuedeCarta(1)) {
+                Log.d("carta1", "Puede Lanzar");
+                carta1.setClickable(true);
+                carta1.setAlpha(1.0f);
+            } else {
+                carta1.setClickable(false);
+                carta1.setAlpha(0.25f);
+            }
             carta1suit = est.getCartaSuit(1);
             carta1value = est.getCartaVal(1);
-        } else carta1.setVisibility(View.INVISIBLE);
+        } else {
+            carta1.setVisibility(View.INVISIBLE);
+            carta1.setClickable(false);
+        }
 
         if (est.getCarta(2) != null) {
             carta2.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(2)));
             carta2.setVisibility(View.VISIBLE);
-            carta2.setClickable(est.isTirarCarta() && est.isPuedeCarta(2));
+            if(est.isTirarCarta() && est.isPuedeCarta(2)) {
+                Log.d("carta2", "Puede Lanzar");
+                carta2.setClickable(true);
+                carta2.setAlpha(1.0f);
+            } else {
+                carta2.setClickable(false);
+                carta2.setAlpha(0.25f);
+            }
             carta2suit = est.getCartaSuit(2);
             carta2value = est.getCartaVal(2);
-        } else carta2.setVisibility(View.INVISIBLE);
+        } else {
+            carta2.setVisibility(View.INVISIBLE);
+            carta2.setClickable(false);
+        }
 
         if (est.getCarta(3) != null) {
             carta3.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(3)));
             carta3.setVisibility(View.VISIBLE);
-            carta3.setClickable(est.isTirarCarta() && est.isPuedeCarta(3));
+            if(est.isTirarCarta() && est.isPuedeCarta(3)) {
+                Log.d("carta3", "Puede Lanzar");
+                carta3.setClickable(true);
+                carta3.setAlpha(1.0f);
+            } else {
+                carta3.setClickable(false);
+                carta3.setAlpha(0.25f);
+            }
             carta3suit = est.getCartaSuit(3);
             carta3value = est.getCartaVal(3);
-        } else carta3.setVisibility(View.INVISIBLE);
+        } else {
+            carta3.setVisibility(View.INVISIBLE);
+            carta3.setClickable(false);
+        }
 
         if (est.getCarta(4) != null) {
             carta4.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(4)));
             carta4.setVisibility(View.VISIBLE);
-            carta4.setClickable(est.isTirarCarta() && est.isPuedeCarta(4));
+            if(est.isTirarCarta() && est.isPuedeCarta(4)) {
+                Log.d("carta4", "Puede Lanzar");
+                carta4.setClickable(true);
+                carta4.setAlpha(1.0f);
+            } else {
+                carta4.setClickable(false);
+                carta4.setAlpha(0.25f);
+            }
             carta4suit = est.getCartaSuit(4);
             carta4value = est.getCartaVal(4);
-        } else carta4.setVisibility(View.INVISIBLE);
+        } else {
+            carta4.setVisibility(View.INVISIBLE);
+            carta4.setClickable(false);
+        }
 
         if (est.getCarta(5) != null) {
             carta5.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(5)));
             carta5.setVisibility(View.VISIBLE);
-            carta5.setClickable(est.isTirarCarta() && est.isPuedeCarta(5));
+            if(est.isTirarCarta() && est.isPuedeCarta(5)) {
+                Log.d("carta5", "Puede Lanzar");
+                carta5.setClickable(true);
+                carta5.setAlpha(1.0f);
+            } else {
+                carta5.setClickable(false);
+                carta5.setAlpha(0.25f);
+            }
             carta5suit = est.getCartaSuit(5);
             carta5value = est.getCartaVal(5);
-        } else carta5.setVisibility(View.INVISIBLE);
+        } else {
+            carta5.setVisibility(View.INVISIBLE);
+            carta5.setClickable(false);
+        }
 
         if (est.getCarta(6) != null) {
             carta6.setBackground(ContextCompat.getDrawable(JuegoActivity.this, est.getCarta(6)));
             carta6.setVisibility(View.VISIBLE);
-            carta6.setClickable(est.isTirarCarta() && est.isPuedeCarta(6));
+            if(est.isTirarCarta() && est.isPuedeCarta(6)) {
+                Log.d("carta6", "Puede Lanzar");
+                carta6.setClickable(true);
+                carta6.setAlpha(1.0f);
+            } else {
+                carta6.setClickable(false);
+                carta6.setAlpha(0.25f);
+            }
             carta6suit = est.getCartaSuit(6);
             carta6value = est.getCartaVal(6);
-        } else carta6.setVisibility(View.INVISIBLE);
+        } else {
+            carta6.setVisibility(View.INVISIBLE);
+            carta6.setClickable(false);
+        }
+
+        try {
+            if(est.getCards_played_round() != null && est.getCards_played_round().get(0) != null) {
+                monton1.setBackgroundResource(est.getCards_played_round().get(0));
+                monton1.setVisibility(View.VISIBLE);
+            }
+            else monton1.setVisibility(View.INVISIBLE);
+        } catch (Exception e) {
+            monton1.setVisibility(View.INVISIBLE);
+            e.printStackTrace();
+        }
+
+        try {
+            if(est.getCards_played_round() != null && est.getCards_played_round().get(1) != null) {
+                monton2.setBackgroundResource(est.getCards_played_round().get(1));
+                monton2.setVisibility(View.VISIBLE);
+            }
+            else monton2.setVisibility(View.INVISIBLE);
+        } catch (Exception e) {
+            monton2.setVisibility(View.INVISIBLE);
+            e.printStackTrace();
+        }
+
+        try {
+            if(est.getCards_played_round() != null && est.getCards_played_round().get(2) != null) {
+                monton3.setBackgroundResource(est.getCards_played_round().get(2));
+                monton3.setVisibility(View.VISIBLE);
+            }
+            else monton3.setVisibility(View.INVISIBLE);
+        } catch (Exception e) {
+            monton3.setVisibility(View.INVISIBLE);
+            e.printStackTrace();
+        }
 
         // Si es posible cantar, muestra y activa los botones de cantar y no cantar
         if (est.isCantar()) {
@@ -463,10 +581,18 @@ public class JuegoActivity extends AppCompatActivity {
             );
         }
 
-        // TODO (falta los metodos en EstadoPartida) Actualiza las cartas lanzadas por el resto de jugadores
-        /*if(est.get)
+        if(est.getStatus().equals("votePause"))  {
+            votarPausa.setVisibility(View.VISIBLE);
+            votarNoPausa.setVisibility(View.VISIBLE);
+        } else {
+            votarPausa.setVisibility(View.INVISIBLE);
+            votarNoPausa.setVisibility(View.INVISIBLE);
+        }
 
-        */
+        if(est.getStatus().equals("paused"))    {
+            mensajePausa.setVisibility(View.VISIBLE);
+            botonVolver.setVisibility(View.VISIBLE);
+        }
 
         // Si la partida ha finalizado lo muestra al jugador
         if(est.isEnded())   {
@@ -481,6 +607,13 @@ public class JuegoActivity extends AppCompatActivity {
         }
     }
 
+    private String sendMyself() {
+        JsonObject json = new JsonObject();
+        json.addProperty("player_id", idPlayer);
+        json.addProperty(pair_id, idPair);
+        return json.toString();
+    }
+
     // Genera un evento de creación de partida
     private String generateCreateJoinEvent() {
         JsonObject json = new JsonObject();
@@ -488,6 +621,16 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(player_id, idPlayer);
         json.addProperty(pair_id, idPair);
         json.addProperty(event_type, EVENTO_CREATE_JOIN);
+        return json.toString();
+    }
+
+    // Genera un evento de creación de partida
+    private String generateCreateJoinSoloEvent() {
+        JsonObject json = new JsonObject();
+        json.addProperty(game_id, idPartida);
+        json.addProperty(player_id, idPlayer);
+        json.addProperty(pair_id, idPair);
+        json.addProperty(event_type, EVENTO_CREATE_JOIN_SOLO);
         return json.toString();
     }
 
@@ -521,7 +664,7 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
         json.add("card", card);
-        json.addProperty(event_type, EVENTO_LEAVE);
+        json.addProperty(event_type, EVENTO_JUGAR_CARTA);
         return json.toString();
     }
 
@@ -552,6 +695,17 @@ public class JuegoActivity extends AppCompatActivity {
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
         json.addProperty(event_type, EVENTO_PAUSAR);
+        return json.toString();
+    }
+
+
+    // Genera un evento de votacion de pausa
+    private String generateVotePauseEvent(boolean quiere) {
+        JsonObject json = new JsonObject();
+        json.addProperty(game_id, idPartida);
+        json.addProperty(player_id, idPlayer);
+        json.addProperty("vote", quiere);
+        json.addProperty(event_type, EVENTO_VOTAR_PAUSAR);
         return json.toString();
     }
 
