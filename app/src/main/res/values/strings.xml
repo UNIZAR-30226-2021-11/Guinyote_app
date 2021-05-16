@@ -19,8 +19,9 @@
     <string name="perfil">Perfil</string>
     <!-- MENU ONLINE -->
     <string name="juego_online">Online</string>
-    <string name="crear_sala">Crear una sala</string>
+    <string name="crear_partida">Crear una partida</string>
     <string name="unirse_sala">Unirse a una sala</string>
+    <string name="entrar_al_torneo">Entrar al torneo</string>
     <string name="logo_de_la_empresa">Logo de la empresa</string>
 
     <!-- REGISTRO -->

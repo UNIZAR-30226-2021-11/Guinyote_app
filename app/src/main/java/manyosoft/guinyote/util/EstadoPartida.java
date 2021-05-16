@@ -25,7 +25,7 @@ import manyosoft.guinyote.R;
 public class EstadoPartida {
 
     // Estado de la partida
-    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair,cards_played_round;
+    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair;
     private boolean vueltas, arrastre, ended;
     private String singsuit,status;
 
@@ -91,8 +91,8 @@ public class EstadoPartida {
             arrastre = root.get("arrastre").getAsBoolean();
             ended = root.get("ended").getAsBoolean();
             winner_pair = root.get("winner_pair").getAsLong();
-            if(!root.get("cards_played_round").isJsonNull()) {
-                JsonArray cards_played_json = root.get("cards_played_round").getAsJsonArray();
+            JsonArray cards_played_json = root.get("cards_played_round").getAsJsonArray();
+            if(!cards_played_json.isJsonNull()) {
                 cards_played_round = new ArrayList<Integer>();
                 for(JsonElement card_played : cards_played_json){
                     JsonObject card_played_object = card_played.getAsJsonObject();

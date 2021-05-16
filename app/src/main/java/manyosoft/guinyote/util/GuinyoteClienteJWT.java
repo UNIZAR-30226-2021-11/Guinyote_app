@@ -2,6 +2,7 @@ package manyosoft.guinyote.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.JsonToken;
 import android.util.Log;
 
@@ -15,6 +16,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
+
+import manyosoft.guinyote.R;
 
 
 public class GuinyoteClienteJWT implements Serializable {
@@ -34,7 +37,7 @@ public class GuinyoteClienteJWT implements Serializable {
     static final String GET_PUBLICAS = "api/v1/games/";
     static final String GET_USER_GAMES = "api/v1/games/user/";
     static final String CREATE_GAME = "api/v1/games/";
-    static final String GET_GAME = "api/v1/games/";
+    static final String GET_TORNEOS = "api/v1/games/tournament";
 
     // Players
     static final String JOIN_PAREJA = "api/v1/players/";
@@ -89,19 +92,17 @@ public class GuinyoteClienteJWT implements Serializable {
 
     }
 
-    public boolean crearUsuario(Context context, String location, String usuario, String mail, String password) throws ExecutionException, InterruptedException {
+    public boolean crearUsuario(Context context,String usuario, String mail, String password) throws ExecutionException, InterruptedException {
         // Constantes para trabajar con JSON
         final String usuarioObjetoJSON = "user";
         final String usuarioJSON = "username";
         final String mailJSON = "email";
-        final String locationJSON = "location";
         final String passwordJSON = "password";
 
         // Objeto JSON a pasar al backend
         JsonObject json = new JsonObject();
         json.addProperty(usuarioJSON, usuario);
         json.addProperty(mailJSON, mail);
-        json.addProperty(locationJSON, location);
         json.addProperty(passwordJSON, password);
 
         // Envío + Callback para la respuesta
@@ -118,14 +119,15 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
         final String idUsuario = "id";
-        //final String victorias = "games_won";
-        //final String derrotas = "games_lost";
+        final String victorias = "games_won";
+        final String derrotas = "games_lost";
         final String usernameUsuario = "username";
         final String emailUsuario = "email";
-        final String locationUsuario = "Location";
         final String createdUsuario = "created_at";
         final String updatedUsuario = "updated_at";
-
+        SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int colorCarta = myPreferences.getInt(username+"_colorCarta", R.drawable.reverso);
+        int colorTapete = myPreferences.getInt(username+"_colorCarta",R.drawable.casino_table);
         // Espera síncrona
         JsonObject respuesta = Ion.with(context)
                 .load("GET", HOST + GET_USER + username)
@@ -135,25 +137,24 @@ public class GuinyoteClienteJWT implements Serializable {
         if (respuesta.get("user") != null) {
             return new Usuario(
                     respuesta.get("user").getAsJsonObject().get(idUsuario).getAsInt(),
-                    0,//respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
-                    0,//respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
+                    respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
+                    respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
                     respuesta.get("user").getAsJsonObject().get(usernameUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(emailUsuario).getAsString(),
-                    respuesta.get("user").getAsJsonObject().get(locationUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(createdUsuario).getAsString(),
-                    respuesta.get("user").getAsJsonObject().get(updatedUsuario).getAsString());
+                    respuesta.get("user").getAsJsonObject().get(updatedUsuario).getAsString(),
+                    colorCarta,
+                    colorTapete);
         } else {
             return null;
         }
     }
 
-    public void updateUsuario(Context context, Integer id, String email, String location) {
+    public void updateUsuario(Context context, Integer id, String email) {
         final String emailJSON = "email";
-        final String locationJSON = "location";
 
         JsonObject json = new JsonObject();
         if (email != null) json.addProperty(emailJSON, email);
-        if (location != null) json.addProperty(locationJSON, location);
 
         // Envía la petición PUT y no espera respuesta alguna
         Ion.with(context)
@@ -164,9 +165,14 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public void deleteUsuario(Context context, Integer id) {
         // Envía la petición DELETE y no espera respuesta alguna
-        Ion.with(context)
-                .load("DELETE", HOST + DELETE_USER + id.toString())
-                .setHeader("Authorization", getToken());  // Token de autorización
+        try{
+            Ion.with(context)
+                    .load("DELETE", HOST + DELETE_USER + id)
+                    .setHeader("Authorization", getToken());  // Token de autorización
+        }catch(Exception e){
+            Log.d("RARO",e.getMessage());
+        }
+
     }
 
     public ArrayList<Partida> getPartidasPublicas(Context context) throws ExecutionException, InterruptedException {
@@ -268,15 +274,28 @@ public class GuinyoteClienteJWT implements Serializable {
             JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
                 JsonObject parObj = par.getAsJsonObject();
+                boolean winned;
+                if(parObj.get("winned") != null){
+                    winned = true;
+                }else{
+                    winned = false;
+                }
+                int puntos;
+                if(parObj.get("points") != null){
+                    puntos = parObj.get("points").getAsInt();
+                }else{
+                    puntos = 0;
+                }
+
                 partidasRecuperadas.add(
                         new Partida(
                                 parObj.get("id").getAsLong(),
                                 parObj.get("name").getAsString(),
-                                parObj.get("players_count").getAsInt(),
+                                0,//parObj.get("players_count").getAsInt(),
                                 parObj.get("creation_date").getAsString(),
                                 parObj.get("end_date").getAsString(),
-                                parObj.get("points").getAsInt(),
-                                parObj.get("winned").getAsBoolean()
+                                puntos,
+                                winned
                         )
 
                 );
@@ -313,8 +332,8 @@ public class GuinyoteClienteJWT implements Serializable {
             JsonObject pareja = parejaElem.getAsJsonObject();
             Log.d("getJugadores JSON pareja",pareja.toString());
             j = 0;
-            JsonArray jugadoresArray = pareja.getAsJsonArray("users");
-            if (jugadoresArray != null) {
+            if (!pareja.get("users").isJsonNull()) {
+                JsonArray jugadoresArray = pareja.get("users").getAsJsonArray();
                 for (JsonElement jugadorElem : jugadoresArray) {
                     JsonObject jugador = jugadorElem.getAsJsonObject();
                     Log.d("getJugadores JSON pareja:jugador", jugador.toString());
@@ -399,5 +418,36 @@ public class GuinyoteClienteJWT implements Serializable {
         }
 
         return id;
+    }
+//TODO implementar la conexion con api
+    public ArrayList<Torneo> getTournamentGames(Context context) throws ExecutionException, InterruptedException {
+        ArrayList<Torneo> partidasRecuperadas = new ArrayList<Torneo>();
+
+        // Espera síncrona
+        JsonObject partidasJSON = Ion.with(context)
+                .load("GET", HOST + GET_TORNEOS)
+                .setHeader("Authorization", getToken())  // Token de autorización
+                .asJsonObject()
+                .get();
+
+        Log.d("Mensaje Partidas Recibido", partidasJSON.toString());
+
+        if (partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
+        else {
+            JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
+            for (JsonElement par : partidasJSONArray) {
+                JsonObject parObj = par.getAsJsonObject();
+                partidasRecuperadas.add(
+                        new Torneo(
+                                parObj.get("id").getAsLong(),
+                                parObj.get("name").getAsString(),
+                                parObj.get("creation_date").getAsString(),
+                                parObj.get("end_date").getAsString()
+                        )
+                );
+            }
+            // Devuelve el listado de partidas publicas recuperadas del backend
+            return partidasRecuperadas;
+        }
     }
 }

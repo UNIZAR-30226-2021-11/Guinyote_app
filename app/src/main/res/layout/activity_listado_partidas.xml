@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".ui.MainMenuFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainMenuFragment">
 
     <!-- Boton de retroceso -->
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="PARTIDAS MULTIJUGADOR"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/buscadorPartidas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|start"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="?attr/homeAsUpIndicator"
+        android:contentDescription="@string/back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/back_button" />
+        app:srcCompat="?attr/homeAsUpIndicator" />
 
     <!-- Buscador de partidas -->
     <LinearLayout
         android:id="@+id/buscadorPartidas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toBottomOf="@id/back">
 
         <EditText
             android:id="@+id/codigoPartida"
@@ -41,7 +54,7 @@ tools:context=".ui.MainMenuFragment">
             android:id="@+id/boton_buscar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/buscar_partida"/>
+            android:text="@string/buscar_partida" />
 
     </LinearLayout>
 
@@ -51,7 +64,7 @@ tools:context=".ui.MainMenuFragment">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buscadorPartidas"/>
+        app:layout_constraintTop_toBottomOf="@id/buscadorPartidas" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

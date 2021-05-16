@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -73,7 +76,8 @@ public class UserProfile extends AppCompatActivity {
         rojo = headerView.findViewById(R.id.imageButton_rojo);
         azul = headerView.findViewById(R.id.imageButton_azul);
         negro = headerView.findViewById(R.id.imageButton_negro);
-
+        SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(UserProfile.this);
+        SharedPreferences.Editor myEditor = myPreferences.edit();
         try {
             Usuario user = Usuario.getInstance();
             rellenarPantalla(user.getUsername());
@@ -126,6 +130,7 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 colorCarta = R.drawable.reverso_rojo;
                 rojo.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+                myEditor.putInt(userName.getText()+"_colorCarta",colorCarta);
             }
         });
         azul.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +138,7 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 colorCarta = R.drawable.reverso;
                 azul.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+                myEditor.putInt(userName.getText()+"_colorCarta",colorCarta);
             }
         });
         negro.setOnClickListener(new View.OnClickListener() {
@@ -140,12 +146,18 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 colorCarta = R.drawable.reverso_negro;
                 negro.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+                myEditor.putInt(userName.getText()+"_colorCarta",colorCarta);
             }
         });
         borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                GuinyoteClienteJWT guinyoteClienteJWT = GuinyoteClienteJWT.getInstance();
+                Usuario user = Usuario.getInstance();
+                guinyoteClienteJWT.deleteUsuario(UserProfile.this,user.getId());
+                Intent i = new Intent(UserProfile.this, LoginActivity.class);
+                startActivity(i);
+                finish();
             }
         });
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +165,8 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Usuario user = Usuario.getInstance();
                 user.setColorCarta(colorCarta);
+                myEditor.commit();
+                desplegable.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -197,7 +211,7 @@ public class UserProfile extends AppCompatActivity {
     private void act_history(){
         if(busquedaUsuario){
             Intent i = new Intent(this, HistoryActivity.class);
-            i.putExtra("userName",buscarUser.getText());
+            i.putExtra("userName",buscarUser.getText().toString());
             startActivity(i);
         }else{
             Usuario user = Usuario.getInstance();
@@ -238,18 +252,27 @@ public class UserProfile extends AppCompatActivity {
         numPartidas.setText(totalPartidas.toString());
         numVictorias.setText(user.getVictorias().toString());
 
+        //refrescar la tabla
+        TableRow cabecera =  (TableRow) tabla.getChildAt(0);
+        tabla.removeAllViews();
+        tabla.addView(cabecera);
+
         ArrayList<Partida> historialPartidas = guinyoteClienteJWT.getPartidasByUser(this,user.getId());
         int iter = historialPartidas.size();
-        if(iter >5){iter = 5;}
+        if(iter > 10){iter = 10;}
         for (int i = 0; i<iter;i++){
             Partida p = historialPartidas.get(i);
             fila = new TableRow(this);
+            fila.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT,Gravity.TOP | Gravity.CENTER_HORIZONTAL));
             //DURACION
             TextView duracion = new TextView(this);
-            duracion.setText("PONER DURACION");
+            duracion.setText(p.getCreated()+ "\n - \n" + p.getEnd());
+            duracion.setGravity(Gravity.CENTER);
+            fila.addView(duracion);
             //EQUIPOS
             TextView equipos = new TextView(this);
-            equipos.setText(p.getJugadores());
+            equipos.setText(p.getNombre());
+            equipos.setGravity(Gravity.CENTER);
             fila.addView(equipos);
             //RESULTADO
             TextView resultado = new TextView(this);
@@ -258,10 +281,12 @@ public class UserProfile extends AppCompatActivity {
             }else{
                 resultado.setText("DERROTA");
             }
+            resultado.setGravity(Gravity.CENTER);
             fila.addView(resultado);
             //PUNTOS
             TextView puntos = new TextView(this);
-            puntos.setText(p.getPuntos());
+            puntos.setText(p.getPuntos().toString());
+            puntos.setGravity(Gravity.CENTER);
             fila.addView(puntos);
 
             tabla.addView(fila);

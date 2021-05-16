@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText userName;
     private EditText password;
+    private CheckBox recordar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +35,35 @@ public class LoginActivity extends AppCompatActivity {
 
         userName = findViewById(R.id.iniciarSesion_usuario);
         password = findViewById(R.id.iniciarSesion_password);
+        recordar = findViewById(R.id.checkBox);
+
+        SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor myEditor = myPreferences.edit();
+
+        String nombreUser = myPreferences.getString("userName",null);
+        String passwd = myPreferences.getString("passwd",null);
+        Boolean checked = myPreferences.getBoolean("checked",false);
+        recordar.setChecked(checked);
+
+        if(nombreUser != null && passwd != null){
+            if(checked){
+                userName.setText(nombreUser);
+                password.setText(passwd);
+            }
+        }
 
         Button acceder = (Button) findViewById(R.id.iniciarSesion_acceder);
         acceder.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                            act_profile();
+                        if(recordar.isChecked()){
+                            myEditor.putString("userName",userName.getText().toString());
+                            myEditor.putString("passwd",password.getText().toString());
+                        }
+                        myEditor.putBoolean("checked",recordar.isChecked());
+                        myEditor.commit();
+                        act_profile();
                     }
                 }
         );

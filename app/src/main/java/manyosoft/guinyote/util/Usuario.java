@@ -1,14 +1,17 @@
 package manyosoft.guinyote.util;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 
 import com.koushikdutta.ion.builder.Builders;
 
 import manyosoft.guinyote.R;
+import manyosoft.guinyote.ui.UserProfile;
 
 public class Usuario {
     private Integer id,victorias,derrotas;
-    private String username, email, location, created_at, updated_at;
+    private String username, email, created_at, updated_at;
     private Integer colorCarta,colorTapete;
 
     private static Usuario instance = null;
@@ -17,17 +20,16 @@ public class Usuario {
         return instance;
     }
 
-    public Usuario(Integer id, Integer victorias, Integer derrotas, String username, String email, String location, String created_at, String updated_at) {
+    public Usuario(Integer id, Integer victorias, Integer derrotas, String username, String email, String created_at, String updated_at,int colorCarta,int colorTapete) {
         this.id = id;
         this.victorias = victorias;
         this.derrotas = derrotas;
         this.username = username;
         this.email = email;
-        this.location = location;
         this.created_at = created_at;
         this.updated_at = updated_at;
-        colorCarta = R.drawable.reverso;
-        colorTapete = R.drawable.casino_table;
+        this.colorCarta = colorCarta;
+        this.colorTapete = colorTapete;
     }
 
     public Usuario(Usuario u){
@@ -60,14 +62,6 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getCreated_at() {

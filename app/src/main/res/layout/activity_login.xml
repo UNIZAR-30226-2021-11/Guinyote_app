@@ -7,6 +7,13 @@
     android:layout_gravity="center"
     tools:context=".ui.LoginActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
     <TextView
         android:id="@+id/iniciarSesion_title"
         android:layout_width="wrap_content"
@@ -54,21 +61,39 @@
         android:id="@+id/iniciarSesion_acceder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
         android:text="@string/Acceder"
-        app:layout_constraintEnd_toStartOf="@+id/iniciarSesion_crear_cuenta"
-        app:layout_constraintStart_toStartOf="@+id/iniciarSesion_password"
-        app:layout_constraintTop_toBottomOf="@+id/iniciarSesion_password" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iniciarSesion_password"
+        app:layout_constraintVertical_bias="0.494" />
 
     <Button
         android:id="@+id/iniciarSesion_crear_cuenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:text="@string/Crear_cuenta"
-        app:layout_constraintEnd_toEndOf="@+id/iniciarSesion_password"
-        app:layout_constraintStart_toStartOf="@+id/iniciarSesion_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/iniciarSesion_password" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/iniciarSesion_crear_cuenta"
+        app:layout_constraintEnd_toEndOf="@+id/iniciarSesion_password"
+        app:layout_constraintTop_toBottomOf="@+id/iniciarSesion_password" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RECORDAR DATOS"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+        app:layout_constraintEnd_toStartOf="@+id/checkBox"
+        app:layout_constraintTop_toTopOf="@+id/checkBox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,6 +38,14 @@ public class OnlineMenuFragment extends Fragment {
                 startActivity(i);
             }
         });
+        view.findViewById(R.id.entrar_torneo_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = getContext();
+                Intent i = new Intent(context, ListadoTorneosActivity.class);
+                startActivity(i);
+            }
+        });
 
         view.findViewById(R.id.unirse_sala_button).setOnClickListener(new View.OnClickListener() {
             @Override
