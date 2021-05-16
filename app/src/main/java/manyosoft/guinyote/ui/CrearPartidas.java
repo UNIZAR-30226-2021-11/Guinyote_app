@@ -49,7 +49,7 @@ public class CrearPartidas extends AppCompatActivity {
         );
     }
 
-    private void creacionPartida(){
+    private void creacionPartida()  {
         GuinyoteClienteJWT guinyoteClienteJWT = GuinyoteClienteJWT.getInstance();
         try {
             Usuario user = Usuario.getInstance();
@@ -64,7 +64,7 @@ public class CrearPartidas extends AppCompatActivity {
                 i.putExtra("id",nuevaPartida.getId());
                 startActivity(i);
             }
-        }catch (Exception e){
+        }   catch (Exception e)    {
             Log.d("Crear Partida",e.getMessage());
         }
 

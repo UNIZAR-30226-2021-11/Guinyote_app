@@ -70,6 +70,9 @@
     <string name="parejaGanadora">¡Has ganado!</string>
     <string name="parejaPerdedora">La próxima será</string>
     <string name="back_button">Back button</string>
+    <string name="votar_pausa">Votar pausa</string>
+    <string name="votar_no_pausa">Votar no pausa</string>
+    <string name="partidaPausada">La partida ha sido pausada</string>
 
 
 </resources>

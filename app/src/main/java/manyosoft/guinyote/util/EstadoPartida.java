@@ -27,14 +27,12 @@ public class EstadoPartida {
     // Estado de la partida
     private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair;
     private boolean vueltas, arrastre, ended;
-    private String singsuit,status;
+    private String singsuit, status;
 
     //Carta de triunfo
     private String triumph_suit;
     private Long triumph_val, triumph_points;
     private boolean triumph_playable;
-
-    // TODO Cartas lanzadas por otros jugadores (las que hay sobre el tablero en la ronda)
 
     // Acciones requeridas al jugador
     private boolean tirarCarta, cantar, cambiar;
@@ -91,8 +89,8 @@ public class EstadoPartida {
             arrastre = root.get("arrastre").getAsBoolean();
             ended = root.get("ended").getAsBoolean();
             winner_pair = root.get("winner_pair").getAsLong();
-            JsonArray cards_played_json = root.get("cards_played_round").getAsJsonArray();
-            if(!cards_played_json.isJsonNull()) {
+            if(!root.get("cards_played_round").isJsonNull()) {
+                JsonArray cards_played_json = root.get("cards_played_round").getAsJsonArray();
                 cards_played_round = new ArrayList<Integer>();
                 for(JsonElement card_played : cards_played_json){
                     JsonObject card_played_object = card_played.getAsJsonObject();
@@ -127,19 +125,22 @@ public class EstadoPartida {
                     singsuit = jugador.get("sing_suit").getAsString();
                     cambiar = jugador.get("can_change").getAsBoolean();
                     for(int j = 0; j<6; j++){
-                        JsonObject carta = (JsonObject) jugador.get("cards").getAsJsonArray().get(j);
-                        if(carta != null){
-                           int valorCarta = carta.get("val").getAsInt();
-                            String paloCarta = carta.get("suit").getAsString();
-                            String nombreCarta = paloCarta + "_" + valorCarta;
-                            int id = context.getResources().getIdentifier(nombreCarta,"drawable",context.getPackageName());
-                            cartas.add(id);
-                            cartasSuit.add(paloCarta);
-                            cartasValue.add(valorCarta);
-                            puedeCarta.add(carta.get("playable").getAsBoolean());
-                        }else{
-                            cartas.add(null);
-                            puedeCarta.add(false);
+                        if(! jugador.get("cards").getAsJsonArray().get(j).isJsonNull()) {
+                            JsonObject carta = (JsonObject) jugador.get("cards").getAsJsonArray().get(j);
+                            if (carta != null) {
+                                int valorCarta = carta.get("val").getAsInt();
+                                String paloCarta = carta.get("suit").getAsString();
+                                String nombreCarta = paloCarta + "_" + valorCarta;
+                                int id = context.getResources().getIdentifier(nombreCarta, "drawable", context.getPackageName());
+                                cartas.add(id);
+                                cartasSuit.add(paloCarta);
+                                cartasValue.add(valorCarta);
+                                puedeCarta.add(carta.get("playable").getAsBoolean());
+
+                            } else {
+                                cartas.add(null);
+                                puedeCarta.add(false);
+                            }
                         }
                     }
                 }else{
@@ -237,10 +238,16 @@ public class EstadoPartida {
         this.cambiar = cambiar;
     }
 
-    public Integer getCarta(int indice){
-        return cartas.get(indice-1);
-    }
 
+    public Integer getCarta(int indice){
+        Integer val;
+        try {
+            val = cartas.get(indice-1);
+        } catch (IndexOutOfBoundsException e)   {
+            val = null;
+        }
+        return val;
+    }
     public void setCarta(int indice, Integer carta){
         cartas.set(indice-1,carta);
     }

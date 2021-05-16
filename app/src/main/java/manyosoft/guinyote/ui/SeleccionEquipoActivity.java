@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -57,10 +58,10 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             if(jugadores.get(1) != null) j2t1.setText(jugadores.get(1));
             else                         j2t1.setText("-----");
 
-            if(jugadores.get(2) != null) j1t2.setText(jugadores.get(3));
+            if(jugadores.get(2) != null) j1t2.setText(jugadores.get(2));
             else                         j1t2.setText("-----");
 
-            if(jugadores.get(3) != null) j2t2.setText(jugadores.get(4));
+            if(jugadores.get(3) != null) j2t2.setText(jugadores.get(3));
             else                         j2t2.setText("-----");
 
             if(jugadores.get(0) != null && jugadores.get(1) != null)    {
@@ -90,6 +91,12 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
 
             }
         });
+
+        for(String a : jugadores)   {
+            if(a!=null) Log.d("Depurando", a);
+            else Log.d("Depurando", "null");
+        }
+
         Long idPareja1,idPareja2;
         if(jugadores.get(4) == null){
             idPareja1 = (long) -1;

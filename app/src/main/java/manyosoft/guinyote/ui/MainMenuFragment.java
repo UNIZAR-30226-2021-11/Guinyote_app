@@ -49,11 +49,13 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
+                // TODO mandar a la API REST solicitud creacion partida
+                // ...
                 Intent juegoIntent = new Intent(context, JuegoActivity.class);
                 juegoIntent.putExtra("idPartida",1L);
-                juegoIntent.putExtra("idPlayer",1L);
+                juegoIntent.putExtra("idPlayer",5L);
                 juegoIntent.putExtra("idPair",1L);
-                juegoIntent.putExtra("create",true);
+                juegoIntent.putExtra("solo",true);
                 startActivity(juegoIntent);
             }
         });

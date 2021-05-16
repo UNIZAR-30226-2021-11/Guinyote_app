@@ -37,7 +37,8 @@ public class GuinyoteClienteJWT implements Serializable {
     static final String GET_PUBLICAS = "api/v1/games/";
     static final String GET_USER_GAMES = "api/v1/games/user/";
     static final String CREATE_GAME = "api/v1/games/";
-    static final String GET_TORNEOS = "api/v1/games/tournament";
+    static final String GET_GAME = "api/v1/games/";
+    static final String GET_TORNEOS = "api/v1/games/tournament/";
 
     // Players
     static final String JOIN_PAREJA = "api/v1/players/";
@@ -97,12 +98,14 @@ public class GuinyoteClienteJWT implements Serializable {
         final String usuarioObjetoJSON = "user";
         final String usuarioJSON = "username";
         final String mailJSON = "email";
+        final String locationJSON = "location";
         final String passwordJSON = "password";
 
         // Objeto JSON a pasar al backend
         JsonObject json = new JsonObject();
         json.addProperty(usuarioJSON, usuario);
         json.addProperty(mailJSON, mail);
+        //json.addProperty(locationJSON, location);
         json.addProperty(passwordJSON, password);
 
         // Envío + Callback para la respuesta
@@ -119,10 +122,12 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
         final String idUsuario = "id";
+        //TODO actualizar victorias y derrotas con el string del back
         final String victorias = "games_won";
         final String derrotas = "games_lost";
         final String usernameUsuario = "username";
         final String emailUsuario = "email";
+        final String locationUsuario = "location";
         final String createdUsuario = "created_at";
         final String updatedUsuario = "updated_at";
         SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -152,9 +157,11 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public void updateUsuario(Context context, Integer id, String email) {
         final String emailJSON = "email";
+        final String locationJSON = "location";
 
         JsonObject json = new JsonObject();
         if (email != null) json.addProperty(emailJSON, email);
+        //if (location != null) json.addProperty(locationJSON, location);
 
         // Envía la petición PUT y no espera respuesta alguna
         Ion.with(context)
@@ -332,14 +339,16 @@ public class GuinyoteClienteJWT implements Serializable {
             JsonObject pareja = parejaElem.getAsJsonObject();
             Log.d("getJugadores JSON pareja",pareja.toString());
             j = 0;
-            if (!pareja.get("users").isJsonNull()) {
-                JsonArray jugadoresArray = pareja.get("users").getAsJsonArray();
-                for (JsonElement jugadorElem : jugadoresArray) {
-                    JsonObject jugador = jugadorElem.getAsJsonObject();
-                    Log.d("getJugadores JSON pareja:jugador", jugador.toString());
-                    Log.d("Index", ((Integer) (j + i * 2)).toString());
-                    jugadores.set(j + i * 2, jugador.get("username").getAsString());
-                    j++;
+            if(! pareja.get("users").isJsonNull()) {
+                JsonArray jugadoresArray = pareja.getAsJsonArray("users");
+                if (jugadoresArray != null) {
+                    for (JsonElement jugadorElem : jugadoresArray) {
+                        JsonObject jugador = jugadorElem.getAsJsonObject();
+                        Log.d("getJugadores JSON pareja:jugador", jugador.toString());
+                        Log.d("Index", ((Integer) (j + i * 2)).toString());
+                        jugadores.set(j + i * 2, jugador.get("username").getAsString());
+                        j++;
+                    }
                 }
             }
             jugadores.set(4+i,((Long)pareja.get("id").getAsLong()).toString());
@@ -407,6 +416,7 @@ public class GuinyoteClienteJWT implements Serializable {
             JsonObject respuesta = Ion.with(context)
                     .load("POST",HOST+JOIN_PAREJA)
                     .setHeader("Authorization", getToken())  // Token de autorización
+                    .setJsonObjectBody(json)
                     .asJsonObject()
                     .get();
 

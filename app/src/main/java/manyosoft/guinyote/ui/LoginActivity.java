@@ -90,9 +90,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         if(!error) {//acierto en el inicio de sesión
             try {
-
                 Usuario user = guinyoteClienteJWT.getUsuario(this,userName.getText().toString());
-                new Usuario(user);
+                Usuario.setInstance(user);
             }catch(Exception e){
                 Log.d("GET USUARIO",e.getMessage());
             }

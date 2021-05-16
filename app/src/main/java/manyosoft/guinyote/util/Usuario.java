@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 
-import com.koushikdutta.ion.builder.Builders;
+import android.util.Log;
 
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.ui.UserProfile;
@@ -16,7 +16,12 @@ public class Usuario {
 
     private static Usuario instance = null;
 
-    public static synchronized Usuario getInstance() {
+    public static synchronized void setInstance(Usuario u) {
+        instance = u;
+        Log.d("Usuario", String.valueOf(u.id));
+    }
+
+    public static synchronized Usuario getInstance()    {
         return instance;
     }
 
@@ -30,10 +35,6 @@ public class Usuario {
         this.updated_at = updated_at;
         this.colorCarta = colorCarta;
         this.colorTapete = colorTapete;
-    }
-
-    public Usuario(Usuario u){
-        instance = u;
     }
 
     public void logOut(){
