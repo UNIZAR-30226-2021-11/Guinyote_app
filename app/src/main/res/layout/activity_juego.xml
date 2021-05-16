@@ -91,7 +91,32 @@
         app:layout_constraintTop_toBottomOf="@id/botonPausa"
         app:layout_constraintStart_toEndOf="@id/botonCambiar"
         />
-
+    <!-- VOTACION PAUSA -->
+    <!-- BOTON CANTAR -->
+    <Button
+        android:id="@+id/botonVotarPausar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/votar_pausa"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/botonVotarNoPausar"
+        />
+    <Button
+        android:id="@+id/botonVotarNoPausar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:text="@string/votar_no_pausa"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/botonVotarPausar"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <!-- MANO DEL JUGADOR -->
 
@@ -225,6 +250,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fin_partida"
+        android:textSize="@dimen/_50sdp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/textoGanador"
+        />
+
+    <TextView
+        android:id="@+id/textoPausado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/partidaPausada"
         android:textSize="@dimen/_50sdp"
         android:textStyle="bold"
         android:visibility="invisible"
