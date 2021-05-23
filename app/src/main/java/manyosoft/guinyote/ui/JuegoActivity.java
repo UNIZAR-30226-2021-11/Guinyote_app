@@ -1,8 +1,10 @@
  package manyosoft.guinyote.ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,14 +20,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
 import java.io.IOException;
-import java.nio.channels.AsynchronousByteChannel;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +73,7 @@ public class JuegoActivity extends AppCompatActivity {
     private String carta1suit, carta2suit, carta3suit, carta4suit, carta5suit, carta6suit;
     private Integer carta1value, carta2value, carta3value, carta4value, carta5value, carta6value;
     // Cartas del tablero
-    private ImageView triunfo, monton_robar, monton1, monton2, monton3;
+    private ImageView triunfo, monton_robar, monton1, monton2, monton3,tablero;
     // Texto que muestra el nombre de la partida
     private TextView namePartida_textView;
     // Boton para pausar
@@ -92,6 +90,7 @@ public class JuegoActivity extends AppCompatActivity {
 
     private Button votarPausa, votarNoPausa;
 
+    private ImageButton infoPartida;
 
     private String jsonReceived;
 
@@ -120,9 +119,11 @@ public class JuegoActivity extends AppCompatActivity {
         carta6 = (ImageButton) findViewById(R.id.carta6);
 
         Usuario user = Usuario.getInstance();
+        tablero = findViewById(R.id.tablero);
+        tablero.setBackground(ContextCompat.getDrawable(JuegoActivity.this,user.getColorTapete()));
         triunfo = findViewById(R.id.carta_triunfo);
         monton_robar = findViewById(R.id.montonRobar);
-        //monton_robar.setBackground(ContextCompat.getDrawable(JuegoActivity.this,user.getColorCarta()));
+        monton_robar.setBackground(ContextCompat.getDrawable(JuegoActivity.this,user.getColorCarta()));
         monton1 = findViewById(R.id.monton1);
         monton2 = findViewById(R.id.monton2);
         monton3 = findViewById(R.id.monton3);
@@ -143,6 +144,23 @@ public class JuegoActivity extends AppCompatActivity {
 
         votarPausa = findViewById(R.id.botonVotarPausar);
         votarNoPausa = findViewById(R.id.botonVotarNoPausar);
+
+        infoPartida = findViewById(R.id.infoPartida);
+        infoPartida.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               AlertDialog .Builder builder = new AlertDialog.Builder(JuegoActivity.this);
+               builder.setTitle("AYUDA");
+               builder.setView(R.layout.fragment_dialogo);
+               builder.setNegativeButton("CERRAR", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                   }
+               });
+               builder.show();
+           }
+       });
 
         Handler handler = new Handler()
         {

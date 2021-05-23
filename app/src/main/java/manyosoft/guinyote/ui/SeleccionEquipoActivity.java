@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,9 +23,10 @@ import manyosoft.guinyote.util.Usuario;
 import static java.lang.Long.parseLong;
 
 public class SeleccionEquipoActivity extends AppCompatActivity {
-    private long id;
-    private TextView j1t1, j2t1, j1t2, j2t2;
+    private long id,idPartida;
+    private TextView j1t1, j2t1, j1t2, j2t2,codigoPartida;
     private Button joinT1, joinT2;
+    private ArrayList<String> jugadores = null;
 
     GuinyoteClienteJWT clienteJWT;
 
@@ -34,7 +36,7 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_seleccion_equipo);
 
         Intent intent = getIntent();
-        Long idPartida = intent.getLongExtra("id",-1);
+        idPartida = intent.getLongExtra("id",-1);
 
         clienteJWT = GuinyoteClienteJWT.getInstance();
         j1t1 = findViewById(R.id.jugador1Team1);
@@ -43,8 +45,115 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
         j2t2 = findViewById(R.id.jugador2Team2);
         joinT1 = findViewById(R.id.buttonTeam1);
         joinT2 = findViewById(R.id.buttonTeam2);
+        codigoPartida = findViewById(R.id.codigoPartida);
 
-        ArrayList<String> jugadores = null;
+        codigoPartida.setText(String.valueOf(idPartida));
+
+        actualizarPantalla();
+
+        FloatingActionButton back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        for(String a : jugadores)   {
+            if(a!=null) Log.d("Depurando", a);
+            else Log.d("Depurando", "null");
+        }
+
+        Long idPareja1,idPareja2;
+        if(jugadores.get(4) == null){
+            idPareja1 = (long) -1;
+        }else{
+            idPareja1 = parseLong(jugadores.get(4));
+        }
+        if(jugadores.get(5) == null){
+            idPareja2 = (long) -1;
+        }else{
+            idPareja2 = parseLong(jugadores.get(5));
+        }
+
+
+        joinT1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Usuario user = Usuario.getInstance();
+                if(jugadores != null && (jugadores.get(0) == null || jugadores.get(1) == null )){
+                    if(!jugadores.contains(user.getUsername())) {
+                        Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, user.getId().longValue(), idPareja1);
+                        if (idJugador != -1) {
+                            Intent teamSelection = new Intent(SeleccionEquipoActivity.this, JuegoActivity.class);
+                            teamSelection.putExtra("idPartida",idPartida);
+                            teamSelection.putExtra("idPlayer",idJugador);
+                            teamSelection.putExtra("idPair",idPareja1);
+                            teamSelection.putExtra("solo",false);
+                            startActivity(teamSelection);
+                        } else {
+                            CharSequence text = "ERROR AL UNIRSE AL EQUIPO";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
+                            toast.show();
+                            actualizarPantalla();
+                        }
+                    }else{
+                        CharSequence text = "YA PERTENECE A UN EQUIPO";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
+                        toast.show();
+                    }
+
+                }else{
+                    CharSequence text = "EQUIPO LLENO";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
+                    toast.show();
+                }
+
+            }
+        });
+
+
+        joinT2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Usuario user = Usuario.getInstance();
+                if(jugadores != null && (jugadores.get(2) == null || jugadores.get(3) == null )){
+                    if(!jugadores.contains(user.getUsername())) {
+                        Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, user.getId().longValue(), idPareja2);
+                        if (idJugador != -1) {
+                            Intent teamSelection = new Intent(SeleccionEquipoActivity.this, JuegoActivity.class);
+                            teamSelection.putExtra("idPartida",idPartida);
+                            teamSelection.putExtra("idPlayer",idJugador);
+                            teamSelection.putExtra("idPair",idPareja2);
+                            teamSelection.putExtra("solo",false);
+                            startActivity(teamSelection);
+                        } else {
+                            CharSequence text = "ERROR AL UNIRSE AL EQUIPO";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
+                            toast.show();
+                            actualizarPantalla();
+                        }
+                    }else{
+                        CharSequence text = "YA PERTENECE A UN EQUIPO";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
+                        toast.show();
+                    }
+                }else{
+                    CharSequence text = "EQUIPO LLENO";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
+                    toast.show();
+                }
+            }
+        });
+    }
+
+    void actualizarPantalla(){
         try {
             jugadores = clienteJWT.getJugadores(this, idPartida);
         } catch (ExecutionException | InterruptedException e) {
@@ -82,52 +191,10 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             j1t2.setText(R.string.Error);
             j2t2.setText(R.string.Error);
         }
-
-        FloatingActionButton back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-
-            }
-        });
-
-        for(String a : jugadores)   {
-            if(a!=null) Log.d("Depurando", a);
-            else Log.d("Depurando", "null");
-        }
-
-        Long idPareja1,idPareja2;
-        if(jugadores.get(4) == null){
-            idPareja1 = (long) -1;
-        }else{
-            idPareja1 = parseLong(jugadores.get(4));
-        }
-        if(jugadores.get(5) == null){
-            idPareja2 = (long) -1;
-        }else{
-            idPareja2 = parseLong(jugadores.get(5));
-        }
-
-        joinT1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Usuario user = Usuario.getInstance();
-                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this,user.getId().longValue(), idPareja1);
-                // TODO Iniciar partida
-                // ...
-            }
-        });
-
-
-        joinT2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Usuario user = Usuario.getInstance();
-                Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, user.getId().longValue(), idPareja2);
-                // TODO Iniciar partida
-                // ...
-            }
-        });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        actualizarPantalla();
     }
 }

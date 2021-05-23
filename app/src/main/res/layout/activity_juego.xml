@@ -15,14 +15,14 @@
         android:id="@+id/tablero"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@drawable/casino_table"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/casino_table" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/idPartida"
@@ -303,4 +303,14 @@
         app:layout_constraintTop_toTopOf="@id/textoGanador"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <ImageButton
+        android:id="@+id/infoPartida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idPartida"
+        app:srcCompat="@android:drawable/ic_menu_info_details" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

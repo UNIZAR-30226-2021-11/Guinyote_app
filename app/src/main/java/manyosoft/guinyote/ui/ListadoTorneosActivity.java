@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,14 +16,12 @@ import java.util.concurrent.ExecutionException;
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.util.GuinyoteClienteJWT;
 import manyosoft.guinyote.util.ListadoPartidasAdapter;
-import manyosoft.guinyote.util.ListadoTorneosAdapter;
 import manyosoft.guinyote.util.Partida;
-import manyosoft.guinyote.util.Torneo;
 
 public class ListadoTorneosActivity extends AppCompatActivity {
 
     private ListView listadoPartidas;
-    private ArrayList<Torneo> torneos;
+    private ArrayList<Partida> torneos;
     private GuinyoteClienteJWT clienteJWT;
 
     @Override
@@ -42,6 +38,16 @@ public class ListadoTorneosActivity extends AppCompatActivity {
 
         listadoPartidas = findViewById(R.id.listView_torneo);
 
+        mostrarPartidas();
+
+        listadoPartidas.setOnItemClickListener((adapterView, view, position, id) -> {
+            Toast.makeText(ListadoTorneosActivity.this, "Seleccionaste la partida: " + torneos.get(position).getNombre() + ", id:"+id, Toast.LENGTH_SHORT).show();
+            Intent teamSelection = new Intent(ListadoTorneosActivity.this, SeleccionEquipoActivity.class);
+            teamSelection.putExtra("id",id);
+            startActivity(teamSelection);
+        });
+    }
+    private void mostrarPartidas(){
         try {
             torneos = clienteJWT.getTournamentGames(this);
         } catch (ExecutionException | InterruptedException e) {
@@ -50,15 +56,14 @@ public class ListadoTorneosActivity extends AppCompatActivity {
         }
 
         // Adaptador para la lista de partidas
-        ListadoTorneosAdapter adaptador = new ListadoTorneosAdapter(this, R.layout.list_item_partidas, torneos);
+        ListadoPartidasAdapter adaptador = new ListadoPartidasAdapter(this, R.layout.list_item_partidas, torneos);
         listadoPartidas.setAdapter(adaptador);
         listadoPartidas.setClickable(true);
+    }
 
-        listadoPartidas.setOnItemClickListener((adapterView, view, position, id) -> {
-            Toast.makeText(ListadoTorneosActivity.this, "Seleccionaste la partida: " + torneos.get(position).getNombre() + ", id:"+id, Toast.LENGTH_SHORT).show();
-            Intent teamSelection = new Intent(ListadoTorneosActivity.this, SeleccionEquipoActivity.class);
-            teamSelection.putExtra("id",id);
-            startActivity(teamSelection);
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mostrarPartidas();
     }
 }

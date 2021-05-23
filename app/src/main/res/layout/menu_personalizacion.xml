@@ -95,13 +95,31 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewTapete">
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/imageButton_table_green"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
             android:contextClickable="true"
             app:srcCompat="@drawable/casino_table" />
+
+        <ImageButton
+            android:id="@+id/imageButton_table_red"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:contextClickable="true"
+            app:srcCompat="@drawable/casino_table_rojo" />
+
+        <ImageButton
+            android:id="@+id/imageButton_table_blue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:contextClickable="true"
+            app:srcCompat="@drawable/casino_table_azul" />
     </LinearLayout>
 
     <Button

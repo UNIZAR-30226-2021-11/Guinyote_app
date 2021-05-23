@@ -98,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
-
         }
         else{//error en el inicio de sesión
             CharSequence text = "ERROR EN EL INICIO DE SESION";

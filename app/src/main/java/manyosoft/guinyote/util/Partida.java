@@ -1,7 +1,7 @@
 package manyosoft.guinyote.util;
 
 public class Partida {
-    private Long id;
+    private Long id,playerId,pairId;
     private String nombre;
     private Integer jugadores,puntos;
     private String created, end;
@@ -40,6 +40,13 @@ public class Partida {
             this.puntos = puntos;
             this.victoria = victoria;
         }
+    }
+
+    public Partida(Long id, Long playerId, Long pairId, Integer jugadores) {
+        this.id = id;
+        this.playerId = playerId;
+        this.pairId = pairId;
+        this.jugadores = jugadores;
     }
 
     public Long getId() {
@@ -88,5 +95,25 @@ public class Partida {
 
     public void setVictoria(boolean victoria) {
         this.victoria = victoria;
+    }
+
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
+    }
+
+    public Long getPairId() {
+        return pairId;
+    }
+
+    public void setPairId(Long pairId) {
+        this.pairId = pairId;
+    }
+
+    public boolean isVictoria() {
+        return victoria;
     }
 }

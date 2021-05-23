@@ -38,7 +38,7 @@ public class GuinyoteClienteJWT implements Serializable {
     static final String GET_USER_GAMES = "api/v1/games/user/";
     static final String CREATE_GAME = "api/v1/games/";
     static final String GET_GAME = "api/v1/games/";
-    static final String GET_TORNEOS = "api/v1/games/tournament/";
+    static final String GET_TORNEOS = "api/v1/games/tournament";
 
     // Players
     static final String JOIN_PAREJA = "api/v1/players/";
@@ -122,7 +122,6 @@ public class GuinyoteClienteJWT implements Serializable {
 
     public Usuario getUsuario(Context context, String username) throws ExecutionException, InterruptedException {
         final String idUsuario = "id";
-        //TODO actualizar victorias y derrotas con el string del back
         final String victorias = "games_won";
         final String derrotas = "games_lost";
         final String usernameUsuario = "username";
@@ -132,7 +131,7 @@ public class GuinyoteClienteJWT implements Serializable {
         final String updatedUsuario = "updated_at";
         SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         int colorCarta = myPreferences.getInt(username+"_colorCarta", R.drawable.reverso);
-        int colorTapete = myPreferences.getInt(username+"_colorCarta",R.drawable.casino_table);
+        int colorTapete = myPreferences.getInt(username+"_colorTapete",R.drawable.casino_table);
         // Espera síncrona
         JsonObject respuesta = Ion.with(context)
                 .load("GET", HOST + GET_USER + username)
@@ -175,11 +174,12 @@ public class GuinyoteClienteJWT implements Serializable {
         try{
             Ion.with(context)
                     .load("DELETE", HOST + DELETE_USER + id)
-                    .setHeader("Authorization", getToken());  // Token de autorización
+                    .setHeader("Authorization", getToken())
+                    .asJsonObject()
+                    .get();  // Token de autorización
         }catch(Exception e){
-            Log.d("RARO",e.getMessage());
+            Log.d("Usuario Borrado",e.getMessage());
         }
-
     }
 
     public ArrayList<Partida> getPartidasPublicas(Context context) throws ExecutionException, InterruptedException {
@@ -251,14 +251,31 @@ public class GuinyoteClienteJWT implements Serializable {
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
-
+        //TODO Version provisional
         if (partidaJSON.get("game") != null) {
+            Usuario user = Usuario.getInstance();
+            int numPlayers = 0;
+            Long jugadorID = Long.valueOf(-1);
+            Long parejaID = Long.valueOf(-1);
+            JsonArray parejas = partidaJSON.getAsJsonObject("game").getAsJsonArray("pairs");
+            for(JsonElement pareja : parejas){
+                JsonObject parejaObject = pareja.getAsJsonObject();
+                if(!parejaObject.get("users").isJsonNull()){
+                    for(JsonElement jugador : parejaObject.getAsJsonArray("users")){
+                        JsonObject jugadorObject = jugador.getAsJsonObject();
+                        if(jugadorObject.get("id").getAsLong() == user.getId()){
+                            jugadorID = jugadorObject.get("id").getAsLong();
+                            parejaID = parejaObject.get("id").getAsLong();
+                        }
+                        numPlayers++;
+                    }
+                }
+            }
             recuperada = new Partida(
-                    partidaJSON.getAsJsonObject("game").get("id").getAsLong(),
-                    partidaJSON.getAsJsonObject("game").get("name").getAsString(),
-                    partidaJSON.getAsJsonObject("game").get("players_count").getAsInt(),
-                    partidaJSON.getAsJsonObject("game").get("creation_date").getAsString(),
-                    partidaJSON.getAsJsonObject("game").get("end_date").getAsString()
+                    id,
+                    jugadorID,
+                    parejaID,
+                    numPlayers
             );
         }
 
@@ -298,7 +315,7 @@ public class GuinyoteClienteJWT implements Serializable {
                         new Partida(
                                 parObj.get("id").getAsLong(),
                                 parObj.get("name").getAsString(),
-                                0,//parObj.get("players_count").getAsInt(),
+                                parObj.get("players_count").getAsInt(),
                                 parObj.get("creation_date").getAsString(),
                                 parObj.get("end_date").getAsString(),
                                 puntos,
@@ -430,8 +447,8 @@ public class GuinyoteClienteJWT implements Serializable {
         return id;
     }
 //TODO implementar la conexion con api
-    public ArrayList<Torneo> getTournamentGames(Context context) throws ExecutionException, InterruptedException {
-        ArrayList<Torneo> partidasRecuperadas = new ArrayList<Torneo>();
+    public ArrayList<Partida> getTournamentGames(Context context) throws ExecutionException, InterruptedException {
+        ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
@@ -448,9 +465,10 @@ public class GuinyoteClienteJWT implements Serializable {
             for (JsonElement par : partidasJSONArray) {
                 JsonObject parObj = par.getAsJsonObject();
                 partidasRecuperadas.add(
-                        new Torneo(
+                        new Partida(
                                 parObj.get("id").getAsLong(),
                                 parObj.get("name").getAsString(),
+                                parObj.get("players_count").getAsInt(),
                                 parObj.get("creation_date").getAsString(),
                                 parObj.get("end_date").getAsString()
                         )

@@ -74,5 +74,142 @@
     <string name="votar_no_pausa">Votar no pausa</string>
     <string name="partidaPausada">La partida ha sido pausada</string>
 
+    <!-- REGLAAAAAAAAAAS -->
+    <string name="reglasFuente"> Fuente: Ludoteka.com</string>
+
+    <string name="reglasOrigen"> El Guiñote es un juego de baraja española perteneciente a la amplia familia del
+    tute, juegos en los que se trata de ir consiguiendo bazas, con un palo dominante
+    o palo de triunfo. El guiñote está especialmente arraigado en Aragón y algunas
+    zonas de Navarra y Castilla.</string>
+
+    <string name="reglasDescripcion"> Se trata de un juego de baraja española de 40 cartas. Se juega entre cuatro
+    personas, formando dos parejas. Dado que las reglas son en muchos aspectos
+    muy similares a las del Tute, en la explicación de las mismas se harán referencias
+    a este último juego.</string>
+
+    <string name="reglasObjetivo"> El objetivo general del juego es conseguir ganar antes que la pareja rival el
+    número de cotos pactado inicialmente, cotos constituidos a su vez por el 3
+    puntos/manos ganadoras. El objetivo concreto para ganar cada una de esas
+    manos es sumar el mayor número de puntos posible con las cartas ganadas
+    en cada baza para superar los 100 tantos necesarios para ganarla. Habrá que
+    intentar llevarse un gran número de bazas que reúnen cartas con la puntuación
+    más alta posible. A estos efectos el valor de cada carta es el que sigue: As (11
+    puntos), Tres (10 puntos), Rey (4 puntos), Sota (3 puntos) y Caballo (2 puntos).
+    El resto de cartas no tienen valor puntuable.
+    Existe una jerarquía entre las cartas de un mismo palo de cara a saber cuál
+    es la carta que vence en cada una de las bazas. Es la siguiente, de mayor a
+    menor: As, Tres, Rey, Sota, Caballo, Siete, Seis, Cinco, Cuatro y Dos. A su vez
+    existe una jerarquía entre palos: el palo de mayor rango es el de triunfo (cambia
+    en cada mano), en segundo lugar está el palo de salida (cambia en cada baza),
+    y finalmente están los dos palos restantes.</string>
+
+    <string name="reglasDesarrollo">Cada mano tiene dos fases bien diferenciadas. Una primera fase en la que las
+    reglas son muy similares a las del juego de la Brisca y una segunda en la que
+    las reglas son muy similares al propio juego del Tute.</string>
+
+    <string name="comienzo">Se echa a suertes para saber quién es el que reparte por primera vez y quién es
+    mano (el que se sitúe a la derecha del que reparte).
+    En las siguientes manos será mano el jugador situado a la derecha de quien
+    se llevó las diez de últimas en la mano anterior.
+    En cada mano el que reparte dará a cortar la baraja al jugador situado a
+    su izquierda, y seguidamente repartirá 6 cartas a cada jugador una a una y de
+    izquierda a derecha. Cuando haya terminado de repartir las cartas, levantará la
+    siguiente dejándola visible junto al mazo durante toda la mano: esa carta será
+    la que pinte, la que marque el triunfo en esa mano.
+    Cada una de las manos consta de 10 bazas. Una baza es el conjunto de
+    cartas (una por cada jugador) que lanzan sobre el tapete los jugadores en su
+    turno respectivo. Cada vez que se completa una baza habrá un jugador que la
+    gana, que se la lleva.</string>
+
+    <string name="primeraFase">Mientras queden cartas en el mazo (durante las cuatro primeras manos), el que
+    va de mano echará al centro del tapete una de sus cartas (la que él quiera), y
+    los demás, de izquierda a derecha, deberán echar una más cada uno, la que ellos
+    quieran, sin limitaciones u obligaciones de ningún tipo respecto a cuál echar.</string>
+
+    <string name="recogerBazas">La baza se la llevará el jugador que hubiera echado la carta más alta del palo de
+    triunfo, y si no hay triunfos sobre el tapete, la carta más alta del palo de salida.
+    En las bazas sucesivas, dentro de una misma mano, el jugador que se ha
+    llevado la última baza es el que empezará lanzando la 1ª carta de la baza siguiente.
+    Antes de lanzar nuevamente las cartas para jugar una nueva baza, todos los
+    jugadores tomarán una carta de encima del mazo, empezando por el que ganó
+    la baza anterior, de forma que siempre tengan seis cartas en la mano.</string>
+
+    <string name="cambioCartas">Cuando un jugador tuviera en su mano durante el juego el siete del palo de
+    triunfo, podrá cambiarlo por la carta que pinte si ésta fuera una carta de valor
+    (As, Tres, Rey, Sota o Caballo). Este cambio podrá hacerse justo tras haber
+    ganado una baza y antes de proceder a robar la carta correspondiente del mazo.
+    Para obtener el cambio de carta debe pulsarse en cualquier momento la carta
+    que marca el triunfo, de modo que el programa realiza el cambio en cuanto éste
+    es posible</string>
+     <string name="faseArrastre">Lógicamente, conforme avance el juego en una mano, las cartas del mazo se
+    acabarán y llegará un momento en que no habrá cartas para robar: en las seis
+    últimas bazas se jugará sólo con las cartas que tuvieran en la mano. Cuando las
+    cartas del mazo se acaban, el último jugador toma la carta que señala el palo
+    de triunfo.
+    En esta fase cambian las normas en cuanto a obligatoriedad al echar cartas,
+    pasando a utilizar las normas del tute (con alguna pequeña diferencia). El jugador que hubiera ganado la última baza de la fase anterior echa al centro del
+    tapete una de sus cartas (la que él quiera), que será la que indique el palo de
+    salida de esa baza, y los demás, de izquierda a derecha, deberán echar una más
+    cada uno, siguiendo las reglas siguientes:</string>
+
+    <string name="caso1">- Obligación de montar y de asistir: si un jugador, en su turno, tuviera
+    cartas del palo de salida estará obligado a ASISTIR (echar carta de ese
+    palo), y además, si pudiera, a MONTAR (echar una carta del palo de
+    salida que supere a las cartas que están sobre el tapete).</string>
+
+    <string name="caso2">- Obligación de fallar: si un jugador, en su turno, no pudiera asistir (no
+    tuviera carta del palo de salida) deberá FALLAR (echar una carta del
+    palo de triunfo) siempre que superase a las que hubiera sobre el tapete.</string>
+
+    <string name="caso3">- Si la baza la va ganando la pareja no hay obligación de montar ni fallar, sino tan sólo la obligación de asistir al palo de salida. Esta es una
+    particularidad que distingue al Guiñote del Tute en esta fase del juego.</string>
+
+    <string name="caso4">- Si un jugador no tuviera cartas para asistir ni para fallar superando las
+    cartas del tapete, podrá entonces echar la carta que quiera.</string>
+
+    <string name="caso5">- La baza se la llevará el jugador que hubiera echado la carta más alta en
+    la jerarquía arriba indicada.</string>
+
+    <string name="caso6">- En las bazas sucesivas, dentro de una misma mano, el jugador que se ha
+    llevado la última baza es el que empezará lanzando la 1ª carta de la baza
+    siguiente.</string>
+    <string name="canticos">Durante el desarrollo de la mano, si un jugador tuviera el rey y la sota de un
+    mismo palo, podrá realizar un cántico, es lo que se denomina cantar las 40 (si
+    se trata de la sota y el rey del palo de triunfo) o cantar las 20 (si se trata de
+    rey y sota de cualquier otro palo). Deberá indicar tal circunstancia precisando
+    el palo en el que canta las 20 (20 en oros, copas, espadas o bastos) o si canta las40 bastará que lo indique sin necesidad de indicar el palo, ya que en cada mano
+    sólo existe un palo de triunfo. Si el cántico se hace durante la fase de arrastre,
+    no es necesario indicar el palo del que se trata, salvo que así lo solicite el propio
+    compañero, en cuyo caso sí deberá indicarse el palo concreto.
+    Los cánticos asignan los tantos que indican sus nombres (20 ó 40) a efectos
+    del recuento final de la mano.
+    Los cánticos pueden realizarse cuando la propia pareja ha realizado la última
+    baza.</string>
+
+    <string name="puntuacionBaza1">Una vez que se han completado todas las bazas de una mano, se procederá al
+    recuento de los puntos obtenidos por cada jugador en esa mano por las bazas
+    ganadas, que se sumarán a los ya obtenidos por razón de los cánticos.
+    Los tantos serán sumados a todos los efectos por parejas.
+    La pareja que hubiera llevado la última baza de una mano sumará 10 tantos
+    más (10 de últimas)
+    El número total de puntos que suman las cartas de la baraja es 120. Lógicamente, además, en todas las manos habrá 10 puntos de últimas. Por otro lado,
+    el máximo de puntos posible por razón de los cánticos es 100.
+    La pareja que supere los 100 tantos ganará la mano.
+    Si ambas parejas superan dicha cantidad no gana necesariamente la qué más
+    tantos haya obtenido:</string>
+
+    <string name="puntuacionBaza2">Si una pareja no alcanza 30 puntos sin contar los cantes, pierde.</string>
+
+    <string name="puntuacionBaza3">Si ambas parejas además de superar los 100 tantos, superan los 30 tantos
+    sin contar los cantes, gana quien se lleva las 10 últimas.</string>
+
+    <string name="puntuacionBaza4">Si ninguna de las parejas supera los 100 tantos en una mano se jugará una
+    mano más llamada ”de vueltas”. No es preciso que en la mano de vuelta sean
+    jugadas todas las cartas, sino que el ganador de cada baza tiene la opción de
+    anunciar que ha superado los 100 puntos, dándola así por finalizada. Si efectivamente, sumando los puntos de la mano anterior, supera los 100 puntos, la mano
+    es suya; en caso contrario, será para la pareja oponente.</string>
+
+    <string name="reglasFinal">Gana la partida aquella pareja que antes consiga alcanzar el número de cotos
+    pactado inicialmente, formado a su vez por tres manos/puntos.</string>
 
 </resources>

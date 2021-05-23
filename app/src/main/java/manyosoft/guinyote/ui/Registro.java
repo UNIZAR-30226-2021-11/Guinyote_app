@@ -63,6 +63,11 @@ public class Registro extends AppCompatActivity {
             int duration = Toast.LENGTH_LONG;
             Toast toast = Toast.makeText(this, text, duration);
             toast.show();
+        }else if(userName.getText().toString().contains(" ")){
+            CharSequence text = "EL NOMBRE DE USUARIO NO PUEDE CONTENER ESPACIOS";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
         }
         else {// Todos los campos rellenados
             GuinyoteClienteJWT guinyoteClienteJWT = GuinyoteClienteJWT.getInstance();

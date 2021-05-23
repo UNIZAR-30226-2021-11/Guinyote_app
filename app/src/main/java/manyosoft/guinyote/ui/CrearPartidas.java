@@ -52,18 +52,28 @@ public class CrearPartidas extends AppCompatActivity {
     private void creacionPartida()  {
         GuinyoteClienteJWT guinyoteClienteJWT = GuinyoteClienteJWT.getInstance();
         try {
-            Usuario user = Usuario.getInstance();
-            Partida nuevaPartida = guinyoteClienteJWT.createAndJoinGame(this, user.getId(), nombreSala.getText().toString(), publica.isChecked());
-            if(nuevaPartida == null){
-                CharSequence text = "ERROR AL CREAR PARTIDA, PRUEBA CON OTRO NOMBRE";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(this, text, duration);
-                toast.show();
+            if(nombreSala.getText().toString().isEmpty()){
+                Toast.makeText(this, "EL NOMBRE NO PUEDE ESTAR EN BLANCO", Toast.LENGTH_SHORT).show();
+
             }else{
-                Intent i = new Intent(this, SeleccionEquipoActivity.class);
-                i.putExtra("id",nuevaPartida.getId());
-                startActivity(i);
+                Usuario user = Usuario.getInstance();
+                Partida nuevaPartida = guinyoteClienteJWT.createAndJoinGame(this, user.getId(), nombreSala.getText().toString(), publica.isChecked());
+                if(nuevaPartida == null){
+                    CharSequence text = "ERROR AL CREAR PARTIDA, PRUEBA CON OTRO NOMBRE";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(this, text, duration);
+                    toast.show();
+                }else{//Partida creada correctamente
+                    nuevaPartida = guinyoteClienteJWT.getGameById(this,nuevaPartida.getId());
+                    Intent i = new Intent(this, JuegoActivity.class);
+                    i.putExtra("idPartida",nuevaPartida.getId());
+                    i.putExtra("idPlayer",nuevaPartida.getPlayerId());
+                    i.putExtra("idPair",nuevaPartida.getPairId());
+                    i.putExtra("solo",false);
+                    startActivity(i);
+                }
             }
+
         }   catch (Exception e)    {
             Log.d("Crear Partida",e.getMessage());
         }

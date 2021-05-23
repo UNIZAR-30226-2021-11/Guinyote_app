@@ -44,6 +44,7 @@ public class UserProfile extends AppCompatActivity {
     private NavigationView desplegable;
     private ConstraintLayout pantalla;
     private ImageButton negro,rojo,azul;
+    private ImageButton tapeteAzul,tapeteVerde,tapeteRojo;
     private Integer colorCarta,colorTapete;
 
     private FloatingActionButton fab;
@@ -76,6 +77,9 @@ public class UserProfile extends AppCompatActivity {
         rojo = headerView.findViewById(R.id.imageButton_rojo);
         azul = headerView.findViewById(R.id.imageButton_azul);
         negro = headerView.findViewById(R.id.imageButton_negro);
+        tapeteAzul = headerView.findViewById(R.id.imageButton_table_blue);
+        tapeteRojo = headerView.findViewById(R.id.imageButton_table_red);
+        tapeteVerde = headerView.findViewById(R.id.imageButton_table_green);
         SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(UserProfile.this);
         SharedPreferences.Editor myEditor = myPreferences.edit();
         try {
@@ -149,6 +153,31 @@ public class UserProfile extends AppCompatActivity {
                 myEditor.putInt(userName.getText()+"_colorCarta",colorCarta);
             }
         });
+
+        tapeteVerde.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorTapete = R.drawable.casino_table;
+                tapeteVerde.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+                myEditor.putInt(userName.getText()+"_colorTapete",colorTapete);
+            }
+        });
+        tapeteAzul.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorTapete = R.drawable.casino_table_azul;
+                tapeteAzul.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+                myEditor.putInt(userName.getText()+"_colorTapete",colorTapete);
+            }
+        });
+        tapeteRojo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorTapete = R.drawable.casino_table_rojo;
+                tapeteRojo.startAnimation(AnimationUtils.loadAnimation(UserProfile.this,R.anim.fragment_close_exit));
+                myEditor.putInt(userName.getText()+"_colorTapete",colorTapete);
+            }
+        });
         borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,6 +194,7 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Usuario user = Usuario.getInstance();
                 user.setColorCarta(colorCarta);
+                user.setColorTapete(colorTapete);
                 myEditor.commit();
                 desplegable.setVisibility(View.INVISIBLE);
             }
