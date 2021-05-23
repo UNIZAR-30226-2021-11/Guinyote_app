@@ -23,7 +23,7 @@ import manyosoft.guinyote.R;
 public class GuinyoteClienteJWT implements Serializable {
     static final String LOCALHOST = "http://10.0.2.2:9000/";
     static final String REMOTEHOST = "http://15.188.14.213:11050/";
-    static final String HOST = LOCALHOST;
+    static final String HOST = REMOTEHOST;
 
 
     // Usuarios
@@ -79,6 +79,7 @@ public class GuinyoteClienteJWT implements Serializable {
         json.addProperty(usuarioJSON, username);
         json.addProperty(passwordJSON, password);
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         // Envío + Callback para la respuesta
         JsonObject result = Ion.with(context)
                 .load("POST", HOST + LOGIN)
@@ -108,6 +109,7 @@ public class GuinyoteClienteJWT implements Serializable {
         //json.addProperty(locationJSON, location);
         json.addProperty(passwordJSON, password);
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         // Envío + Callback para la respuesta
         JsonObject result = Ion.with(context)
                 .load("POST", HOST + CREATE_USER)
@@ -132,12 +134,18 @@ public class GuinyoteClienteJWT implements Serializable {
         SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         int colorCarta = myPreferences.getInt(username+"_colorCarta", R.drawable.reverso);
         int colorTapete = myPreferences.getInt(username+"_colorTapete",R.drawable.casino_table);
+
+
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         // Espera síncrona
         JsonObject respuesta = Ion.with(context)
                 .load("GET", HOST + GET_USER + username)
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
+
+        Log.d("Get usuario", "Recibe: " + respuesta.toString());
+
         if (respuesta.get("user") != null) {
             return new Usuario(
                     respuesta.get("user").getAsJsonObject().get(idUsuario).getAsInt(),
@@ -158,6 +166,7 @@ public class GuinyoteClienteJWT implements Serializable {
         final String emailJSON = "email";
         final String locationJSON = "location";
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         JsonObject json = new JsonObject();
         if (email != null) json.addProperty(emailJSON, email);
         //if (location != null) json.addProperty(locationJSON, location);
@@ -172,6 +181,7 @@ public class GuinyoteClienteJWT implements Serializable {
     public void deleteUsuario(Context context, Integer id) {
         // Envía la petición DELETE y no espera respuesta alguna
         try{
+            Ion.getDefault(context).getConscryptMiddleware().enable(false);
             Ion.with(context)
                     .load("DELETE", HOST + DELETE_USER + id)
                     .setHeader("Authorization", getToken())
@@ -185,6 +195,7 @@ public class GuinyoteClienteJWT implements Serializable {
     public ArrayList<Partida> getPartidasPublicas(Context context) throws ExecutionException, InterruptedException {
         ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET", HOST + GET_PUBLICAS)
@@ -217,6 +228,7 @@ public class GuinyoteClienteJWT implements Serializable {
     public Partida createAndJoinGame(Context context, Integer userID,String nombre,boolean publica) throws ExecutionException, InterruptedException {
         Partida creada = null;
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         JsonObject json = new JsonObject();
         if (nombre != null) json.addProperty("name", nombre);
         json.addProperty("public", publica);
@@ -235,7 +247,9 @@ public class GuinyoteClienteJWT implements Serializable {
                     partidaJSON.getAsJsonObject("game").get("name").getAsString(),
                     partidaJSON.getAsJsonObject("game").get("players_count").getAsInt(),
                     partidaJSON.getAsJsonObject("game").get("creation_date").getAsString(),
-                    partidaJSON.getAsJsonObject("game").get("end_date").getAsString()
+                    partidaJSON.getAsJsonObject("game").get("end_date").getAsString(),
+                    partidaJSON.getAsJsonObject("game").get("my_player_id").getAsLong(),
+                    partidaJSON.getAsJsonObject("game").get("my_pair_id").getAsLong()
             );
         }
 
@@ -245,6 +259,7 @@ public class GuinyoteClienteJWT implements Serializable {
     public Partida getGameById(Context context, Long id) throws ExecutionException, InterruptedException {
         Partida recuperada = null;
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         // Espera síncrona
         JsonObject partidaJSON = Ion.with(context)
                 .load("GET", HOST + CREATE_GAME+id)
@@ -285,6 +300,7 @@ public class GuinyoteClienteJWT implements Serializable {
     public ArrayList<Partida> getPartidasByUser(Context context, int userId) throws ExecutionException, InterruptedException {
         ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 
+        Ion.getDefault(context).getConscryptMiddleware().enable(false);
         // Espera síncrona
         JsonObject partidasJSON = Ion.with(context)
                 .load("GET", HOST + GET_USER_GAMES + userId)

@@ -69,6 +69,7 @@ public class CrearPartidas extends AppCompatActivity {
                     i.putExtra("idPartida",nuevaPartida.getId());
                     i.putExtra("idPlayer",nuevaPartida.getPlayerId());
                     i.putExtra("idPair",nuevaPartida.getPairId());
+                    i.putExtra("create",true);
                     i.putExtra("solo",false);
                     startActivity(i);
                 }

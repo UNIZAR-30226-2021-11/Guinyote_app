@@ -6,6 +6,7 @@ public class Partida {
     private Integer jugadores,puntos;
     private String created, end;
     private boolean victoria;
+    private Long myId, myPairId;
 
     /**
      *  Resto de elementos necesarios para controlar la partida
@@ -27,6 +28,19 @@ public class Partida {
             this.jugadores = players;
             this.created = created;
             this.end = end;
+        }
+    }
+
+
+    public Partida(Long id, String name, Integer players, String created, String end, Long myId, Long myPairId)   {
+        if(id != null && name != null && players != null)   {
+            this.id = id;
+            this.nombre = name;
+            this.jugadores = players;
+            this.created = created;
+            this.end = end;
+            this.myId = myId;
+            this.myPairId = myPairId;
         }
     }
 
@@ -115,5 +129,21 @@ public class Partida {
 
     public boolean isVictoria() {
         return victoria;
+    }
+
+    public Long getMyId() {
+        return myId;
+    }
+
+    public void setMyId(Long myId) {
+        this.myId = myId;
+    }
+
+    public Long getMyPairId() {
+        return myPairId;
+    }
+
+    public void setMyPairId(Long myPairId) {
+        this.myPairId = myPairId;
     }
 }

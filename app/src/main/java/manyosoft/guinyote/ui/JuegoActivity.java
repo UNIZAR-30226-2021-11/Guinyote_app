@@ -36,8 +36,10 @@ public class JuegoActivity extends AppCompatActivity {
      * Servidor remoto del backend
      */
     private static final String SERVER      = "10.0.2.2:9000/simulation";
+    private static final String REMOTESERVER      = "15.188.14.213:11050/simulation";
+
     private static final String SECURE_DIR  = "wss://" + SERVER;
-    private static final String DIR         = "ws://" + SERVER;
+    private static final String DIR         = "ws://" + REMOTESERVER;
 
     // Strings predefinidos para el paso de eventos
     private static final String game_id = "game_id";
@@ -199,10 +201,13 @@ public class JuegoActivity extends AppCompatActivity {
                             websocket.sendText(sendMyself());
                             // Manda evento de creacion o union
                             if(intent.getBooleanExtra("solo", false)){
+                                Log.d("segundo envio", "solo-game");
                                 websocket.sendText(generateCreateJoinSoloEvent());
                             } else if(intent.getBooleanExtra("create", false))  {
+                                Log.d("segundo envio", "create-game");
                                 websocket.sendText(generateCreateJoinEvent());
                             } else {
+                                Log.d("segundo envio", "join-game");
                                 websocket.sendText(generateJoinEvent());
                             }
                         }
@@ -396,7 +401,12 @@ public class JuegoActivity extends AppCompatActivity {
         botonVolver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                if(ws.isOpen()) {
+                    Log.d("Fin partida","El usuario ha pulsado boton volver a menu principal");
+                    ws.sendText(generateLeaveEvent());
+                    ws.disconnect();
+                }
+                finish();
             }
         });
 
