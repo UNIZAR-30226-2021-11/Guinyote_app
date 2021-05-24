@@ -224,10 +224,10 @@ public class JuegoActivity extends AppCompatActivity {
         pausar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO Solicitar pausa de partida
+/*                // TODO Solicitar pausa de partida
                 Snackbar.make(view, "Acción no disponible por el momento", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-/*
+*/
                 // Enviar evento pausa
                 if(ws.isOpen()) ws.sendText(generatePauseEvent());
                 else    {
@@ -235,7 +235,7 @@ public class JuegoActivity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     reconectar();
                 }
-*/            }
+            }
         });
 
         if(intent.getBooleanExtra("solo", false)) pausar.setVisibility(View.INVISIBLE);
@@ -729,7 +729,7 @@ public class JuegoActivity extends AppCompatActivity {
     }
 
     // Genera un evento de pausa
-    private String generatePauseEvent(boolean cambia) {
+    private String generatePauseEvent() {
         JsonObject json = new JsonObject();
         json.addProperty(game_id, idPartida);
         json.addProperty(player_id, idPlayer);
