@@ -205,7 +205,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         Log.d("Mensaje Partidas Recibido", partidasJSON.toString());
 
-        if (partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
+        if (partidasJSON.get("games") != null && partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
         else {
             JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
@@ -312,7 +312,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         Log.d("Partidas Usuario", partidasJSON.toString());
 
-        if (!partidasJSON.get("games").isJsonNull()) {
+        if (partidasJSON.get("games") != null && !partidasJSON.get("games").isJsonNull()) {
             JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
                 JsonObject parObj = par.getAsJsonObject();
@@ -374,7 +374,7 @@ public class GuinyoteClienteJWT implements Serializable {
             JsonObject pareja = parejaElem.getAsJsonObject();
             Log.d("getJugadores JSON pareja",pareja.toString());
             j = 0;
-            if(! pareja.get("users").isJsonNull()) {
+            if(pareja.get("users") != null && !pareja.get("users").isJsonNull()) {
                 JsonArray jugadoresArray = pareja.getAsJsonArray("users");
                 if (jugadoresArray != null) {
                     for (JsonElement jugadorElem : jugadoresArray) {
@@ -477,7 +477,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         Log.d("Mensaje Partidas Recibido", partidasJSON.toString());
 
-        if (partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
+        if (partidasJSON.get("games")==null && partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
         else {
             JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
