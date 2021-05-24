@@ -241,6 +241,8 @@ public class GuinyoteClienteJWT implements Serializable {
                 .asJsonObject()
                 .get();
 
+        Log.d("CreateJoin", "Recibido: " + partidaJSON.toString());
+
         if (partidaJSON.get("game") != null) {
             creada = new Partida(
                     partidaJSON.getAsJsonObject("game").get("id").getAsLong(),
@@ -266,7 +268,7 @@ public class GuinyoteClienteJWT implements Serializable {
                 .setHeader("Authorization", getToken())  // Token de autorización
                 .asJsonObject()
                 .get();
-        //TODO Version provisional
+
         if (partidaJSON.get("game") != null) {
             Usuario user = Usuario.getInstance();
             int numPlayers = 0;
@@ -274,8 +276,8 @@ public class GuinyoteClienteJWT implements Serializable {
             Long parejaID = Long.valueOf(-1);
             JsonArray parejas = partidaJSON.getAsJsonObject("game").getAsJsonArray("pairs");
             for(JsonElement pareja : parejas){
-                JsonObject parejaObject = pareja.getAsJsonObject();
-                if(!parejaObject.get("users").isJsonNull()){
+                if(pareja.getAsJsonObject().get("users")!=null && !pareja.getAsJsonObject().get("users").isJsonNull()){
+                    JsonObject parejaObject = pareja.getAsJsonObject();
                     for(JsonElement jugador : parejaObject.getAsJsonArray("users")){
                         JsonObject jugadorObject = jugador.getAsJsonObject();
                         if(jugadorObject.get("id").getAsLong() == user.getId()){
