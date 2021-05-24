@@ -74,8 +74,8 @@ public class JuegoActivity extends AppCompatActivity {
     private ImageButton carta1, carta2, carta3, carta4, carta5, carta6;
     private String carta1suit, carta2suit, carta3suit, carta4suit, carta5suit, carta6suit;
     private Integer carta1value, carta2value, carta3value, carta4value, carta5value, carta6value;
-    // Cartas del tablero
-    private ImageView triunfo, monton_robar, monton1, monton2, monton3,tablero;
+    // Cartas del tableromonton
+    private ImageView triunfo, monton_robar, monton1, monton2,monton3,monton4,tablero;
     // Texto que muestra el nombre de la partida
     private TextView namePartida_textView;
     // Boton para pausar
@@ -129,6 +129,7 @@ public class JuegoActivity extends AppCompatActivity {
         monton1 = findViewById(R.id.monton1);
         monton2 = findViewById(R.id.monton2);
         monton3 = findViewById(R.id.monton3);
+        monton4 = findViewById(R.id.monton4);
 
         namePartida_textView = findViewById(R.id.idPartida);
 
@@ -567,6 +568,16 @@ public class JuegoActivity extends AppCompatActivity {
             else monton3.setVisibility(View.INVISIBLE);
         } catch (Exception e) {
             monton3.setVisibility(View.INVISIBLE);
+            e.printStackTrace();
+        }
+        try {
+            if(est.getCards_played_round() != null && est.getCards_played_round().get(3) != null) {
+                monton4.setBackgroundResource(est.getCards_played_round().get(3));
+                monton4.setVisibility(View.VISIBLE);
+            }
+            else monton4.setVisibility(View.INVISIBLE);
+        } catch (Exception e) {
+            monton4.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
 

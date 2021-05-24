@@ -149,8 +149,8 @@ public class GuinyoteClienteJWT implements Serializable {
         if (respuesta.get("user") != null) {
             return new Usuario(
                     respuesta.get("user").getAsJsonObject().get(idUsuario).getAsInt(),
-                    respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
-                    respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
+                    0,//respuesta.get("user").getAsJsonObject().get(victorias).getAsInt(),
+                    0,//respuesta.get("user").getAsJsonObject().get(derrotas).getAsInt(),
                     respuesta.get("user").getAsJsonObject().get(usernameUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(emailUsuario).getAsString(),
                     respuesta.get("user").getAsJsonObject().get(createdUsuario).getAsString(),
