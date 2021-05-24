@@ -477,7 +477,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         Log.d("Mensaje Partidas Recibido", partidasJSON.toString());
 
-        if (partidasJSON.get("games")==null && partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
+        if (partidasJSON.get("games")==null || partidasJSON.get("games").isJsonNull()) return partidasRecuperadas;
         else {
             JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
