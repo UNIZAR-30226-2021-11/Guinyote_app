@@ -281,7 +281,7 @@ public class GuinyoteClienteJWT implements Serializable {
                     for(JsonElement jugador : parejaObject.getAsJsonArray("users")){
                         JsonObject jugadorObject = jugador.getAsJsonObject();
                         if(jugadorObject.get("id").getAsLong() == user.getId()){
-                            jugadorID = jugadorObject.get("id").getAsLong();
+                            jugadorID = jugadorObject.get("player_id").getAsLong();
                             parejaID = parejaObject.get("id").getAsLong();
                         }
                         numPlayers++;
