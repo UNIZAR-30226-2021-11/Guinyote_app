@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/juego"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="@id/jugar_online_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
