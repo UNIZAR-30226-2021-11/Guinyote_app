@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 import manyosoft.guinyote.R;
 import manyosoft.guinyote.util.GuinyoteClienteJWT;
+import manyosoft.guinyote.util.Partida;
 import manyosoft.guinyote.util.Usuario;
 
 import static java.lang.Long.parseLong;
@@ -81,6 +82,7 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Usuario user = Usuario.getInstance();
+                actualizarPantalla();
                 if(jugadores != null && (jugadores.get(0) == null || jugadores.get(1) == null )){
                     if(!jugadores.contains(user.getUsername())) {
                         Long idJugador = clienteJWT.joinGame(SeleccionEquipoActivity.this, user.getId().longValue(), idPareja1);
@@ -96,7 +98,6 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
                             int duration = Toast.LENGTH_SHORT;
                             Toast toast = Toast.makeText(SeleccionEquipoActivity.this, text, duration);
                             toast.show();
-                            actualizarPantalla();
                         }
                     }else{
                         CharSequence text = "YA PERTENECE A UN EQUIPO";
@@ -119,6 +120,7 @@ public class SeleccionEquipoActivity extends AppCompatActivity {
         joinT2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                actualizarPantalla();
                 Usuario user = Usuario.getInstance();
                 if(jugadores != null && (jugadores.get(2) == null || jugadores.get(3) == null )){
                     if(!jugadores.contains(user.getUsername())) {

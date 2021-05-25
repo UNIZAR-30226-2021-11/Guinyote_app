@@ -638,8 +638,18 @@ public class JuegoActivity extends AppCompatActivity {
             mensajeFin.setVisibility(View.VISIBLE);
             boolean heGanado = est.getWinner_pair().equals(idPair);
 
-            Long points_team_a = est.getPoints_team_a() + est.getPoints_sing_a();
-            Long points_team_b = est.getPoints_team_b() + est.getPoints_sing_b();
+
+            Long points_team_a;
+            if (est != null && est.getPoints_team_a() != null && est.getPoints_sing_a() != null)
+                points_team_a = est.getPoints_team_a() + est.getPoints_sing_a();
+            else points_team_a = -1L;
+            Long points_team_b;
+            if(est != null && est.getPoints_team_b() != null && est.getPoints_sing_b() != null)
+                points_team_b = est.getPoints_team_b() + est.getPoints_sing_b();
+            else
+                points_team_b = -1L;
+
+
             if(heGanado)    parejaGanadora.setText(R.string.parejaGanadora + points_team_a.toString() + " - " + points_team_b.toString());
             else            parejaGanadora.setText(R.string.parejaPerdedora + points_team_a.toString() + " - " + points_team_b.toString());
             parejaGanadora.setVisibility(View.VISIBLE);
