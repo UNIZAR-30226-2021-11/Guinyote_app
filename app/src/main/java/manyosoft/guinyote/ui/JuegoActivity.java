@@ -638,8 +638,10 @@ public class JuegoActivity extends AppCompatActivity {
             mensajeFin.setVisibility(View.VISIBLE);
             boolean heGanado = est.getWinner_pair().equals(idPair);
 
-            if(heGanado)    parejaGanadora.setText(R.string.parejaGanadora);
-            else            parejaGanadora.setText(R.string.parejaPerdedora);
+            Long points_team_a = est.getPoints_team_a() + est.getPoints_sing_a();
+            Long points_team_b = est.getPoints_team_b() + est.getPoints_sing_b();
+            if(heGanado)    parejaGanadora.setText(R.string.parejaGanadora + points_team_a.toString() + " - " + points_team_b.toString());
+            else            parejaGanadora.setText(R.string.parejaPerdedora + points_team_a.toString() + " - " + points_team_b.toString());
             parejaGanadora.setVisibility(View.VISIBLE);
 
             botonVolver.setVisibility(View.VISIBLE);
