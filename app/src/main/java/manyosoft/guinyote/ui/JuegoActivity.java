@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -104,6 +105,9 @@ public class JuegoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_juego);
 
         Intent intent = getIntent();
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         idPartida = intent.getLongExtra("idPartida",-1);
         idPlayer = intent.getLongExtra("idPlayer",-1);
 
@@ -650,8 +654,8 @@ public class JuegoActivity extends AppCompatActivity {
                 points_team_b = -1L;
 
 
-            if(heGanado)    parejaGanadora.setText(R.string.parejaGanadora + points_team_a.toString() + " - " + points_team_b.toString());
-            else            parejaGanadora.setText(R.string.parejaPerdedora + points_team_a.toString() + " - " + points_team_b.toString());
+            if(heGanado)    parejaGanadora.setText("¡Has ganado! " + points_team_a.toString() + " - " + points_team_b.toString());
+            else            parejaGanadora.setText("La próxima será " + points_team_a.toString() + " - " + points_team_b.toString());
             parejaGanadora.setVisibility(View.VISIBLE);
 
             botonVolver.setVisibility(View.VISIBLE);
