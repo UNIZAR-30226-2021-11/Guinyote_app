@@ -677,7 +677,7 @@ public class JuegoActivity extends AppCompatActivity {
         // Si la partida ha finalizado lo muestra al jugador
         if(est.isEnded())   {
             mensajeFin.setVisibility(View.VISIBLE);
-            boolean heGanado = est.getWinner_pair().equals(est.getInternPair());
+            boolean heGanado = est.getWinner_pair().equals(idPair);
 
 
             Long points_team_a;
