@@ -55,6 +55,8 @@ public class CrearPartidas extends AppCompatActivity {
             if(nombreSala.getText().toString().isEmpty()){
                 Toast.makeText(this, "EL NOMBRE NO PUEDE ESTAR EN BLANCO", Toast.LENGTH_SHORT).show();
 
+            }else if(nombreSala.getText().toString().contains(" ")){
+                Toast.makeText(this, "EL NOMBRE NO PUEDE CONTENER ESPACIOS EN BLANCO", Toast.LENGTH_SHORT).show();
             }else{
                 Usuario user = Usuario.getInstance();
                 Partida nuevaPartida = guinyoteClienteJWT.createAndJoinGame(this, user.getId(), nombreSala.getText().toString(), publica.isChecked());

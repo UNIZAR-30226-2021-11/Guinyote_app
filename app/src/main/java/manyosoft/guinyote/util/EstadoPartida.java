@@ -121,7 +121,7 @@ public class EstadoPartida {
                 if(jugador.get("id").getAsInt() == idPlayer){
                     encontrado = true;
                     id = idPlayer;
-                    internPair = jugador.get("InternPair").getAsLong();
+                    internPair = jugador.get("pair").getAsLong();
                     tirarCarta = jugador.get("can_play").getAsBoolean();
                     cantar = jugador.get("can_sing").getAsBoolean();
                     singsuit = jugador.get("sing_suit").getAsString();

@@ -677,7 +677,7 @@ public class JuegoActivity extends AppCompatActivity {
         // Si la partida ha finalizado lo muestra al jugador
         if(est.isEnded())   {
             mensajeFin.setVisibility(View.VISIBLE);
-            boolean heGanado = est.getWinner_pair().equals(idPair);
+            boolean heGanado = est.getWinner_pair().equals(est.getInternPair());
 
 
             Long points_team_a;
@@ -692,7 +692,7 @@ public class JuegoActivity extends AppCompatActivity {
 
 
             if(heGanado)    parejaGanadora.setText("¡Has ganado! " + points_team_a.toString() + " - " + points_team_b.toString());
-            else            parejaGanadora.setText("La próxima será " + points_team_a.toString() + " - " + points_team_b.toString());
+            else            parejaGanadora.setText("¡Has perdido! " + points_team_a.toString() + " - " + points_team_b.toString());
             parejaGanadora.setVisibility(View.VISIBLE);
 
             botonVolver.setVisibility(View.VISIBLE);
