@@ -112,8 +112,9 @@ public class JuegoActivity extends AppCompatActivity {
         idPlayer = intent.getLongExtra("idPlayer",-1);
 
         idPair = intent.getLongExtra("idPair", -1);
-        // TODO DEBUG ONLY
-        //idPair = 1L;
+
+        if(intent.getBooleanExtra("solo", false))
+            idPair = 1L;
         //idPlayer = 3L;
 
 
@@ -660,7 +661,7 @@ public class JuegoActivity extends AppCompatActivity {
                 points_team_b = est.getPoints_team_b() + est.getPoints_sing_b();
             else
                 points_team_b = -1L;
-            if(est.getInternPair() == 2) {//TODO poner identificar cual es mi pareja
+            if(est.getInternPair() == 2) {
                 puntosRival.setText(points_team_a.toString());
                 puntosJugador.setText(points_team_b.toString());
             }else{

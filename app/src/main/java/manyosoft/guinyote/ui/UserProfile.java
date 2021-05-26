@@ -278,50 +278,68 @@ public class UserProfile extends AppCompatActivity {
             user = guinyoteClienteJWT.getUsuario(this, name);
         }
         userName.setText(user.getUsername());
-        Integer totalPartidas = user.getVictorias()+user.getDerrotas();
+        Integer totalVictorias = 0, totalDerrotas = 0;
+        /*= user.getVictorias()+user.getDerrotas();
         numPartidas.setText(totalPartidas.toString());
         numVictorias.setText(user.getVictorias().toString());
-
+        */
         //refrescar la tabla
         TableRow cabecera =  (TableRow) tabla.getChildAt(0);
         tabla.removeAllViews();
         tabla.addView(cabecera);
 
         ArrayList<Partida> historialPartidas = guinyoteClienteJWT.getPartidasByUser(this,user.getId());
+
+        for(int i = 0; i < historialPartidas.size(); i++)   {
+            if(historialPartidas.get(i).getPuntos() != 0)   {
+                if(historialPartidas.get(i).getPuntos() >= 100) {
+                    totalVictorias++;
+                } else {
+                    totalDerrotas++;
+                }
+            }
+        }
+
+        Integer total = totalVictorias + totalDerrotas;
+        numPartidas.setText(total.toString());
+        numVictorias.setText(totalVictorias.toString());
+
         int iter = historialPartidas.size();
         if(iter > 10){iter = 10;}
         for (int i = 0; i<iter;i++){
             Partida p = historialPartidas.get(i);
-            fila = new TableRow(this);
-            fila.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT,Gravity.TOP | Gravity.CENTER_HORIZONTAL));
-            //DURACION
-            TextView duracion = new TextView(this);
-            duracion.setText(p.getEnd());
-            duracion.setGravity(Gravity.CENTER);
-            fila.addView(duracion);
-            //EQUIPOS
-            TextView equipos = new TextView(this);
-            equipos.setText(p.getNombre());
-            equipos.setGravity(Gravity.CENTER);
-            fila.addView(equipos);
-            //RESULTADO
-            TextView resultado = new TextView(this);
-            if(/*p.getVictoria()*/ p.getPuntos() >= 100) {
-                resultado.setText("VICTORIA");
-                Log.d("Victoria", "");
-            } else {
-                resultado.setText("DERROTA");
-                Log.d("Derrota", "");
-            }
-            resultado.setGravity(Gravity.CENTER);
-            fila.addView(resultado);
-            //PUNTOS
-            TextView puntos = new TextView(this);
-            puntos.setText(p.getPuntos().toString());
-            puntos.setGravity(Gravity.CENTER);
-            fila.addView(puntos);
+            if(p.getPuntos() > 0) {
+                fila = new TableRow(this);
+                fila.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL));
+                //DURACION
+                TextView duracion = new TextView(this);
+                duracion.setText(p.getEnd());
+                duracion.setGravity(Gravity.CENTER);
+                fila.addView(duracion);
+                //EQUIPOS
+                TextView equipos = new TextView(this);
+                equipos.setText(p.getNombre());
+                equipos.setGravity(Gravity.CENTER);
+                fila.addView(equipos);
+                //RESULTADO
+                TextView resultado = new TextView(this);
+                if (p.getVictoria()) {
+                    resultado.setText("VICTORIA");
+                    Log.d("Victoria", "");
+                } else {
+                    resultado.setText("DERROTA");
+                    Log.d("Derrota", "");
+                }
+                resultado.setGravity(Gravity.CENTER);
+                fila.addView(resultado);
+                //PUNTOS
+                TextView puntos = new TextView(this);
+                puntos.setText(p.getPuntos().toString());
+                puntos.setGravity(Gravity.CENTER);
+                fila.addView(puntos);
 
-            tabla.addView(fila);
+                tabla.addView(fila);
+            }
         }
     }
 }
