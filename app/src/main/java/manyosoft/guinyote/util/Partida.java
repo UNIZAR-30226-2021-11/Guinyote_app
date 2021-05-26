@@ -44,7 +44,7 @@ public class Partida {
         }
     }
 
-    public Partida(Long id, String name, Integer players, String created, String end,Integer puntos,boolean victoria)   {
+    public Partida(Long id, String name, Integer players, String created, String end,Integer puntos, boolean victoria)   {
         if(id != null && name != null && players != null)   {
             this.id = id;
             this.nombre = name;

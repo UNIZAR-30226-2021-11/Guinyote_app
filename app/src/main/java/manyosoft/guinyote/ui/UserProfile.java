@@ -306,10 +306,12 @@ public class UserProfile extends AppCompatActivity {
             fila.addView(equipos);
             //RESULTADO
             TextView resultado = new TextView(this);
-            if(p.getVictoria()) {
+            if(/*p.getVictoria()*/ p.getPuntos() >= 100) {
                 resultado.setText("VICTORIA");
-            }else{
+                Log.d("Victoria", "");
+            } else {
                 resultado.setText("DERROTA");
+                Log.d("Derrota", "");
             }
             resultado.setGravity(Gravity.CENTER);
             fila.addView(resultado);
