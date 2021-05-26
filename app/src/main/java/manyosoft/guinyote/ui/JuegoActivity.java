@@ -428,8 +428,14 @@ public class JuegoActivity extends AppCompatActivity {
     private void actualizaTablero() {
         EstadoPartida est = new EstadoPartida(jsonReceived, idPlayer,this);
         // Si es arrastre no hay monton de robar
-        if (est.isArrastre()) monton_robar.setVisibility(View.INVISIBLE);
-        else monton_robar.setVisibility(View.VISIBLE);
+        if (est.isArrastre()) {
+            monton_robar.setVisibility(View.INVISIBLE);
+            triunfo.setAlpha(0.5f);
+        }
+        else {
+            monton_robar.setVisibility(View.VISIBLE);
+            triunfo.setAlpha(1.0f);
+        }
 
         // Log de la mano del jugador
         for(int i = 1; i <= 6; i++) {
