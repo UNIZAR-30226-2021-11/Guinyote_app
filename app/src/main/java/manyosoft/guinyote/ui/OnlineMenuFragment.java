@@ -51,12 +51,12 @@ public class OnlineMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Context context = getContext();
-                CharSequence text = "Apertura listado salas";
+                /*CharSequence text = "Apertura listado salas";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
-
+*/
                 Intent i = new Intent(context, ListadoPartidasActivity.class);
                 startActivity(i);
             }
