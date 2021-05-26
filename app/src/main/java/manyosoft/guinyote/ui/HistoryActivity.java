@@ -63,7 +63,7 @@ public class HistoryActivity extends AppCompatActivity {
             fila.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL));
             //DURACION
             TextView duracion = new TextView(this);
-            duracion.setText(p.getCreated()+ "\n - \n" + p.getEnd());
+            duracion.setText(p.getEnd());
             duracion.setGravity(Gravity.CENTER);
             fila.addView(duracion);
             //EQUIPOS

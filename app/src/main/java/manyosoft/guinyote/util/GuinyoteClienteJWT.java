@@ -316,12 +316,6 @@ public class GuinyoteClienteJWT implements Serializable {
             JsonArray partidasJSONArray = partidasJSON.getAsJsonArray("games");
             for (JsonElement par : partidasJSONArray) {
                 JsonObject parObj = par.getAsJsonObject();
-                boolean winned;
-                if(parObj.get("winned") != null){
-                    winned = true;
-                }else{
-                    winned = false;
-                }
                 int puntos;
                 if(parObj.get("points") != null){
                     puntos = parObj.get("points").getAsInt();
@@ -337,7 +331,7 @@ public class GuinyoteClienteJWT implements Serializable {
                                 parObj.get("creation_date").getAsString(),
                                 parObj.get("end_date").getAsString(),
                                 puntos,
-                                winned
+                                parObj.get("winned").getAsBoolean()
                         )
 
                 );

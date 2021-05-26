@@ -33,7 +33,7 @@
     <string name="Crear_cuenta">CREAR CUENTA</string>
 
     <!-- MENU USUARIO -->
-    <string name="EQUIPO">EQUIPO</string>
+    <string name="NOMBREPARTIDA">NOMBRE PARTIDA</string>
     <string name="RESULTADO">RESULTADO</string>
     <string name="PUNTOS">PUNTOS</string>
     <string name="DURACION">DURACION</string>

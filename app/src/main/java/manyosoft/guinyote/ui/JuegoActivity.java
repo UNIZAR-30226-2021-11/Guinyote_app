@@ -140,6 +140,10 @@ public class JuegoActivity extends AppCompatActivity {
         puntosRival = findViewById(R.id.puntosRival);
         puntos_textView = findViewById(R.id.textViewPuntos);
         rival_textView = findViewById(R.id.textViewRival);
+        puntosJugador.setVisibility(View.INVISIBLE);
+        puntosRival.setVisibility(View.INVISIBLE);
+        puntos_textView.setVisibility(View.INVISIBLE);
+        rival_textView.setVisibility(View.INVISIBLE);
 
         pausar = findViewById(R.id.botonPausa);
         cantar = findViewById(R.id.botonCantar);
