@@ -464,7 +464,7 @@ public class GuinyoteClienteJWT implements Serializable {
 
         return id;
     }
-//TODO implementar la conexion con api
+
     public ArrayList<Partida> getTournamentGames(Context context) throws ExecutionException, InterruptedException {
         ArrayList<Partida> partidasRecuperadas = new ArrayList<Partida>();
 

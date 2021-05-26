@@ -4,14 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/guinote_background_2"
     tools:context=".ui.MainActivity">
 
-
-    <ImageView
-        android:id="@+id/fondo"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:srcCompat="@drawable/guinote_background_2" />
 
     <include layout="@layout/content_main" />
 

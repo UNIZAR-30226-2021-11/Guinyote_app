@@ -26,7 +26,7 @@ import manyosoft.guinyote.R;
 public class EstadoPartida {
 
     // Estado de la partida
-    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair;
+    private Long id, points_team_a, points_team_b, points_sing_a, points_sing_b, ronda,winner_pair,internPair;
     private boolean vueltas, arrastre, ended;
     private String singsuit, status;
 
@@ -84,7 +84,7 @@ public class EstadoPartida {
             points_team_a = root.get("points_team_a").getAsLong();
             points_team_b = root.get("points_team_b").getAsLong();
             points_sing_a = root.get("points_sing_a").getAsLong();
-            points_sing_a = root.get("points_sing_b").getAsLong();
+            points_sing_b = root.get("points_sing_b").getAsLong();
             ronda = root.get("current_round").getAsLong();
             vueltas = root.get("vueltas").getAsBoolean();
             arrastre = root.get("arrastre").getAsBoolean();
@@ -121,6 +121,7 @@ public class EstadoPartida {
                 if(jugador.get("id").getAsInt() == idPlayer){
                     encontrado = true;
                     id = idPlayer;
+                    internPair = jugador.get("InternPair").getAsLong();
                     tirarCarta = jugador.get("can_play").getAsBoolean();
                     cantar = jugador.get("can_sing").getAsBoolean();
                     singsuit = jugador.get("sing_suit").getAsString();
@@ -347,6 +348,14 @@ public class EstadoPartida {
 
     public void setTriumph_playable(boolean triumph_playable) {
         this.triumph_playable = triumph_playable;
+    }
+
+    public Long getInternPair() {
+        return internPair;
+    }
+
+    public void setIdPair(Long internPair) {
+        this.internPair = internPair;
     }
 }
 

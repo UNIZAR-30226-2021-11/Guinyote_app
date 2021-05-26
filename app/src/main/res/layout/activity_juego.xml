@@ -260,45 +260,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fin_partida"
+        android:textColor="#000000"
         android:textSize="@dimen/_50sdp"
         android:textStyle="bold"
-        android:visibility="invisible"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/textoGanador"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textoPausado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/partidaPausada"
+        android:textColor="#000000"
         android:textSize="@dimen/_50sdp"
         android:textStyle="bold"
-        android:visibility="invisible"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/textoGanador"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textoGanador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@android:string/unknownName"
+        android:textColor="#000000"
         android:textSize="@dimen/_25sdp"
         android:textStyle="bold"
-        android:visibility="invisible"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textoFin"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/botonVolver"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textoFin" />
 
     <Button
         android:id="@+id/botonVolver"
@@ -320,7 +322,47 @@
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/idPartida"
         app:layout_constraintTop_toBottomOf="@+id/idPartida"
         app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+    <TextView
+        android:id="@+id/textViewPuntos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Puntos: "
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/puntosJugador"
+        app:layout_constraintEnd_toStartOf="@+id/puntosJugador"
+        app:layout_constraintTop_toTopOf="@+id/puntosJugador" />
+
+    <TextView
+        android:id="@+id/textViewRival"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rival: "
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/puntosRival"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPuntos" />
+
+    <TextView
+        android:id="@+id/puntosJugador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoPartida" />
+
+    <TextView
+        android:id="@+id/puntosRival"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/puntosJugador" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

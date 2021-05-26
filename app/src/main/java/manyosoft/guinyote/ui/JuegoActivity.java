@@ -78,7 +78,7 @@ public class JuegoActivity extends AppCompatActivity {
     // Cartas del tableromonton
     private ImageView triunfo, monton_robar, monton1, monton2,monton3,monton4,tablero;
     // Texto que muestra el nombre de la partida
-    private TextView namePartida_textView;
+    private TextView namePartida_textView,puntosJugador,puntosRival,puntos_textView,rival_textView;
     // Boton para pausar
     private Button pausar;
     // Botones para cantar o no
@@ -136,6 +136,10 @@ public class JuegoActivity extends AppCompatActivity {
         monton4 = findViewById(R.id.monton4);
 
         namePartida_textView = findViewById(R.id.idPartida);
+        puntosJugador = findViewById(R.id.puntosJugador);
+        puntosRival = findViewById(R.id.puntosRival);
+        puntos_textView = findViewById(R.id.textViewPuntos);
+        rival_textView = findViewById(R.id.textViewRival);
 
         pausar = findViewById(R.id.botonPausa);
         cantar = findViewById(R.id.botonCantar);
@@ -635,6 +639,33 @@ public class JuegoActivity extends AppCompatActivity {
         if(est.getStatus().equals("paused"))    {
             mensajePausa.setVisibility(View.VISIBLE);
             botonVolver.setVisibility(View.VISIBLE);
+        }
+        if(est.isVueltas()){
+            Long points_team_a;
+            if (est != null && est.getPoints_team_a() != null && est.getPoints_sing_a() != null)
+                points_team_a = est.getPoints_team_a() + est.getPoints_sing_a();
+            else points_team_a = -1L;
+            Long points_team_b;
+            if(est != null && est.getPoints_team_b() != null && est.getPoints_sing_b() != null)
+                points_team_b = est.getPoints_team_b() + est.getPoints_sing_b();
+            else
+                points_team_b = -1L;
+            if(est.getInternPair() == 2) {//TODO poner identificar cual es mi pareja
+                puntosRival.setText(points_team_a.toString());
+                puntosJugador.setText(points_team_b.toString());
+            }else{
+                puntosRival.setText(points_team_b.toString());
+                puntosJugador.setText(points_team_a.toString());
+            }
+            puntosJugador.setVisibility(View.VISIBLE);
+            puntosRival.setVisibility(View.VISIBLE);
+            puntos_textView.setVisibility(View.VISIBLE);
+            rival_textView.setVisibility(View.VISIBLE);
+        }else{
+            puntosJugador.setVisibility(View.INVISIBLE);
+            puntosRival.setVisibility(View.INVISIBLE);
+            puntos_textView.setVisibility(View.INVISIBLE);
+            rival_textView.setVisibility(View.INVISIBLE);
         }
 
         // Si la partida ha finalizado lo muestra al jugador
